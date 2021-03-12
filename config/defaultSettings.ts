@@ -9,7 +9,7 @@ const proSettings: DefaultSettings = {
   // 拂晓蓝
   primaryColor: '#1890ff',
   headerTheme: 'dark',  
-  layout: 'side',
+  layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
