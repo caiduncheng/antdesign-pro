@@ -1,5 +1,5 @@
 @import '~antd/es/style/themes/default.less';
-
+// @deep:~'>>>';
 .main {
   width: 328px;
   margin: 0 auto;
@@ -40,5 +40,30 @@
   .prefixIcon {
     color: @primary-color;
     font-size: @font-size-base;
+  }
+
+  .btn {
+    :global {
+      .ant-btn-primary {
+        &:hover,
+        &:focus {
+          background: #1b2b38;
+          border-color: #1b2b38;
+        }
+      }
+      .ant-btn:hover,
+      .ant-btn:focus,
+      .ant-btn:active {
+        background: #1b2b38;
+        border-color: #1b2b38;
+      }
+    }
+  }
+  .proInput {
+    :global(.ant-input-affix-wrapper) {
+      background: '#f7f7f7' !important;
+      border: '1px solid #f7f7f7' !important;
+      border-radius: '3px' !important;
+    }
   }
 }

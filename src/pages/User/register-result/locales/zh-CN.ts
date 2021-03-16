@@ -5,7 +5,7 @@ export default {
   'userandregister-result.login.message-invalid-verification-code': '验证码错误',
   'userandregister-result.login.tab-login-credentials': '账户密码登录',
   'userandregister-result.login.tab-login-mobile': '手机号登录',
-  'userandregister-result.login.remember-me': '自动登录',
+  'userandregister-result.login.remember-me': '记住密码',
   'userandregister-result.login.forgot-password': '忘记密码',
   'userandregister-result.login.sign-in-with': '其他登录方式',
   'userandregister-result.login.signup': '注册账户',
