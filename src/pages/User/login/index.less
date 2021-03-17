@@ -8,12 +8,12 @@
     max-width: 328px;
   }
 
-  :global {
-    .@{ant-prefix}-tabs-nav-list {
-      margin: auto;
-      font-size: 16px;
-    }
-  }
+  // :global {
+  //   .@{ant-prefix}-tabs-nav-list {
+  //     margin: auto;
+  //     font-size: 16px;
+  //   }
+  // }
 
   .icon {
     margin-left: 16px;
@@ -38,32 +38,77 @@
   }
 
   .prefixIcon {
-    color: @primary-color;
+    color: @grey-color !important;
     font-size: @font-size-base;
   }
-
-  .btn {
-    :global {
-      .ant-btn-primary {
-        &:hover,
-        &:focus {
-          background: #1b2b38;
-          border-color: #1b2b38;
-        }
+  .captcha {
+    display: flex;
+    justify-content: space-between;
+    .captImg {
+      width: 63%;
+      height: 39px;
+      margin-left: 5px;
+      img {
+        height: 100%;
+        border-radius: 2px;
       }
-      .ant-btn:hover,
-      .ant-btn:focus,
-      .ant-btn:active {
+    }
+  }
+
+  :global {
+    .ant-input-affix-wrapper {
+      background: #f7f7f7;
+      border: 1px solid #f7f7f7;
+      border-radius: 3px;
+      &:hover {
+        background: #f7f7f7;
+      }
+    }
+    .ant-input-affix-wrapper > input.ant-input {
+      background: #f7f7f7;
+    }
+    // 复选
+    .ant-form label {
+      color: #ccc;
+      font-size: 7px;
+    }
+    .ant-checkbox-checked::after {
+      border: 1px solid #f7f7f7;
+    }
+    .ant-checkbox-checked .ant-checkbox-inner {
+      background-color: #f7f7f7;
+      border-color: #f7f7f7;
+      &::after {
+        border: 2px solid #31d9a4;
+        border-top: 0;
+        border-left: 0;
+      }
+    }
+    // 按钮
+    .ant-btn-primary {
+      background: #17242f;
+      border-color: #17242f;
+      &:hover,
+      &:focus {
         background: #1b2b38;
         border-color: #1b2b38;
       }
     }
-  }
-  .proInput {
-    :global(.ant-input-affix-wrapper) {
-      background: '#f7f7f7' !important;
-      border: '1px solid #f7f7f7' !important;
-      border-radius: '3px' !important;
+    .ant-btn:hover,
+    .ant-btn:focus,
+    .ant-btn:active {
+      background: #1b2b38;
+      border-color: #1b2b38;
+    }
+    // 改自动输入样式
+    input:-webkit-autofill,
+    textarea:-webkit-autofill,
+    select:-webkit-autofill {
+      background-color: transparent;
+      background-image: none;
+      box-shadow: 0 0 0 1000px transparent inset !important;
+      transition: background-color 50000s ease-in-out 0s;
+      -webkit-text-fill-color: #333 !important;
     }
   }
 }

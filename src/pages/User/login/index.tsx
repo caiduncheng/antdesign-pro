@@ -1,4 +1,4 @@
-import { LockTwoTone, UserOutlined } from '@ant-design/icons';
+import { UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
@@ -61,8 +61,6 @@ const Login: React.FC<LoginProps> = (props) => {
             size: 'large',
             style: {
               width: '100%',
-              borderColor: '#17242F',
-              background: '#17242F',
             },
           },
         }}
@@ -82,7 +80,6 @@ const Login: React.FC<LoginProps> = (props) => {
         )}
         <ProFormText
           name="userName"
-          style={{ background: '#f7f7f7', borderRadius: '3px', border: '1px solid #f7f7f7' }}
           fieldProps={{
             size: 'large',
             prefix: <UserOutlined className={styles.prefixIcon} />,
@@ -102,10 +99,9 @@ const Login: React.FC<LoginProps> = (props) => {
         />
         <ProFormText.Password
           name="password"
-          style={{ background: '#f7f7f7', borderRadius: '3px', border: '1px solid #f7f7f7' }}
           fieldProps={{
             size: 'large',
-            prefix: <LockTwoTone className={styles.prefixIcon} />,
+            prefix: <UnlockOutlined className={styles.prefixIcon} />,
           }}
           placeholder={intl.formatMessage({
             id: 'pages.login.password.placeholder',
@@ -125,35 +121,35 @@ const Login: React.FC<LoginProps> = (props) => {
         />
 
         {status === 'error' && !submitting && <LoginMessage content="验证码错误" />}
-        <ProFormText
-          name="captcha"
-          className={styles.proInput}
-          style={{
-            width: '55%',
-            background: '#f7f7f7',
-            borderRadius: '3px',
-            border: '1px solid #f7f7f7',
-          }}
-          fieldProps={{
-            size: 'large',
-          }}
-          placeholder={intl.formatMessage({
-            id: 'pages.login.captcha.placeholder',
-            defaultMessage: '请输入验证码',
-          })}
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.login.captcha.required"
-                  defaultMessage="请输入验证码！"
-                />
-              ),
-            },
-          ]}
-        />
-        <img src="https://192.168.35.175/npnserver/captcha.jpg?uuid='1234'" alt="captcha" />
+        <div className={styles.captcha}>
+          <ProFormText
+            name="captcha"
+            style={{
+              width: 20,
+            }}
+            fieldProps={{
+              size: 'large',
+            }}
+            placeholder={intl.formatMessage({
+              id: 'pages.login.captcha.placeholder',
+              defaultMessage: '请输入验证码',
+            })}
+            rules={[
+              {
+                required: true,
+                message: (
+                  <FormattedMessage
+                    id="pages.login.captcha.required"
+                    defaultMessage="请输入验证码！"
+                  />
+                ),
+              },
+            ]}
+          />
+          <div className={styles.captImg}>
+            <img src="https://192.168.35.175/npnserver/captcha.jpg?uuid='1234'" alt="captcha" />
+          </div>
+        </div>
         {/* <ProFormCaptcha
           fieldProps={{
             size: 'large',
@@ -204,7 +200,7 @@ const Login: React.FC<LoginProps> = (props) => {
             marginBottom: 24,
           }}
         >
-          <ProFormCheckbox noStyle name="autoLogin">
+          <ProFormCheckbox noStyle name="autoLogin" className={styles.check}>
             <FormattedMessage id="pages.login.rememberMe" defaultMessage="记住密码" />
           </ProFormCheckbox>
         </div>
