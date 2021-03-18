@@ -14,6 +14,7 @@ export type CurrentUser = {
   }[];
   userid?: string;
   unreadCount?: number;
+  role?: string
 };
 
 export type UserModelState = {

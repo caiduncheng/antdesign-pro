@@ -19,6 +19,7 @@ export default {
   'GET /api/currentUser': {
     name: 'Farhan Rizvi',
     avatar: 'https://caidc.oss-cn-beijing.aliyuncs.com/avatar.c58e465.png',
+    role: 'Admin',
     userid: '00000001',
     email: 'antdesign@alipay.com',
     signature: '海纳百川，有容乃大',

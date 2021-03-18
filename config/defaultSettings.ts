@@ -9,7 +9,7 @@ const proSettings: DefaultSettings = {
   // 拂晓蓝
   primaryColor: '#1890ff',
   headerTheme: 'dark',
-  headerHeight: 80,
+  headerHeight: 70,
   layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
