@@ -8,6 +8,7 @@ import type { Dispatch } from 'umi';
 import type { StateType } from '@/models/login';
 import type { LoginParamsType } from '@/services/login';
 import type { ConnectState } from '@/models/connect';
+import { getUUID } from '@/utils/utils';
 
 import styles from './index.less';
 
@@ -15,7 +16,6 @@ export type LoginProps = {
   dispatch: Dispatch;
   userLogin: StateType;
   submitting?: boolean;
-  uuid: string;
 };
 
 const LoginMessage: React.FC<{
@@ -36,6 +36,8 @@ const Login: React.FC<LoginProps> = (props) => {
   const { status } = userLogin;
   const [type] = useState<string>('account');
   const intl = useIntl();
+
+  const uuid = getUUID();
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
@@ -147,7 +149,7 @@ const Login: React.FC<LoginProps> = (props) => {
             ]}
           />
           <div className={styles.captImg}>
-            <img src="https://192.168.35.175/npnserver/captcha.jpg?uuid='1234'" alt="captcha" />
+            <img src={`https://192.168.35.175/npnserver/captcha.jpg?uuid=${uuid}`} alt="captcha" />
           </div>
         </div>
         {/* <ProFormCaptcha

@@ -8,16 +8,20 @@
   &.hasLegend .chart {
     width: ~'calc(100% - 240px)';
   }
+  .lines {
+    border-left: 2px solid @border-color-split;
+    // padding: 0 0px 23px 50px;
+  }
   .legend {
     position: absolute;
     top: 50%;
     right: 0;
     min-width: 200px;
-    margin: 0 20px;
-    padding: 0;
+    margin: 0 20px 0 40px;
+    padding: 0 0 0 50px;
     list-style: none;
     transform: translateY(-50%);
-    li {
+    .legendItem1 {
       height: 22px;
       margin-bottom: 16px;
       line-height: 22px;
@@ -25,6 +29,10 @@
       &:last-child {
         margin-bottom: 0;
       }
+    }
+    .legendItem2 {
+      margin-bottom: 3px;
+      cursor: pointer;
     }
   }
   .dot {
@@ -34,7 +42,7 @@
     width: 8px;
     height: 8px;
     margin-right: 8px;
-    border-radius: 8px;
+    // border-radius: 8px;
   }
   .line {
     display: inline-block;
@@ -43,15 +51,27 @@
     margin-right: 8px;
     background-color: @border-color-split;
   }
+  // .lengendTwo {
+  //   display: flex;
+  //   flex-direction: column;
+  // }
   .legendTitle {
     color: @text-color;
+  }
+  .titleTwo {
+    color: #999;
   }
   .percent {
     color: @text-color-secondary;
   }
   .value {
-    position: absolute;
-    right: 0;
+    display: block;
+    margin-left: 15px;
+    color: #333;
+    // position: absolute;
+    // right: 0;
+    font-weight: bold;
+    font-size: 16px;
   }
   .title {
     margin-bottom: 8px;

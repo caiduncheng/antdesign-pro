@@ -1,6 +1,7 @@
 import { Chart, Coord, Geom, Tooltip } from 'bizcharts';
 import React, { Component } from 'react';
 
+import numeral from 'numeral';
 import { DataView } from '@antv/data-set';
 import Debounce from 'lodash.debounce';
 import { Divider } from 'antd';
@@ -17,6 +18,7 @@ export interface PieProps {
   height?: number;
   margin?: [number, number, number, number];
   hasLegend?: boolean;
+  types?: number;
   padding?: [number, number, number, number];
   percent?: number;
   data?: {
@@ -31,7 +33,7 @@ export interface PieProps {
   total?: React.ReactNode | number | (() => React.ReactNode | number);
   title?: React.ReactNode;
   tooltip?: boolean;
-  valueFormat?: (value: string) => string | React.ReactNode;
+  // valueFormat?: (value: string) => string | React.ReactNode;
   subTitle?: React.ReactNode;
 }
 interface PieState {
@@ -156,17 +158,18 @@ class Pie extends Component<PieProps, PieState> {
 
   render() {
     const {
-      valueFormat,
+      // valueFormat,
       subTitle,
       total,
       hasLegend = false,
+      types = 1,
       className,
       style,
       height = 0,
       forceFit = true,
       percent,
       color,
-      inner = 0.75,
+      inner = 0,
       animate = true,
       colors,
       lineWidth = 1,
@@ -280,11 +283,14 @@ class Pie extends Component<PieProps, PieState> {
             )}
           </div>
         </ReactFitText>
-
-        {hasLegend && (
+        {hasLegend && types === 1 && (
           <ul className={styles.legend}>
             {legendData.map((item, i) => (
-              <li key={item.x} onClick={() => this.handleLegendClick(item, i)}>
+              <li
+                key={item.x}
+                onClick={() => this.handleLegendClick(item, i)}
+                className={styles.legendItem1}
+              >
                 <span
                   className={styles.dot}
                   style={{
@@ -296,7 +302,32 @@ class Pie extends Component<PieProps, PieState> {
                 <span className={styles.percent}>
                   {`${(Number.isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}
                 </span>
-                <span className={styles.value}>{valueFormat ? valueFormat(item.y) : item.y}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {hasLegend && types === 2 && (
+          <ul className={`${styles.legend} ${styles.lines}`}>
+            {legendData.map((item, i) => (
+              <li
+                key={item.x}
+                onClick={() => this.handleLegendClick(item, i)}
+                className={styles.legendItem2}
+              >
+                <span
+                  className={styles.dot}
+                  style={{
+                    backgroundColor: !item.checked ? '#aaa' : item.color,
+                  }}
+                />
+
+                <span className={styles.lengendTwo}>
+                  <span className={styles.titleTwo}>{item.x}</span>
+                  <span className={styles.value}>
+                    {/* {valueFormat ? valueFormat(item.y) : item.y} */}
+                    {numeral(item.y).format('0,0')}
+                  </span>
+                </span>
               </li>
             ))}
           </ul>

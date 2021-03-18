@@ -2,19 +2,19 @@ import { EllipsisOutlined } from '@ant-design/icons';
 import { Col, Dropdown, Menu, Row } from 'antd';
 import React, { Component, Suspense } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { RadioChangeEvent } from 'antd/es/radio';
-import { RangePickerProps } from 'antd/es/date-picker/generatePicker';
-import moment from 'moment';
+import type { RadioChangeEvent } from 'antd/es/radio';
+import type { RangePickerProps } from 'antd/es/date-picker/generatePicker';
+import type moment from 'moment';
 import { connect, Dispatch } from 'umi';
 
 import PageLoading from './components/PageLoading';
 import { getTimeDistance } from './utils/utils';
-import { AnalysisData } from './data.d';
+import type { AnalysisData } from './data.d';
 import styles from './style.less';
 
 const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
-const SalesCard = React.lazy(() => import('./components/SalesCard'));
-const TopSearch = React.lazy(() => import('./components/TopSearch'));
+// const SalesCard = React.lazy(() => import('./components/SalesCard'));
+// const TopSearch = React.lazy(() => import('./components/TopSearch'));
 const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
 const OfflineData = React.lazy(() => import('./components/OfflineData'));
 
@@ -117,13 +117,14 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
   };
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    // rangePickerValue,
+    const { salesType, currentTabKey } = this.state;
     const { dashboardAndanalysis, loading } = this.props;
     const {
       visitData,
-      visitData2,
-      salesData,
-      searchData,
+      // visitData2,
+      // salesData,
+      // searchData,
       offlineData,
       offlineChartData,
       salesTypeData,
@@ -158,7 +159,7 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
           <Suspense fallback={<PageLoading />}>
             <IntroduceRow loading={loading} visitData={visitData} />
           </Suspense>
-          <Suspense fallback={null}>
+          {/* <Suspense fallback={null}>
             <SalesCard
               rangePickerValue={rangePickerValue}
               salesData={salesData}
@@ -167,14 +168,14 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
               loading={loading}
               selectDate={this.selectDate}
             />
-          </Suspense>
+          </Suspense> */}
           <Row
             gutter={24}
             style={{
-              marginTop: 24,
+              margin: '24 0 0 0',
             }}
           >
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+            {/* <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <TopSearch
                   loading={loading}
@@ -183,14 +184,36 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
                   dropdownGroup={dropdownGroup}
                 />
               </Suspense>
-            </Col>
+            </Col> */}
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <ProportionSales
                   dropdownGroup={dropdownGroup}
                   salesType={salesType}
                   loading={loading}
+                  salesPieData={salesTypeDataOnline}
+                  inner={0}
+                  types={1}
+                  handleChangeSalesType={this.handleChangeSalesType}
+                />
+              </Suspense>
+            </Col>
+          </Row>
+          <Row
+            gutter={24}
+            // style={{
+            //   margin: '0 0 24 0',
+            // }}
+          >
+            <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ margin: '24px 0 0 0' }}>
+              <Suspense fallback={null}>
+                <ProportionSales
+                  dropdownGroup={dropdownGroup}
+                  salesType={salesType}
+                  loading={loading}
                   salesPieData={salesPieData}
+                  inner={0.3}
+                  types={2}
                   handleChangeSalesType={this.handleChangeSalesType}
                 />
               </Suspense>

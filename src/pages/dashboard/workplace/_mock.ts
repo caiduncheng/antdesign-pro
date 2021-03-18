@@ -56,10 +56,6 @@ const salesTypeData = [
     y: 2341,
   },
   {
-    x: '母婴产品',
-    y: 1231,
-  },
-  {
     x: '其他',
     y: 1231,
   },
@@ -81,10 +77,6 @@ const salesTypeDataOnline = [
   {
     x: '服饰箱包',
     y: 41,
-  },
-  {
-    x: '母婴产品',
-    y: 121,
   },
   {
     x: '其他',
