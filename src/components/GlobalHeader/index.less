@@ -41,12 +41,27 @@
     }
   }
   .account {
+    .usernameContainer {
+      color: rgb(255, 255, 255);
+      display: flex;
+      flex-direction: column;
+      line-height: 24px;
+      text-align: right;
+    }
+    .name {
+      font-weight: bold;
+    }
+    .role {
+      color: #5D7B94;
+    }
     .avatar {
       margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
-      margin-right: 8px;
+      margin-left: 12px;
       color: @primary-color;
       vertical-align: top;
       background: rgba(255, 255, 255, 0.85);
+      width: 42px;
+      height: 42px;
     }
   }
 }
