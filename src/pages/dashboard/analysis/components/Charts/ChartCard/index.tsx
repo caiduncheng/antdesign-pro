@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import { CardProps } from 'antd/es/card';
+import type { CardProps } from 'antd/es/card';
 import React from 'react';
 import classNames from 'classnames';
 import styles from './index.less';
@@ -87,7 +87,15 @@ class ChartCard extends React.Component<ChartCardProps> {
       ...rest
     } = this.props;
     return (
-      <Card loading={loading} bodyStyle={{ padding: '20px 24px 8px 24px' }} {...rest}>
+      <Card
+        loading={loading}
+        bodyStyle={{
+          padding: '20px 24px 8px 24px',
+          // backgroundImage: "url('../../../../../../assets/01.png')",
+        }}
+        // className={styles.cardimg}
+        {...rest}
+      >
         {this.renderContent()}
       </Card>
     );

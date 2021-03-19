@@ -5,7 +5,8 @@ import { GridContent } from '@ant-design/pro-layout';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import type { RangePickerProps } from 'antd/es/date-picker/generatePicker';
 import type moment from 'moment';
-import { connect, Dispatch } from 'umi';
+import { connect } from 'umi';
+import type { Dispatch } from 'umi';
 
 import PageLoading from './components/PageLoading';
 import { getTimeDistance } from './utils/utils';
@@ -17,6 +18,8 @@ const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
 // const TopSearch = React.lazy(() => import('./components/TopSearch'));
 const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
 const OfflineData = React.lazy(() => import('./components/OfflineData'));
+const SystemCalendar = React.lazy(() => import('./components/SystemCalendar'));
+// const SystemMsg = React.lazy(() => import('./components/SystemMsg'));
 
 type RangePickerValue = RangePickerProps<moment.Moment>['value'];
 
@@ -118,15 +121,16 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
 
   render() {
     // rangePickerValue,
-    const { salesType, currentTabKey } = this.state;
+    const { salesType } = this.state;
     const { dashboardAndanalysis, loading } = this.props;
     const {
       visitData,
       // visitData2,
       // salesData,
       // searchData,
-      offlineData,
-      offlineChartData,
+      // offlineData,
+      // offlineChartData,
+      norlineChartData,
       salesTypeData,
       salesTypeDataOnline,
       salesTypeDataOffline,
@@ -152,7 +156,7 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
       </span>
     );
 
-    const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
+    // const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
     return (
       <GridContent>
         <React.Fragment>
@@ -198,6 +202,11 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
                 />
               </Suspense>
             </Col>
+            <Col xl={6} lg={12} md={12} sm={12} xs={12}>
+              <Suspense fallback={null}>
+                <SystemCalendar loading={loading} />
+              </Suspense>
+            </Col>
           </Row>
           <Row
             gutter={24}
@@ -218,16 +227,17 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
                 />
               </Suspense>
             </Col>
+            <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ margin: '24px 0 0 0' }}>
+              <Suspense fallback={null}>
+                <OfflineData
+                  loading={loading}
+                  norlineChartData={norlineChartData}
+                  // offlineChartData={offlineChartData}
+                  // handleTabChange={this.handleTabChange}
+                />
+              </Suspense>
+            </Col>
           </Row>
-          <Suspense fallback={null}>
-            <OfflineData
-              activeKey={activeKey}
-              loading={loading}
-              offlineData={offlineData}
-              offlineChartData={offlineChartData}
-              handleTabChange={this.handleTabChange}
-            />
-          </Suspense>
         </React.Fragment>
       </GridContent>
     );

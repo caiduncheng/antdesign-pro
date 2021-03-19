@@ -123,6 +123,16 @@ for (let i = 0; i < 20; i += 1) {
     y2: Math.floor(Math.random() * 100) + 10,
   });
 }
+// 常规折线图
+const norlineChartData = [];
+const xValue = ['一','二','三','四','五'];
+for (let i = 0; i < 5; i += 1) {
+  norlineChartData.push({
+    x: xValue[i],
+    y1: Math.floor(Math.random() * 100) + 10,
+    y2: Math.floor(Math.random() * 100) + 10,
+  });
+}
 
 const radarOriginData = [
   {
@@ -178,6 +188,7 @@ const getFakeChartData: AnalysisData = {
   searchData,
   offlineData,
   offlineChartData,
+  norlineChartData,
   salesTypeData,
   salesTypeDataOnline,
   salesTypeDataOffline,

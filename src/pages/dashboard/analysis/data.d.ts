@@ -21,6 +21,11 @@ export interface OfflineChartData {
   y1: number;
   y2: number;
 }
+export interface norlineChartData {
+  x: any;
+  y1: number;
+  y2: number;
+}
 
 export interface RadarData {
   name: string;
@@ -35,6 +40,7 @@ export interface AnalysisData {
   searchData: SearchDataType[];
   offlineData: OfflineDataType[];
   offlineChartData: OfflineChartData[];
+  norlineChartData: norlineChartData[];
   salesTypeData: VisitDataType[];
   salesTypeDataOnline: VisitDataType[];
   salesTypeDataOffline: VisitDataType[];

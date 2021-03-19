@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { VisitDataType } from './data.d';
+import type { VisitDataType } from './data.d';
 // mock data
 const visitData: VisitDataType[] = [];
 const beginDay = new Date().getTime();
@@ -118,6 +118,17 @@ const offlineChartData = [];
 for (let i = 0; i < 20; i += 1) {
   offlineChartData.push({
     x: new Date().getTime() + 1000 * 60 * 30 * i,
+    y1: Math.floor(Math.random() * 100) + 10,
+    y2: Math.floor(Math.random() * 100) + 10,
+  });
+}
+// 常规折线图
+const norlineChartData = [];
+const xValue = ['一','二','三','四','五'];
+for (let i = 0; i < 5; i += 1) {
+  
+  norlineChartData.push({
+    x: xValue[i],
     y1: Math.floor(Math.random() * 100) + 10,
     y2: Math.floor(Math.random() * 100) + 10,
   });
@@ -378,6 +389,7 @@ export default {
     searchData,
     offlineData,
     offlineChartData,
+    norlineChartData,
     salesTypeData,
     salesTypeDataOnline,
     salesTypeDataOffline,

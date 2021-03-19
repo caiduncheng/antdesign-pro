@@ -22,6 +22,8 @@ export default {
   'dashboardandanalysis.analysis.per-capita-search': 'Per Capita Search',
   'dashboardandanalysis.analysis.online-top-search': 'Online Top Search',
   'dashboardandanalysis.analysis.the-proportion-of-sales': 'The Proportion Of Sales',
+  'dashboardandanalysis.analysis.the-calendar-of-system': 'System Calendar',
+  'dashboardandanalysis.analysis.messages':'Message',
   'dashboardandanalysis.channel.all': 'ALL',
   'dashboardandanalysis.channel.online': 'Online',
   'dashboardandanalysis.channel.stores': 'Stores',

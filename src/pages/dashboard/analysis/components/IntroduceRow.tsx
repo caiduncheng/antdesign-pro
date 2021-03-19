@@ -5,10 +5,14 @@ import { FormattedMessage } from 'umi';
 import React from 'react';
 // import numeral from 'numeral';
 import { ChartCard } from './Charts';
+// import { urlencoded } from 'express';
 // import { VisitDataType } from '../data.d';
 // import Trend from './Trend';
 // import Yuan from '../utils/Yuan';
 // import styles from '../style.less';
+import img01 from '@/assets/01.png';
+import img02 from '@/assets/02.png';
+import img03 from '@/assets/03.png';
 
 const topColResponsiveProps = {
   xs: 24,
@@ -23,7 +27,13 @@ const IntroduceRow = ({ loading }: { loading: boolean }) => (
   <Row gutter={24} type="flex">
     <Col {...topColResponsiveProps}>
       <ChartCard
-        bodyStyle={{ backgroundColor: '#258DF4', borderRadius: '2px' }}
+        bodyStyle={{
+          backgroundColor: '#258DF4',
+          borderRadius: '2px',
+          backgroundImage: `url(${img01})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: '103% 140%',
+        }}
         bordered={false}
         title={
           <FormattedMessage
@@ -31,6 +41,7 @@ const IntroduceRow = ({ loading }: { loading: boolean }) => (
             defaultMessage="Not Started"
           />
         }
+        // bcimg={bcimg}
         // action={
         //   <Tooltip
         //     title={
@@ -74,7 +85,13 @@ const IntroduceRow = ({ loading }: { loading: boolean }) => (
 
     <Col {...topColResponsiveProps}>
       <ChartCard
-        bodyStyle={{ backgroundColor: '#FF474C', borderRadius: '2px' }}
+        bodyStyle={{
+          backgroundColor: '#FF474C',
+          borderRadius: '2px',
+          backgroundImage: `url(${img02})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: '100% 100%',
+        }}
         bordered={false}
         loading={loading}
         title={
@@ -115,7 +132,13 @@ const IntroduceRow = ({ loading }: { loading: boolean }) => (
     </Col>
     <Col {...topColResponsiveProps}>
       <ChartCard
-        bodyStyle={{ backgroundColor: '#00B98B', borderRadius: '2px' }}
+        bodyStyle={{
+          backgroundColor: '#00B98B',
+          borderRadius: '2px',
+          backgroundImage: `url(${img03})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: '100% 100%',
+        }}
         bordered={false}
         loading={loading}
         title={

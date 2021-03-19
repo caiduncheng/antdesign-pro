@@ -1,40 +1,20 @@
 import { Card } from 'antd';
 
 import { FormattedMessage } from 'umi';
-import type { RadioChangeEvent } from 'antd/es/radio';
 import React from 'react';
-import type { VisitDataType } from '../data.d';
-import { Pie } from './Charts';
+// import { Pie } from './Charts';
+import Messages from './Message';
 // import Yuan from '../utils/Yuan';
 import styles from '../style.less';
 
-const ProportionSales = ({
-  inner,
-  types,
-  // dropdownGroup,
-  // salesType,
-  loading,
-  salesPieData,
-}: // handleChangeSalesType,
-{
-  inner: number;
-  types: number;
-  loading: boolean;
-  dropdownGroup: React.ReactNode;
-  salesType: 'all' | 'online' | 'stores';
-  salesPieData: VisitDataType[];
-  handleChangeSalesType?: (e: RadioChangeEvent) => void;
-}) => (
+const SystemMsg = ({ loading }: { loading: boolean }) => (
   <Card
     loading={loading}
     className={styles.salesCard}
     bordered={false}
-    // title={
-    //   <FormattedMessage
-    //     id="dashboardandanalysis.analysis.the-proportion-of-sales"
-    //     defaultMessage="The Proportion of Sales"
-    //   />
-    // }
+    title={
+      <FormattedMessage id="dashboardandanalysis.analysis.messages" defaultMessage="Message" />
+    }
     style={{
       height: '100%',
     }}
@@ -58,26 +38,14 @@ const ProportionSales = ({
     // }
   >
     <div>
-      <h2
+      {/* <h2
       // style={{ marginTop: 8, marginBottom: 16 }}
       >
         <FormattedMessage id="dashboardandanalysis.analysis.sales" defaultMessage="Sales" />
-      </h2>
-      <Pie
-        hasLegend
-        // subTitle={
-        //   <FormattedMessage id="dashboardandanalysis.analysis.sales" defaultMessage="Sales" />
-        // }
-        // total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}
-        data={salesPieData}
-        // valueFormat={(value) => <Yuan>{value}</Yuan>}
-        height={248}
-        lineWidth={0}
-        inner={inner}
-        types={types}
-      />
+      </h2> */}
+      <Messages></Messages>
     </div>
   </Card>
 );
 
-export default ProportionSales;
+export default SystemMsg;
