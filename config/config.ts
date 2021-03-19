@@ -1,5 +1,5 @@
 // https://umijs.org/config/
-import { defineConfig } from 'umi';
+import { defineConfig, Redirect } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
@@ -69,7 +69,7 @@ export default defineConfig({
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
           authority: ['admin', 'user'],
-          routes: [
+          routes: [            
             {
               path: '/',
               redirect: '/dashboard/analysis',
@@ -77,31 +77,73 @@ export default defineConfig({
             {
               path: '/dashboard',
               name: 'dashboard',
-              icon: 'dashboard',
+              icon: 'icon-home',
+              component: './dashboard/analysis'
+              // routes: [
+              //   {
+              //     path: '/',
+              //     redirect: '/dashboard/analysis',
+              //   },
+              //   {
+              //     name: 'analysis',
+              //     icon: 'smile',
+              //     path: '/dashboard/analysis',
+              //     component: './dashboard/analysis',
+              //   },
+              //   {
+              //     name: 'monitor',
+              //     icon: 'smile',
+              //     path: '/dashboard/monitor',
+              //     component: './dashboard/monitor',
+              //   },
+              //   {
+              //     name: 'workplace',
+              //     icon: 'smile',
+              //     path: '/dashboard/workplace',
+              //     component: './dashboard/workplace',
+              //   },
+              // ],
+            },
+            {
+              path: '/settings',
+              icon: 'icon-settings',
+              name: 'settings',
               routes: [
                 {
                   path: '/',
-                  redirect: '/dashboard/analysis',
+                  redirect: '/settins/admin-list'
                 },
                 {
-                  name: 'analysis',
+                  name: 'admin-list',
                   icon: 'smile',
-                  path: '/dashboard/analysis',
-                  component: './dashboard/analysis',
+                  path: '/settings/admin-list'                  
                 },
                 {
-                  name: 'monitor',
+                  name: 'role-list',
                   icon: 'smile',
-                  path: '/dashboard/monitor',
-                  component: './dashboard/monitor',
+                  path: '/settings/role-list'
                 },
                 {
-                  name: 'workplace',
+                  name: 'menu-list',
                   icon: 'smile',
-                  path: '/dashboard/workplace',
-                  component: './dashboard/workplace',
-                },
-              ],
+                  path: '/settings/menu-list'
+                }
+              ]
+            },
+            {
+              path: '/issue',
+              icon: 'icon-person',
+              name: 'issue'
+            },
+            {
+              path: '/documents',
+              icon: 'icon-document',
+              name: 'documents'
+            },
+            {
+              path: '/message',
+              icon: 'icon-message',
+              name: 'message'
             },
             {
               path: '/form',

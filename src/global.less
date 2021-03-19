@@ -53,11 +53,27 @@ ol {
   }
 }
 
-// 组件样式重写
+// antd组件样式重写
 .ant-menu-submenu-title .anticon {
   margin-right: 20px;
 }
 
 .ant-pro-sider-menu span.ant-pro-menu-item-title {
   font-weight: bold;
+}
+
+.ant-pro-global-header-logo {
+  text-transform: uppercase;
+}
+
+.ant-menu > li.ant-menu-item-selected {
+  &::before {
+    width: 4px;
+    height: 100%;
+    background-color: #FF474C;
+    border-radius: 10px;
+    content: '';
+    position: absolute;
+    left: 0;
+  }
 }
