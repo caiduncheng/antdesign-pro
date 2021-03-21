@@ -58,9 +58,7 @@ const ProportionSales = ({
     // }
   >
     <div>
-      <h2
-      // style={{ marginTop: 8, marginBottom: 16 }}
-      >
+      <h2 style={{ fontWeight: 700 }}>
         <FormattedMessage id="dashboardandanalysis.analysis.sales" defaultMessage="Sales" />
       </h2>
       <Pie

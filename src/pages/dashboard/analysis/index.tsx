@@ -19,7 +19,7 @@ const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
 const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
 const OfflineData = React.lazy(() => import('./components/OfflineData'));
 const SystemCalendar = React.lazy(() => import('./components/SystemCalendar'));
-// const SystemMsg = React.lazy(() => import('./components/SystemMsg'));
+const SystemMsg = React.lazy(() => import('./components/SystemMsg'));
 
 type RangePickerValue = RangePickerProps<moment.Moment>['value'];
 
@@ -131,10 +131,13 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
       // offlineData,
       // offlineChartData,
       norlineChartData,
+      messageData,
       salesTypeData,
       salesTypeDataOnline,
       salesTypeDataOffline,
     } = dashboardAndanalysis;
+    console.log(norlineChartData);
+
     let salesPieData;
     if (salesType === 'all') {
       salesPieData = salesTypeData;
@@ -205,6 +208,11 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
             <Col xl={6} lg={12} md={12} sm={12} xs={12}>
               <Suspense fallback={null}>
                 <SystemCalendar loading={loading} />
+              </Suspense>
+            </Col>
+            <Col xl={6} lg={12} md={12} sm={12} xs={12}>
+              <Suspense fallback={null}>
+                <SystemMsg loading={loading} messageData={messageData} />
               </Suspense>
             </Col>
           </Row>
