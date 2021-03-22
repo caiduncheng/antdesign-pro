@@ -10,7 +10,8 @@ export default {
     '/api/': {
       target: 'https://192.168.35.175/npnserver',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: { '^': '' },
+      secure: false
     },
   },
   test: {
