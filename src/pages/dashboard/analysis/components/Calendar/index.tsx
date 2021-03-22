@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import styles from './index.less';
 
 import { Calendar, Select, Radio, Col, Row, Typography } from 'antd';
-import { FormattedMessage } from '@/.umi/plugin-locale/localeExports';
+// import { FormattedMessage } from '@/.umi/plugin-locale/localeExports';
 
 // const onPanelChange = (value: any, mode: string) => {
 // console.log(value, mode);
@@ -50,12 +50,12 @@ class TheCalendar extends Component {
     }
     return (
       <div style={{ padding: 8 }}>
-        <Typography.Title level={4}>
+        {/* <Typography.Title level={4}>
           <FormattedMessage
             id="dashboardandanalysis.analysis.the-calendar-of-system"
             defaultMessage="System Calendar"
           />
-        </Typography.Title>
+        </Typography.Title> */}
         <Row gutter={8}>
           <Col>
             <Radio.Group size="small" onChange={(e) => onTypeChange(e.target.value)} value={type}>

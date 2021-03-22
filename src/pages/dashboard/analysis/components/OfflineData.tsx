@@ -1,6 +1,6 @@
 import { Card } from 'antd';
 // FormattedMessage,
-import { formatMessage } from 'umi';
+import { formatMessage, FormattedMessage } from 'umi';
 import React from 'react';
 // OfflineChartData, OfflineDataType,
 import { norlineChartData } from '../data.d';
@@ -83,10 +83,18 @@ const OfflineData = ({
         </TabPane>
       ))}
     </Tabs> */}
-    <div style={{ padding: '0 24px', height: '100%' }}>
+    <div
+    // style={{ padding: '0 24px', height: '100%' }}
+    >
+      <h2 style={{ fontWeight: 700 }}>
+        <FormattedMessage
+          id="dashboardandanalysis.analysis.linechart"
+          defaultMessage="Line Chart"
+        />
+      </h2>
       <TimelineChart
-        title={'折线图'}
-        height={275}
+        // title={'折线图'}
+        height={245}
         data={norlineChartData}
         titleMap={{
           y1: formatMessage({ id: 'dashboardandanalysis.analysis.traffic' }),

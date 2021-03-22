@@ -5,6 +5,7 @@ import React from 'react';
 import TheCalendar from './Calendar';
 // import Yuan from '../utils/Yuan';
 import styles from '../style.less';
+import { FormattedMessage } from '@/.umi/plugin-locale/localeExports';
 
 // import closeIcon from '@/assets/close.svg';
 // import refreshIcon from '@/assets/refresh.svg';
@@ -49,6 +50,12 @@ const SystemCalendar = ({ loading }: { loading: boolean }) => (
     // }
   >
     <div>
+      <h2 style={{ fontWeight: 700 }}>
+        <FormattedMessage
+          id="dashboardandanalysis.analysis.the-calendar-of-system"
+          defaultMessage="System Calendar"
+        />
+      </h2>
       <TheCalendar />
     </div>
   </Card>

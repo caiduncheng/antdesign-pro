@@ -134,6 +134,59 @@ for (let i = 0; i < 5; i += 1) {
   });
 }
 
+const messageData = [
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+  {
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    name: '新大陆',
+    content:'每一次支付都能发现...'
+  },
+];
+
 const titles = [
   'Alipay',
   'Angular',
@@ -390,6 +443,7 @@ export default {
     offlineData,
     offlineChartData,
     norlineChartData,
+    messageData,
     salesTypeData,
     salesTypeDataOnline,
     salesTypeDataOffline,
