@@ -1,6 +1,6 @@
 import { UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { useIntl, connect, FormattedMessage } from 'umi';
 // import { getFakeCaptcha } from '@/services/login';
@@ -36,8 +36,13 @@ const Login: React.FC<LoginProps> = (props) => {
   const { status } = userLogin;
   const [type] = useState<string>('account');
   const intl = useIntl();
+    
+  const [UUID, setUUID] = useState('')
 
-  const uuid = getUUID();
+  useEffect(() => {
+    setUUID(getUUID())
+  }, [])
+    
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
@@ -46,6 +51,11 @@ const Login: React.FC<LoginProps> = (props) => {
       payload: { ...values, type },
     });
   };
+
+  const handleCaptchaClick = () => {
+    setUUID(getUUID())
+  } 
+
   return (
     <div className={styles.main}>
       <ProForm
@@ -148,8 +158,8 @@ const Login: React.FC<LoginProps> = (props) => {
               },
             ]}
           />
-          <div className={styles.captImg}>
-            <img src={`https://192.168.35.175/npnserver/captcha.jpg?uuid=${uuid}`} alt="captcha" />
+          <div className={styles.captImg} onClick={handleCaptchaClick}>
+            <img src={`http://121.36.23.30:12461/portalbase/captcha.jpg?uuid=${UUID}`} alt="captcha" />
           </div>
         </div>
         {/* <ProFormCaptcha
