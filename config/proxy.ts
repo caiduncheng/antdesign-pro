@@ -8,7 +8,7 @@
 export default {
   dev: {
     '/api/': {
-      target: 'https://192.168.35.175/npnserver',
+      target: 'http://121.36.23.30:12461/portalbase',
       changeOrigin: true,
       pathRewrite: { '^': '' },
       secure: false
@@ -16,14 +16,14 @@ export default {
   },
   test: {
     '/api/': {
-      target: 'https://192.168.35.175/npnserver',
+      target: 'http://121.36.23.30:12461/portalbase',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   pre: {
     '/api/': {
-      target: 'https://192.168.35.175/npnserver',
+      target: 'http://121.36.23.30:12461/portalbase',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

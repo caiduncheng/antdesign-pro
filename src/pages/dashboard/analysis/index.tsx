@@ -136,7 +136,6 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
       salesTypeDataOnline,
       salesTypeDataOffline,
     } = dashboardAndanalysis;
-    console.log(norlineChartData);
 
     let salesPieData;
     if (salesType === 'all') {

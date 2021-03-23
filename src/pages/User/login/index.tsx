@@ -11,6 +11,8 @@ import type { ConnectState } from '@/models/connect';
 import { getUUID } from '@/utils/utils';
 
 import styles from './index.less';
+// import { resolveOnChange } from 'antd/lib/input/Input';
+// import { wrapConstructor } from 'lodash-decorators/utils';
 
 export type LoginProps = {
   dispatch: Dispatch;
@@ -34,27 +36,27 @@ const LoginMessage: React.FC<{
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
   const { status } = userLogin;
-  const [type] = useState<string>('account');
+  // const [type] = useState<string>('account');
   const intl = useIntl();
-    
-  const [UUID, setUUID] = useState('')
+
+  const [UUID, setUUID] = useState('');
 
   useEffect(() => {
-    setUUID(getUUID())
-  }, [])
-    
+    setUUID(getUUID());
+  }, []);
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
     dispatch({
       type: 'login/login',
-      payload: { ...values, type },
+      // payload: { ...values, type },
+      payload: { ...values },
     });
   };
 
   const handleCaptchaClick = () => {
-    setUUID(getUUID())
-  } 
+    setUUID(getUUID());
+  };
 
   return (
     <div className={styles.main}>
@@ -77,6 +79,9 @@ const Login: React.FC<LoginProps> = (props) => {
           },
         }}
         onFinish={(values) => {
+          values.uuid = UUID;
+          console.log(values);
+
           handleSubmit(values as LoginParamsType);
           return Promise.resolve();
         }}
@@ -91,7 +96,7 @@ const Login: React.FC<LoginProps> = (props) => {
           />
         )}
         <ProFormText
-          name="userName"
+          name="username"
           fieldProps={{
             size: 'large',
             prefix: <UserOutlined className={styles.prefixIcon} />,
@@ -159,7 +164,10 @@ const Login: React.FC<LoginProps> = (props) => {
             ]}
           />
           <div className={styles.captImg} onClick={handleCaptchaClick}>
-            <img src={`http://121.36.23.30:12461/portalbase/captcha.jpg?uuid=${UUID}`} alt="captcha" />
+            <img
+              src={`http://121.36.23.30:12461/portalbase/captcha.jpg?uuid=${UUID}`}
+              alt="captcha"
+            />
           </div>
         </div>
         {/* <ProFormCaptcha
@@ -212,7 +220,11 @@ const Login: React.FC<LoginProps> = (props) => {
             marginBottom: 24,
           }}
         >
-          <ProFormCheckbox noStyle name="autoLogin" className={styles.check}>
+          <ProFormCheckbox
+            noStyle
+            // name="autoLogin"
+            className={styles.check}
+          >
             <FormattedMessage id="pages.login.rememberMe" defaultMessage="记住密码" />
           </ProFormCheckbox>
         </div>

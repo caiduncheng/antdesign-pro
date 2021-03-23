@@ -40,7 +40,9 @@ const Model: LoginModelType = {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      console.log(response);
+      
+      if (response.code === '0000') {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         message.success('🎉 🎉 🎉  登录成功！');
@@ -58,9 +60,10 @@ const Model: LoginModelType = {
           }
         }
         history.replace(redirect || '/');
+      } else {
+        message.success(response.msg);
       }
     },
-
     logout() {
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note

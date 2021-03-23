@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export type LoginParamsType = {
-  userName: string;
+  username: string;
   password: string;
   // mobile: string;
   uuid: string;
@@ -9,12 +9,14 @@ export type LoginParamsType = {
 };
 
 export async function fakeAccountLogin(params: LoginParamsType) {
-  return request('/api/sys/login', {
+  console.log(params);
+  
+  return request('/api/portal/login', {
     method: 'POST',
     data: params,
   });
 }
 
-export async function getFakeCaptcha(mobile: string) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
-}
+// export async function getFakeCaptcha(mobile: string) {
+//   return request(`/api/login/captcha?mobile=${mobile}`);
+// }
