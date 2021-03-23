@@ -1,4 +1,4 @@
-import { UnlockOutlined, UserOutlined } from '@ant-design/icons';
+import { ConsoleSqlOutlined, UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert } from 'antd';
 import React, { useState, useEffect } from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
@@ -34,7 +34,7 @@ const LoginMessage: React.FC<{
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
   const { status } = userLogin;
-  const [type] = useState<string>('account');
+  // const [type] = useState<string>('account');
   const intl = useIntl();
     
   const [UUID, setUUID] = useState(getUUID())  
@@ -43,7 +43,7 @@ const Login: React.FC<LoginProps> = (props) => {
     const { dispatch } = props;
     dispatch({
       type: 'login/login',
-      payload: { ...values, type },
+      payload: { ...values },
     });
   };
 
@@ -72,6 +72,7 @@ const Login: React.FC<LoginProps> = (props) => {
           },
         }}
         onFinish={(values) => {
+          values.uuid = UUID
           handleSubmit(values as LoginParamsType);
           return Promise.resolve();
         }}
@@ -86,7 +87,7 @@ const Login: React.FC<LoginProps> = (props) => {
           />
         )}
         <ProFormText
-          name="userName"
+          name="username"
           fieldProps={{
             size: 'large',
             prefix: <UserOutlined className={styles.prefixIcon} />,
@@ -207,9 +208,9 @@ const Login: React.FC<LoginProps> = (props) => {
             marginBottom: 24,
           }}
         >
-          <ProFormCheckbox noStyle name="autoLogin" className={styles.check}>
+          {/* <ProFormCheckbox noStyle name="autoLogin" className={styles.check}>
             <FormattedMessage id="pages.login.rememberMe" defaultMessage="记住密码" />
-          </ProFormCheckbox>
+          </ProFormCheckbox> */}
         </div>
       </ProForm>
     </div>

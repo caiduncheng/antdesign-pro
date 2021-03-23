@@ -26,8 +26,13 @@ export const getPageQuery = () => parse(window.location.href.split('?')[1]);
 /**
  * 获取uuid
  */
-export function getUUID () {
+export function getUUID (): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
     return (c === 'x' ? (Math.random() * 16 | 0) : '8').toString(16)
   })
+}
+
+// 密钥
+export function getRsaPublicKey (): string {  
+  return 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtDAhoWampPDDudem2cy+x5xB4avhCZsX/cgmZJxda38sJ/oiORurSt68C50hKlM3QioZwDFFpniyXR+ipt8rL0xKC9LExd2Cf+VG2tZniS4ziYsYCfH5xVzSkDZT/zXE8Kjwq97td4tmH6Ox2qufmRgWQ6n5othEhkCD9DDOG3QIDAQAB';
 }
