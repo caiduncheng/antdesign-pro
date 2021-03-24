@@ -50,15 +50,18 @@ const errorHandler = (error: { response: Response }): Response => {
  */
 const request = extend({
   errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  credentials: 'omit'
 });
 
 // 拦截器
-request.interceptors.request.use((url, options) => {
-  return {
-    url: process.env.baseUrl + url,
-    options
-  }
-})
+// request.interceptors.request.use((url, options) => {
+//   console.log(options)
+//   return {
+//     url: process.env.baseUrl + url,
+//     options: {      
+//       ...options      
+//     },
+//   }
+// })
 
 export default request;

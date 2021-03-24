@@ -2,15 +2,16 @@ import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { login } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
+import { getPageQuery, getUUID } from '@/utils/utils';
 import { message } from 'antd';
 
 export type StateType = {
-  status?: 'ok' | 'error';
+  status?: 'ok' | 'error' ;
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
+  UUID?: string;
 };
 
 export type LoginModelType = {
@@ -22,6 +23,7 @@ export type LoginModelType = {
   };
   reducers: {
     changeLoginStatus: Reducer<StateType>;
+    changeLoginCapcha: Reducer<StateType>;
   };
 };
 
@@ -30,21 +32,24 @@ const Model: LoginModelType = {
 
   state: {
     status: undefined,
+    UUID:getUUID(),
   },
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(login, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
       // Login successfully
-      console.log(response);
       
       if (response.code === '0000') {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        
         message.success('🎉 🎉 🎉  登录成功！');
         let { redirect } = params as { redirect: string };
         if (redirect) {
@@ -60,8 +65,6 @@ const Model: LoginModelType = {
           }
         }
         history.replace(redirect || '/');
-      } else {
-        message.success(response.msg);
       }
     },
     logout() {
@@ -83,8 +86,15 @@ const Model: LoginModelType = {
       setAuthority(payload.currentAuthority);
       return {
         ...state,
-        status: payload.status,
+        status: payload.code==='0000'?'ok':'error',
         type: payload.type,
+        UUID:getUUID(),
+      };
+    },
+    changeLoginCapcha(state, { payload }) {
+      return {
+        ...state,
+        UUID:payload,
       };
     },
   },

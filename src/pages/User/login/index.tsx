@@ -1,4 +1,4 @@
-import { UnlockOutlined, UserOutlined } from '@ant-design/icons';
+import { ConsoleSqlOutlined, UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
@@ -34,24 +34,31 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
-  const { status } = userLogin;
+  const { status, UUID } = userLogin;
   // const [type] = useState<string>('account');
   const intl = useIntl();
-
-  const [UUID, setUUID] = useState(getUUID());
+  // const [UUID, setUUID] = useState(getUUID());
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
     dispatch({
       type: 'login/login',
-      // payload: { ...values, type },
       payload: { ...values },
     });
   };
 
   const handleCaptchaClick = () => {
-    setUUID(getUUID());
+    // setUUID(getUUID());
+    const { dispatch } = props;
+    dispatch({
+      type: 'login/changeLoginCapcha',
+      payload: getUUID(),
+    });
   };
+
+  if (status === 'error') {
+    handleCaptchaClick;
+  }
 
   return (
     <div className={styles.main}>
@@ -74,9 +81,8 @@ const Login: React.FC<LoginProps> = (props) => {
           },
         }}
         onFinish={(values) => {
+          // values.uuid = UUID;
           values.uuid = UUID;
-          console.log(values);
-
           handleSubmit(values as LoginParamsType);
           return Promise.resolve();
         }}
@@ -159,7 +165,8 @@ const Login: React.FC<LoginProps> = (props) => {
             ]}
           />
           <div className={styles.captImg} onClick={handleCaptchaClick}>
-            <img src={`${process.env.baseUrl}/captcha.jpg?uuid=${UUID}`} alt="captcha" />
+            {/* <img src={`${process.env.baseUrl}/captcha.jpg?uuid=${UUID}`} alt="captcha" /> */}
+            <img src={`/api/captcha.jpg?uuid=${UUID}`} alt="captcha" />
           </div>
         </div>
         {/* <ProFormCaptcha
@@ -212,13 +219,9 @@ const Login: React.FC<LoginProps> = (props) => {
             marginBottom: 24,
           }}
         >
-          <ProFormCheckbox
-            noStyle
-            // name="autoLogin"
-            className={styles.check}
-          >
+          {/* <ProFormCheckbox noStyle name="autoLogin" className={styles.check}>
             <FormattedMessage id="pages.login.rememberMe" defaultMessage="记住密码" />
-          </ProFormCheckbox>
+          </ProFormCheckbox> */}
         </div>
       </ProForm>
     </div>

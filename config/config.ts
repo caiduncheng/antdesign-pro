@@ -10,7 +10,8 @@ export default defineConfig({
   antd: {
   },
   define: {
-    "process.env.baseUrl": "http://121.36.23.30:12461/portalbase"
+    // "process.env.baseUrl": "http://121.36.23.30:12461/portalbase"
+    "process.env.baseUrl": "http://192.168.35.8:7050/portal"
   },
   dva: {
     hmr: true,
