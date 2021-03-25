@@ -35,9 +35,7 @@ const LoginMessage: React.FC<{
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
   const { status, UUID } = userLogin;
-  // const [type] = useState<string>('account');
   const intl = useIntl();
-  // const [UUID, setUUID] = useState(getUUID());
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
@@ -48,7 +46,6 @@ const Login: React.FC<LoginProps> = (props) => {
   };
 
   const handleCaptchaClick = () => {
-    // setUUID(getUUID());
     const { dispatch } = props;
     dispatch({
       type: 'login/changeLoginCapcha',
@@ -165,7 +162,6 @@ const Login: React.FC<LoginProps> = (props) => {
             ]}
           />
           <div className={styles.captImg} onClick={handleCaptchaClick}>
-            {/* <img src={`${process.env.baseUrl}/captcha.jpg?uuid=${UUID}`} alt="captcha" /> */}
             <img src={`/api/captcha.jpg?uuid=${UUID}`} alt="captcha" />
           </div>
         </div>

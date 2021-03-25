@@ -38,6 +38,7 @@ export type BasicLayoutProps = {
   };
   settings: Settings;
   dispatch: Dispatch;
+  menuData: MenuDataItem[];
 } & ProLayoutProps;
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: Record<string, MenuDataItem>;
@@ -48,6 +49,8 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map((item) => {
+    // console.log(item);
+
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : undefined,
@@ -89,12 +92,18 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     location = {
       pathname: '/',
     },
+    menuData,
   } = props;
+  console.log(menuData);
+
   const menuDataRef = useRef<MenuDataItem[]>([]);
   useEffect(() => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
+      });
+      dispatch({
+        type: 'menu/getMenuData',
       });
     }
   }, []);
@@ -158,6 +167,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         }}
         // footerRender={() => defaultFooterDom}
         menuDataRender={menuDataRender}
+        // menuDataRender={() => menuData}
         rightContentRender={() => <RightContent />}
         postMenuData={(menuData) => {
           menuDataRef.current = menuData || [];
@@ -181,7 +191,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   );
 };
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({ global, settings, menu }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
+  menuData: menu.menuData,
 }))(BasicLayout);

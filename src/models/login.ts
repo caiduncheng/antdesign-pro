@@ -8,7 +8,7 @@ import { getPageQuery, getUUID } from '@/utils/utils';
 import { message } from 'antd';
 
 export type StateType = {
-  status?: 'ok' | 'error' ;
+  status?: 'ok' | 'error';
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
   UUID?: string;
@@ -32,24 +32,23 @@ const Model: LoginModelType = {
 
   state: {
     status: undefined,
-    UUID:getUUID(),
+    UUID: getUUID(),
   },
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(login, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
+      const response: Res.ResponseResult<Res.LoginData> = yield call(login, payload);
       // Login successfully
-      
       if (response.code === '0000') {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: { status: 'ok' },
+        });
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
-        const token = response.data.token;
+        const { token } = response.data;
         localStorage.setItem('token', token);
-        
+
         message.success('🎉 🎉 🎉  登录成功！');
         let { redirect } = params as { redirect: string };
         if (redirect) {
@@ -77,24 +76,25 @@ const Model: LoginModelType = {
             redirect: window.location.href,
           }),
         });
+        localStorage.removeItem('token');
       }
     },
   },
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      // setAuthority(payload.currentAuthority);
       return {
         ...state,
-        status: payload.code==='0000'?'ok':'error',
+        status: payload.code === '0000' ? 'ok' : 'error',
         type: payload.type,
-        UUID:getUUID(),
+        UUID: getUUID(),
       };
     },
     changeLoginCapcha(state, { payload }) {
       return {
         ...state,
-        UUID:payload,
+        UUID: payload,
       };
     },
   },
