@@ -37,7 +37,7 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response: Res.ResponseResult<Res.LoginData> = yield call(login, payload);
+      const response = yield call(login, payload);
       // Login successfully
       if (response.code === '0000') {
         yield put({
