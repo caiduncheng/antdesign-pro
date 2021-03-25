@@ -8,7 +8,7 @@ import { getPageQuery, getUUID } from '@/utils/utils';
 import { message } from 'antd';
 
 export type StateType = {
-  status?: 'ok' | 'error' ;
+  status?: 'ok' | 'error';
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
   UUID?: string;
@@ -32,7 +32,7 @@ const Model: LoginModelType = {
 
   state: {
     status: undefined,
-    UUID:getUUID(),
+    UUID: getUUID(),
   },
 
   effects: {
@@ -43,13 +43,13 @@ const Model: LoginModelType = {
         payload: response,
       });
       // Login successfully
-      
+
       if (response.code === '0000') {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         const token = response.data.token;
         localStorage.setItem('token', token);
-        
+
         message.success('🎉 🎉 🎉  登录成功！');
         let { redirect } = params as { redirect: string };
         if (redirect) {
@@ -77,6 +77,7 @@ const Model: LoginModelType = {
             redirect: window.location.href,
           }),
         });
+        localStorage.removeItem('token');
       }
     },
   },
@@ -86,15 +87,15 @@ const Model: LoginModelType = {
       setAuthority(payload.currentAuthority);
       return {
         ...state,
-        status: payload.code==='0000'?'ok':'error',
+        status: payload.code === '0000' ? 'ok' : 'error',
         type: payload.type,
-        UUID:getUUID(),
+        UUID: getUUID(),
       };
     },
     changeLoginCapcha(state, { payload }) {
       return {
         ...state,
-        UUID:payload,
+        UUID: payload,
       };
     },
   },

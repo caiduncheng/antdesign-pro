@@ -7,11 +7,10 @@ const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
   hash: true,
-  antd: {
-  },
+  antd: {},
   define: {
     // "process.env.baseUrl": "http://121.36.23.30:12461/portalbase"
-    "process.env.baseUrl": "http://192.168.35.8:7050/portal"
+    'process.env.baseUrl': 'http://192.168.35.8:7050/portal',
   },
   dva: {
     hmr: true,
@@ -73,7 +72,7 @@ export default defineConfig({
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
           authority: ['admin', 'user'],
-          routes: [            
+          routes: [
             {
               path: '/',
               redirect: '/dashboard/analysis',
@@ -82,7 +81,7 @@ export default defineConfig({
               path: '/dashboard',
               name: 'dashboard',
               icon: 'icon-home',
-              component: './dashboard/analysis'
+              component: './dashboard/analysis',
               // routes: [
               //   {
               //     path: '/',
@@ -115,39 +114,39 @@ export default defineConfig({
               routes: [
                 {
                   path: '/',
-                  redirect: '/settins/admin-list'
+                  redirect: '/settins/admin-list',
                 },
                 {
                   name: 'admin-list',
                   icon: 'smile',
-                  path: '/settings/admin-list'                  
+                  path: '/settings/admin-list',
                 },
                 {
                   name: 'role-list',
                   icon: 'smile',
-                  path: '/settings/role-list'
+                  path: '/settings/role-list',
                 },
                 {
                   name: 'menu-list',
                   icon: 'smile',
-                  path: '/settings/menu-list'
-                }
-              ]
+                  path: '/settings/menu-list',
+                },
+              ],
             },
             {
               path: '/issue',
               icon: 'icon-person',
-              name: 'issue'
+              name: 'issue',
             },
             {
               path: '/documents',
               icon: 'icon-document',
-              name: 'documents'
+              name: 'documents',
             },
             {
               path: '/message',
               icon: 'icon-message',
-              name: 'message'
+              name: 'message',
             },
             {
               path: '/form',
@@ -374,7 +373,7 @@ export default defineConfig({
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': defaultSettings.primaryColor,
-    'layout-header-background': '#17242F'
+    'layout-header-background': '#17242F',
   },
   title: false,
   ignoreMomentLocale: true,

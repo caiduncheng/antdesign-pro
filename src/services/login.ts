@@ -1,6 +1,6 @@
 import request from '@/utils/request';
-import { JSEncrypt } from 'jsencrypt'
-import { getRsaPublicKey } from '@/utils/utils'
+import { JSEncrypt } from 'jsencrypt';
+import { getRsaPublicKey } from '@/utils/utils';
 
 const rsa = new JSEncrypt({});
 const publicKey = getRsaPublicKey();
@@ -19,8 +19,8 @@ export function login(params: LoginParamsType) {
     method: 'POST',
     data: {
       ...params,
-      password: rsa.encrypt(`${params.password.trim()}|${params.captcha}`)
-    }
+      password: rsa.encrypt(`${params.password.trim()}|${params.captcha}`),
+    },
   });
 }
 
