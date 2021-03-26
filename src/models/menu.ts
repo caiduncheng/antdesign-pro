@@ -1,7 +1,9 @@
 import type { Reducer, Effect } from 'umi';
 import type { MenuDataItem } from '@ant-design/pro-layout';
 
-import { queryMenuList } from '@/services/menu';
+import { queryMenuNav } from '@/services/menu';
+import { Menu } from '@/res';
+import { rest } from '_@types_lodash@4.14.168@@types/lodash';
 
 export interface MenuStateType {
   menuData: MenuDataItem[];
@@ -16,6 +18,28 @@ export type MenuModelType = {
   reducers: {
     saveMenuData: Reducer<MenuStateType>;
   };
+};
+
+const normalizeMenu = (menuList: Menu[]): MenuDataItem[] => {
+  const res: MenuDataItem[] = [];
+  let c: MenuDataItem[];
+  for (let i = 0; i < menuList.length; i++) {
+    if (menuList[i].list.length > 0) {
+      c = normalizeMenu(menuList[i].list);
+      res.push({
+        list: c,
+        name: menuList[i].name,
+        path: menuList[i].url,
+      });
+    } else {
+      res.push({
+        path: menuList[i].url,
+        name: menuList[i].name,
+        list: menuList[i].list,
+      });
+    }
+  }
+  return res;
 };
 
 const menuFormatter = (response: any) => {
@@ -81,10 +105,10 @@ const MenuModel: MenuModelType = {
 
   effects: {
     *getMenuData(_, { call, put }) {
-      const response = yield call(queryMenuList);
+      const response: Res.ResponseResult<Menu> = yield call(queryMenuNav);
       yield put({
         type: 'saveMenuData',
-        payload: menuFormatter(response.data.menuList),
+        payload: normalizeMenu(response.data.menuList),
       });
     },
   },

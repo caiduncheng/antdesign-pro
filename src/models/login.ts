@@ -5,6 +5,7 @@ import { history } from 'umi';
 import { login } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery, getUUID } from '@/utils/utils';
+import { ResponseResult, LoginData } from '@/res';
 import { message } from 'antd';
 
 export type StateType = {
@@ -37,7 +38,7 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(login, payload);
+      const response: ResponseResult<LoginData> = yield call(login, payload);
       // Login successfully
       if (response.code === '0000') {
         yield put({
