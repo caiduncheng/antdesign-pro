@@ -2,8 +2,7 @@ import type { Reducer, Effect } from 'umi';
 import type { MenuDataItem } from '@ant-design/pro-layout';
 
 import { queryMenuNav } from '@/services/menu';
-import { Menu } from '@/res';
-import { rest } from '_@types_lodash@4.14.168@@types/lodash';
+import { Menu, ResponseResult } from '@/res';
 
 export interface MenuStateType {
   menuData: MenuDataItem[];
@@ -27,15 +26,15 @@ const normalizeMenu = (menuList: Menu[]): MenuDataItem[] => {
     if (menuList[i].list.length > 0) {
       c = normalizeMenu(menuList[i].list);
       res.push({
-        list: c,
+        children: c,
         name: menuList[i].name,
-        path: menuList[i].url,
+        path: menuList[i].url ? menuList[i].url : '/',
       });
     } else {
       res.push({
-        path: menuList[i].url,
+        path: menuList[i].url ? menuList[i].url : '/',
         name: menuList[i].name,
-        list: menuList[i].list,
+        children: menuList[i].list,
       });
     }
   }
@@ -57,15 +56,22 @@ const menuFormatter = (response: any) => {
   //   return menuItem;
   // });
   let menuDatas = [];
-  for (let item of response) {
-    if (item.parentId === 0) {
-      menuDatas.push(item);
+  // for (let item of response) {
+  //   if (item.parentId === 0) {
+  //     menuDatas.push(item);
+  //   }
+  //   toChildren(menuDatas, item);
+  // }
+  menuDatas = response.map((item: any) => {
+    if (item.children) {
+      return toMenuData(item.children);
     }
-    toChildren(menuDatas, item);
-  }
-
-  toMenuData(menuDatas);
-
+    return {
+      children: item.list || [],
+      name: item.name,
+      path: item.url || '/',
+    };
+  });
   return menuDatas;
 };
 const toChildren = (menuDatas: any, ele: any) => {
@@ -83,16 +89,17 @@ const toChildren = (menuDatas: any, ele: any) => {
 };
 const toMenuData = (menuDatas: any) => {
   menuDatas = menuDatas.map((item: any) => {
-    if (item.children) {
-      toMenuData(item.children);
-    }
-    return {
-      children: item.children || [],
-      name: item.name,
-      path: item.url || '/',
-    };
+    // if (item.children) {
+    //   toMenuData(item.children);
+    // }
+    return item.children
+      ? toMenuData(item.children)
+      : {
+          children: item.children || [],
+          name: item.name,
+          path: item.url || '/',
+        };
   });
-
   return menuDatas;
 };
 
@@ -105,7 +112,7 @@ const MenuModel: MenuModelType = {
 
   effects: {
     *getMenuData(_, { call, put }) {
-      const response: Res.ResponseResult<Menu> = yield call(queryMenuNav);
+      const response: ResponseResult<Menu> = yield call(queryMenuNav);
       yield put({
         type: 'saveMenuData',
         payload: normalizeMenu(response.data.menuList),

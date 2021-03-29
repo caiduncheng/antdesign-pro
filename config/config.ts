@@ -108,28 +108,30 @@ export default defineConfig({
               // ],
             },
             {
-              path: '/settings',
+              path: '/sys',
               icon: 'icon-settings',
               name: 'settings',
               routes: [
                 {
                   path: '/',
-                  redirect: '/settins/admin-list',
+                  redirect: '/sys/user',
                 },
                 {
                   name: 'admin-list',
                   icon: 'smile',
-                  path: '/settings/admin-list',
+                  path: '/sys/user',
+                  component: './sys/user',
                 },
                 {
                   name: 'role-list',
                   icon: 'smile',
-                  path: '/settings/role-list',
+                  path: '/sys/role',
+                  component: './sys/role',
                 },
                 {
                   name: 'menu-list',
                   icon: 'smile',
-                  path: '/settings/menu-list',
+                  path: '/sys/menu',
                 },
               ],
             },

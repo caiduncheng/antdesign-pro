@@ -49,12 +49,11 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map((item) => {
-    // console.log(item);
-
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : undefined,
     };
+    console.log(localItem);
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
@@ -166,8 +165,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           );
         }}
         // footerRender={() => defaultFooterDom}
-        menuDataRender={menuDataRender}
-        // menuDataRender={() => menuData}
+        // menuDataRender={menuDataRender}
+        menuDataRender={() => menuData}
         rightContentRender={() => <RightContent />}
         postMenuData={(menuData) => {
           menuDataRef.current = menuData || [];
