@@ -79,6 +79,7 @@ export interface Role {
 }
 
 export interface RoleList {
+  /** @name 角色个数 */
   count: number;
   data: Role[];
 }

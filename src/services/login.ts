@@ -15,7 +15,6 @@ rsa.setPublicKey(publicKey);
 export type LoginParamsType = {
   username: string;
   password: string;
-  // mobile: string;
   uuid: string;
   captcha: string;
 };
@@ -36,12 +35,12 @@ export function loginout() {
   });
 }
 
-// export async function fakeAccountLogin(params: LoginParamsType) {
-//   return request('/api/login/account', {
-//     method: 'POST',
-//     data: params,
-//   });
-// }
+export async function fakeAccountLogin(params: LoginParamsType) {
+  return request('/api/login/account', {
+    method: 'POST',
+    data: params,
+  });
+}
 
 export async function getFakeCaptcha(mobile: string) {
   return request(`/api/login/captcha?mobile=${mobile}`);

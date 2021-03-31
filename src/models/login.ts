@@ -1,13 +1,11 @@
 import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
-
-import { login, loginout } from '@/services/login';
+import { login, loginout, fakeAccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery, getUUID } from '@/utils/utils';
 import { ResponseResult, LoginData } from '@/res';
 import { message } from 'antd';
-import { clearConfigCache } from 'prettier';
 
 export type StateType = {
   status?: 'ok' | 'error';
@@ -66,6 +64,13 @@ const Model: LoginModelType = {
           }
         }
         history.replace(redirect || '/');
+      } else {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            status: 'error',
+          },
+        });
       }
     },
     *logout(_, { call }) {
@@ -90,10 +95,10 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      // setAuthority(payload.currentAuthority);
+      setAuthority('admin');
       return {
         ...state,
-        status: payload.code === '0000' ? 'ok' : 'error',
+        status: payload.status,
         type: payload.type,
         UUID: getUUID(),
       };

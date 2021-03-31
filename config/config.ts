@@ -62,9 +62,6 @@ export default defineConfig({
               path: '/user/register',
               component: './user/register',
             },
-            {
-              component: '404',
-            },
           ],
         },
         {
@@ -75,7 +72,7 @@ export default defineConfig({
           routes: [
             {
               path: '/',
-              redirect: '/dashboard/analysis',
+              redirect: '/dashboard',
             },
             {
               path: '/dashboard',
@@ -111,6 +108,7 @@ export default defineConfig({
               path: '/sys',
               icon: 'icon-settings',
               name: 'settings',
+              authority: ['user'],
               routes: [
                 {
                   path: '/',
@@ -133,7 +131,16 @@ export default defineConfig({
                   icon: 'smile',
                   path: '/sys/menu',
                 },
+                {
+                  component: '404',
+                },
               ],
+            },
+            {
+              path: '/menu',
+              name: 'menu',
+              component: './sys/menu',
+              icon: 'icon-menu',
             },
             {
               path: '/issue',
@@ -260,58 +267,58 @@ export default defineConfig({
                 },
               ],
             },
-            // {
-            //   name: 'result',
-            //   icon: 'CheckCircleOutlined',
-            //   path: '/result',
-            //   routes: [
-            //     {
-            //       path: '/',
-            //       redirect: '/result/success',
-            //     },
-            //     {
-            //       name: 'success',
-            //       icon: 'smile',
-            //       path: '/result/success',
-            //       component: './result/success',
-            //     },
-            //     {
-            //       name: 'fail',
-            //       icon: 'smile',
-            //       path: '/result/fail',
-            //       component: './result/fail',
-            //     },
-            //   ],
-            // },
-            // {
-            //   name: 'exception',
-            //   icon: 'warning',
-            //   path: '/exception',
-            //   routes: [
-            //     {
-            //       path: '/',
-            //       redirect: '/exception/403',
-            //     },
-            //     {
-            //       name: '403',
-            //       icon: 'smile',
-            //       path: '/exception/403',
-            //       component: './exception/403',
-            //     },
-            //     {
-            //       name: '404',
-            //       icon: 'smile',
-            //       path: '/exception/404',
-            //       component: './exception/404',
-            //     },
-            //     {
-            //       name: '500',
-            //       icon: 'smile',
-            //       path: '/exception/500',
-            //       component: './exception/500',
-            //     },
-            //   ],
-            // },
+            {
+              name: 'result',
+              icon: 'CheckCircleOutlined',
+              path: '/result',
+              routes: [
+                {
+                  path: '/',
+                  redirect: '/result/success',
+                },
+                {
+                  name: 'success',
+                  icon: 'smile',
+                  path: '/result/success',
+                  component: './result/success',
+                },
+                {
+                  name: 'fail',
+                  icon: 'smile',
+                  path: '/result/fail',
+                  component: './result/fail',
+                },
+              ],
+            },
+            {
+              name: 'exception',
+              icon: 'warning',
+              path: '/exception',
+              routes: [
+                {
+                  path: '/',
+                  redirect: '/exception/403',
+                },
+                {
+                  name: '403',
+                  icon: 'smile',
+                  path: '/exception/403',
+                  component: './exception/403',
+                },
+                {
+                  name: '404',
+                  icon: 'smile',
+                  path: '/exception/404',
+                  component: './exception/404',
+                },
+                {
+                  name: '500',
+                  icon: 'smile',
+                  path: '/exception/500',
+                  component: './exception/500',
+                },
+              ],
+            },
             // {
             //   name: 'account',
             //   icon: 'user',

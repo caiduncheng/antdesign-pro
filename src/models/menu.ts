@@ -113,10 +113,12 @@ const MenuModel: MenuModelType = {
   effects: {
     *getMenuData(_, { call, put }) {
       const response: ResponseResult<Menu> = yield call(queryMenuNav);
-      yield put({
-        type: 'saveMenuData',
-        payload: normalizeMenu(response.data.menuList),
-      });
+      if (response.code === '0000') {
+        yield put({
+          type: 'saveMenuData',
+          payload: normalizeMenu(response.data.menuList),
+        });
+      }
     },
   },
 
