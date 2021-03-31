@@ -53,7 +53,7 @@ export interface addListParams {
   email: string;
   mobile: string;
   password: string;
-  roleIdList: RoleIDs[];
+  roleIdList: number[];
   status?: number;
   username: string;
 }
@@ -63,6 +63,7 @@ export interface updateListParams {
   roleIdList: number[];
   status: number;
   userId: number;
+  username: string;
 }
 export interface RoleListItem {
   creTime: string;

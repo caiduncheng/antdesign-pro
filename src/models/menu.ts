@@ -27,13 +27,13 @@ const normalizeMenu = (menuList: Menu[]): MenuDataItem[] => {
       c = normalizeMenu(menuList[i].list);
       res.push({
         children: c,
-        name: menuList[i].name,
+        name: 'sys',
         path: menuList[i].url ? menuList[i].url : '/',
       });
     } else {
       res.push({
         path: menuList[i].url ? menuList[i].url : '/',
-        name: menuList[i].name,
+        name: menuList[i].url?.split('/')[1],
         children: menuList[i].list,
       });
     }

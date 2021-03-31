@@ -5,6 +5,7 @@ import { queryRoles } from '../../role/service';
 
 interface RoleTableProps {
   getRoles: (roles: number[]) => void;
+  choosedRoles: number[];
 }
 const RoleTable: React.FC<RoleTableProps> = (props) => {
   const actionRef = useRef<ActionType>();
@@ -36,6 +37,9 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
     },
   ];
 
+  if (props.choosedRoles?.length > 0) {
+    props.getRoles(props.choosedRoles);
+  }
   const [selectedRowsState, setSelectedRows] = useState<number[]>([]);
 
   return (

@@ -1,3 +1,4 @@
+import { Menu } from '@/res';
 import request from 'umi-request';
 import { TableListParams, RoleListParams } from './data.d';
 let token = localStorage.getItem('token');
@@ -6,12 +7,21 @@ let headers: any = {
   Accept: 'application/json',
   token: token,
 };
-export async function queryRule(params?: TableListParams) {
-  return request('/api/rule', {
-    params,
+export async function queryRoles(params?: RoleListParams) {
+  return request('/api/sys/role/list', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+    headers,
   });
 }
-
+export async function queryMenuList() {
+  return request('/api/sys/menu/list', {
+    headers,
+    method: 'GET',
+  });
+}
 export async function removeRule(params: { key: number[] }) {
   return request('/api/rule', {
     method: 'POST',
@@ -39,15 +49,5 @@ export async function updateRule(params: TableListParams) {
       ...params,
       method: 'update',
     },
-  });
-}
-
-export async function queryRoles(params?: RoleListParams) {
-  return request('/api/sys/role/list', {
-    method: 'POST',
-    data: {
-      ...params,
-    },
-    headers,
   });
 }

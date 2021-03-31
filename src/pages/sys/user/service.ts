@@ -46,7 +46,7 @@ export async function updateRule(params: updateListParams) {
     headers: headers,
   });
 }
-export async function resetPwRule(params: { userIds: number }) {
+export async function resetPwRule(params: { userId: number }) {
   return request('/api/sys/user/resetPw', {
     method: 'POST',
     data: {

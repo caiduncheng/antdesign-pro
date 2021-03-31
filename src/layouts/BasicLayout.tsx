@@ -93,7 +93,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     },
     menuData,
   } = props;
-  console.log(menuData);
+  // console.log(menuData);
 
   const menuDataRef = useRef<MenuDataItem[]>([]);
   useEffect(() => {

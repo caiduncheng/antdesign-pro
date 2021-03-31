@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, message, Input, Drawer } from 'antd';
+import { Button, message, Drawer } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,7 +7,9 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
-import { queryRule, updateRule, addRule, removeRule } from './service';
+// import { RoleList } from 'res.d';
+import { queryRoles, updateRule, addRule, removeRule } from './service';
+import { Role } from '@/res';
 
 /**
  * 添加节点
@@ -76,18 +78,19 @@ const TableList: React.FC<{}> = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<TableListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
-  const columns: ProColumns<TableListItem>[] = [
+  const [row, setRow] = useState<Role>();
+  const [selectedRowsState, setSelectedRows] = useState<Role[]>([]);
+  const columns: ProColumns<Role>[] = [
     {
-      title: '规则名称',
-      dataIndex: 'name',
-      tip: '规则名称是唯一的 key',
+      title: 'ID',
+      dataIndex: 'roleId',
+      hideInForm: true,
+      tip: '用户ID是唯一的 key',
       formItemProps: {
         rules: [
           {
             required: true,
-            message: '规则名称为必填项',
+            message: '用户ID为必填项',
           },
         ],
       },
@@ -96,44 +99,32 @@ const TableList: React.FC<{}> = () => {
       },
     },
     {
-      title: '描述',
-      dataIndex: 'desc',
+      title: '角色名称',
+      dataIndex: 'roleName',
+      valueType: 'text',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
       valueType: 'textarea',
     },
     {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
+      title: '创建时间',
+      dataIndex: 'creTime',
       hideInForm: true,
-      renderText: (val: string) => `${val} 万`,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      hideInForm: true,
-      valueEnum: {
-        0: { text: '关闭', status: 'Default' },
-        1: { text: '运行中', status: 'Processing' },
-        2: { text: '已上线', status: 'Success' },
-        3: { text: '异常', status: 'Error' },
-      },
-    },
-    {
-      title: '上次调度时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
       valueType: 'dateTime',
+    },
+    {
+      title: '修改时间',
+      dataIndex: 'updTime',
       hideInForm: true,
-      renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        const status = form.getFieldValue('status');
-        if (`${status}` === '0') {
-          return false;
-        }
-        if (`${status}` === '3') {
-          return <Input {...rest} placeholder="请输入异常原因！" />;
-        }
-        return defaultRender(item);
-      },
+      valueType: 'dateTime',
+    },
+    {
+      title: '菜单列表',
+      dataIndex: 'menuIdList',
+      hideInForm: true,
+      hideInTable: true,
     },
     {
       title: '操作',
@@ -144,13 +135,13 @@ const TableList: React.FC<{}> = () => {
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
+              console.log(record);
+
               setStepFormValues(record);
             }}
           >
-            配置
+            修改
           </a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
         </>
       ),
     },
@@ -158,10 +149,10 @@ const TableList: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <ProTable<TableListItem>
+      <ProTable<Role>
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="roleId"
         search={{
           labelWidth: 120,
         }}
@@ -170,7 +161,23 @@ const TableList: React.FC<{}> = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={(params, sorter, filter) => queryRule({ ...params, sorter, filter })}
+        // request={(params, sorter, filter) => queryRoles({ ...params, sorter, filter })}
+        request={async (params) => {
+          const msg = await queryRoles({
+            limit: params.pageSize,
+            page: params.current,
+            roleName: params.keyword,
+          });
+
+          return {
+            data: msg.data.data,
+            // success 请返回 true，
+            // 不然 table 会停止解析数据，即使有数据
+            success: true,
+            // 不传会使用 data 的长度，如果是分页一定要传
+            total: msg.data.count,
+          };
+        }}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
@@ -181,15 +188,12 @@ const TableList: React.FC<{}> = () => {
           extra={
             <div>
               已选择 <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a> 项&nbsp;&nbsp;
-              <span>
-                服务调用次数总计 {selectedRowsState.reduce((pre, item) => pre + item.callNo, 0)} 万
-              </span>
             </div>
           }
         >
           <Button
             onClick={async () => {
-              await handleRemove(selectedRowsState);
+              // await handleRemove(selectedRowsState);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -200,7 +204,7 @@ const TableList: React.FC<{}> = () => {
         </FooterToolbar>
       )}
       <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<TableListItem, TableListItem>
+        {/* <ProTable<Role, TableListItem>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {
@@ -213,7 +217,7 @@ const TableList: React.FC<{}> = () => {
           rowKey="key"
           type="form"
           columns={columns}
-        />
+        /> */}
       </CreateForm>
       {stepFormValues && Object.keys(stepFormValues).length ? (
         <UpdateForm
@@ -244,15 +248,15 @@ const TableList: React.FC<{}> = () => {
         }}
         closable={false}
       >
-        {row?.name && (
-          <ProDescriptions<TableListItem>
+        {row?.roleId && (
+          <ProDescriptions<Role>
             column={2}
-            title={row?.name}
+            title={row?.roleName}
             request={async () => ({
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.roleId,
             }}
             columns={columns}
           />

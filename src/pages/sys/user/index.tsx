@@ -9,7 +9,7 @@ import RoleTable from './components/RoleTable';
 import UpdateForm from './components/UpdateForm';
 import { TableListItem, addListParams, updateListParams } from './data.d';
 import { RoleListParams } from '../role/data.d';
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { queryRule, updateRule, addRule, removeRule, resetPwRule } from './service';
 import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
 
 /**
@@ -27,7 +27,7 @@ const handleAdd = async (fields: addListParams) => {
       message.success('添加成功');
       return true;
     }
-    message.success(res.msg);
+    message.error(res.msg);
     return false;
   } catch (error) {
     hide();
@@ -41,16 +41,21 @@ const handleAdd = async (fields: addListParams) => {
  * @param fields
  */
 const handleUpdate = async (fields: updateListParams) => {
-  const hide = message.loading('正在配置');
-  try {
-    await updateRule({ ...fields });
-    hide();
+  const hide = message.loading('正在更新');
+  console.log(fields);
 
-    message.success('配置成功');
-    return true;
+  try {
+    const res = await updateRule({ ...fields });
+    if (res.msg === 'SUCCESS') {
+      hide();
+      message.success('更新成功');
+      return true;
+    }
+    message.error(res.msg);
+    return false;
   } catch (error) {
     hide();
-    message.error('配置失败请重试！');
+    message.error('更新失败请重试！');
     return false;
   }
 };
@@ -71,7 +76,7 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
       message.success('删除成功，即将刷新');
       return true;
     }
-    message.success(res.msg);
+    message.error(res.msg);
     return false;
   } catch (error) {
     hide();
@@ -79,11 +84,31 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
     return false;
   }
 };
-
+/**
+ *  重置密码
+ * @param selectedRows
+ */
+const handleSetPW = async (user: { userId: number }) => {
+  const hide = message.loading('正在重置密码');
+  try {
+    const res = await resetPwRule(user);
+    if (res.msg === 'SUCCESS') {
+      hide();
+      message.success('重置密码成功，即将刷新');
+      return true;
+    }
+    message.error(res.msg);
+    return false;
+  } catch (error) {
+    hide();
+    message.error('重置密码失败，请重试');
+    return false;
+  }
+};
 const TableList: React.FC<{}> = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValues, setStepFormValues] = useState({});
+  const [stepFormValues, setStepFormValues] = useState<TableListItem>();
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
@@ -112,13 +137,9 @@ const TableList: React.FC<{}> = () => {
       valueType: 'text',
     },
     {
-      title: '性别',
-      dataIndex: 'desc',
-      valueType: 'text',
-    },
-    {
       title: '创建时间',
       dataIndex: 'creTime',
+      sorter: true,
       hideInForm: true,
       valueType: 'dateTime',
     },
@@ -158,29 +179,12 @@ const TableList: React.FC<{}> = () => {
         1: { text: '预设', status: 'Success' },
       },
     },
-    // {
-    //   title: '上次调度时间',
-    //   dataIndex: 'updatedAt',
-    //   sorter: true,
-    //   valueType: 'dateTime',
-    //   hideInForm: true,
-    //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
-    //     const status = form.getFieldValue('status');
-    //     if (`${status}` === '0') {
-    //       return false;
-    //     }
-    //     if (`${status}` === '3') {
-    //       return <Input {...rest} placeholder="请输入异常原因！" />;
-    //     }
-    //     return defaultRender(item);
-    //   },
-    // },
     {
       title: '角色列表',
       dataIndex: 'roleIdList',
       hideInTable: true,
+      hideInSearch: true,
       // initialValue: ['all'],
-      valueType: 'checkbox',
       render: (dom, entity) => {
         return <a onClick={() => setRow(entity)}>{dom}</a>;
       },
@@ -194,6 +198,8 @@ const TableList: React.FC<{}> = () => {
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
+              console.log(record);
+
               setStepFormValues(record);
             }}
           >
@@ -220,9 +226,23 @@ const TableList: React.FC<{}> = () => {
           </Popconfirm>
 
           <Divider type="vertical" />
-          <a href="">重置密码</a>
-          <Divider type="vertical" />
-          <a href="">配置角色</a>
+
+          <Popconfirm
+            title={`确定对【${record.username}】进行【重置密码】操作?`}
+            onConfirm={async () => {
+              const success = await handleSetPW({ userId: record.userId });
+              if (success) {
+                actionRef.current?.reloadAndRest?.();
+              }
+            }}
+            onCancel={() => {}}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="">重置密码</a>
+          </Popconfirm>
+          {/* <Divider type="vertical" />
+          <a href="">配置角色</a> */}
         </>
       ),
     },
@@ -319,6 +339,9 @@ const TableList: React.FC<{}> = () => {
               }
             }
           }}
+          initialValues={{
+            status: 1,
+          }}
         >
           <ProForm.Group>
             <ProFormText
@@ -384,30 +407,46 @@ const TableList: React.FC<{}> = () => {
             request={async (params:RoleListParams) => {}}
             placeholder="请选择角色"
           /> */}
-          <RoleTable getRoles={(roles) => setRoleList(roles)} />
+          <RoleTable getRoles={(roles) => setRoleList(roles)} choosedRoles={[]} />
         </ProForm>
       </CreateForm>
       {stepFormValues && Object.keys(stepFormValues).length ? (
-        <>
-          {/* <UpdateForm
-            onSubmit={async (value) => {
-              const success = await handleUpdate(value);
-              if (success) {
-                handleUpdateModalVisible(false);
-                setStepFormValues({});
-                if (actionRef.current) {
-                  actionRef.current.reload();
-                }
-              }
-            }}
-            onCancel={() => {
+        // <UpdateForm
+        //   onSubmit={async (value) => {
+        //     const success = await handleUpdate(value);
+        //     if (success) {
+        //       handleUpdateModalVisible(false);
+        //       setStepFormValues({});
+        //       if (actionRef.current) {
+        //         actionRef.current.reload();
+        //       }
+        //     }
+        //   }}
+        //   onCancel={() => {
+        //     handleUpdateModalVisible(false);
+        //     setStepFormValues({});
+        //   }}
+        //   updateModalVisible={updateModalVisible}
+        //   values={stepFormValues}
+        // />
+        <UpdateForm
+          onSubmit={async (value: updateListParams) => {
+            const success = await handleUpdate(value);
+            if (success) {
               handleUpdateModalVisible(false);
-              setStepFormValues({});
-            }}
-            updateModalVisible={updateModalVisible}
-            values={stepFormValues}
-          /> */}
-        </>
+              setStepFormValues(undefined);
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            }
+          }}
+          onCancel={() => {
+            handleUpdateModalVisible(false);
+            setStepFormValues(undefined);
+          }}
+          updateModalVisible={updateModalVisible}
+          values={stepFormValues}
+        ></UpdateForm>
       ) : null}
 
       <Drawer

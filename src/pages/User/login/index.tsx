@@ -1,7 +1,7 @@
-import { ConsoleSqlOutlined, UnlockOutlined, UserOutlined } from '@ant-design/icons';
+import { UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert } from 'antd';
-import React, { useState } from 'react';
-import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
+import React from 'react';
+import ProForm, { ProFormText } from '@ant-design/pro-form';
 import { useIntl, connect, FormattedMessage } from 'umi';
 import type { Dispatch } from 'umi';
 import type { StateType } from '@/models/login';

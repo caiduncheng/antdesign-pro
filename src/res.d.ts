@@ -63,12 +63,22 @@ export interface Role {
   /** @name 用户id */
   creUserId: number;
   /** @name 菜单id列表 */
-  menuIdList: number[];
+  menuIdList?: number[];
   /** @name 预设值标识*/
   preInstallSign: 0 | 1;
+  /** @name 备注*/
+  remark?: string;
+  /** @name 角色ID*/
+  roleId: number;
+  /** @name 角色名称*/
+  roleName: string;
+  /** @name 修改时间*/
+  updTime?: string;
+  /** @name 修改者ID*/
+  updUserId: number;
 }
 
 export interface RoleList {
   count: number;
-  data: T;
+  data: Role[];
 }

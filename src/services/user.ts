@@ -11,22 +11,9 @@ export async function queryCurrent(): Promise<any> {
 export async function queryNotices(): Promise<any> {
   return request('/api/notices');
 }
-export type headers = {
-  'Content-Type': string;
-  Accept: string;
-  token: string;
-};
-export async function user() {
-  let token = localStorage.getItem('token');
-  console.log(token);
 
-  let headers: any = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    token: token,
-  };
+export async function user() {
   return request('/api/sys/user/info', {
     method: 'GET',
-    headers: headers,
   });
 }

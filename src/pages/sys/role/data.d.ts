@@ -3,6 +3,11 @@ export interface RoleListParams {
   limit?: number;
   roleName?: string;
 }
+export interface addRoleParams {
+  menuIdList: number[];
+  roleName: string;
+  remark?: string;
+}
 export interface TableListItem {
   key: number;
   disabled?: boolean;

@@ -2,11 +2,12 @@ import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
-import { login } from '@/services/login';
+import { login, loginout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery, getUUID } from '@/utils/utils';
 import { ResponseResult, LoginData } from '@/res';
 import { message } from 'antd';
+import { clearConfigCache } from 'prettier';
 
 export type StateType = {
   status?: 'ok' | 'error';
@@ -67,17 +68,22 @@ const Model: LoginModelType = {
         history.replace(redirect || '/');
       }
     },
-    logout() {
-      const { redirect } = getPageQuery();
-      // Note: There may be security issues, please note
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        history.replace({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        });
-        localStorage.removeItem('token');
+    *logout(_, { call }) {
+      const response: ResponseResult = yield call(loginout);
+      if (response.code === '0000') {
+        const { redirect } = getPageQuery();
+        // Note: There may be security issues, please note
+        if (window.location.pathname !== '/user/login' && !redirect) {
+          history.replace({
+            pathname: '/user/login',
+            search: stringify({
+              redirect: window.location.href,
+            }),
+          });
+          localStorage.removeItem('token');
+        }
+      } else {
+        message.error(response.msg);
       }
     },
   },

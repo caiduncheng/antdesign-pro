@@ -1,32 +1,33 @@
 import type { Effect, Reducer } from 'umi';
 
 import { queryCurrent, query as queryUsers, user } from '@/services/user';
+import { message } from 'antd';
 
-export type CurrentUser = {
-  avatar?: string;
-  name?: string;
-  title?: string;
-  group?: string;
-  signature?: string;
-  tags?: {
-    key: string;
-    label: string;
-  }[];
-  userid?: string;
-  unreadCount?: number;
-  role?: string;
-};
 // export type CurrentUser = {
-//   userId?: number;
-//   username?: string;
-//   avatar?: string | undefined;
-//   email?: string;
-//   mobile?: string;
-//   status?: number;
-//   preInstallSign?: number;
-//   creTime?: string;
-//   roleIdList?: Array<number>;
+//   avatar?: string;
+//   name?: string;
+//   title?: string;
+//   group?: string;
+//   signature?: string;
+//   tags?: {
+//     key: string;
+//     label: string;
+//   }[];
+//   userid?: string;
+//   unreadCount?: number;
+//   role?: string;
 // };
+export type CurrentUser = {
+  userId?: number;
+  username?: string;
+  avatar?: string | undefined;
+  email?: string;
+  mobile?: string;
+  status?: number;
+  preInstallSign?: number;
+  creTime?: string;
+  roleIdList?: Array<number>;
+};
 
 export type UserModelState = {
   currentUser?: CurrentUser;
@@ -61,12 +62,16 @@ const UserModel: UserModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      // const response = yield call(user);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+      // const response = yield call(queryCurrent);
+      const response = yield call(user);
+      if (response.code === '0000') {
+        yield put({
+          type: 'saveCurrentUser',
+          payload: response.data,
+        });
+      } else {
+        message.error(response.msg);
+      }
     },
   },
 
