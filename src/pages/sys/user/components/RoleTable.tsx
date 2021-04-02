@@ -8,6 +8,8 @@ interface RoleTableProps {
   choosedRoles: number[];
 }
 const RoleTable: React.FC<RoleTableProps> = (props) => {
+  console.log(props);
+
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<RoleListItem>[] = [
     {
@@ -37,10 +39,7 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
     },
   ];
 
-  if (props.choosedRoles?.length > 0) {
-    props.getRoles(props.choosedRoles);
-  }
-  const [selectedRowsState, setSelectedRows] = useState<number[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<number[]>();
 
   return (
     <div>
@@ -48,7 +47,7 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
         // headerTitle="用户表格"
         actionRef={actionRef}
         search={false}
-        rowKey="roleName"
+        rowKey="roleId"
         options={{
           search: true,
         }}
@@ -67,6 +66,7 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
         }}
         columns={columns}
         rowSelection={{
+          // selectedRowsState,
           onChange: (_, selectedRows) => {
             let choosed =
               selectedRows.map((item: any) => {
@@ -78,6 +78,13 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
             return setSelectedRows(choosed);
             // console.log(selectedRowsState);
           },
+          // getCheckboxProps: (record) => {
+          //   console.log(record);
+
+          //   return {
+          //     defaultChecked: selectedRowsState?.includes(record.roleId),
+          //   };
+          // },
         }}
       />
       {/* {console.log(selectedRowsState)} */}

@@ -9,6 +9,7 @@ export interface TreeNode {
 }
 export interface RoleStateType {
   treeData: TreeNode[];
+  allKey: number[];
 }
 
 export type RoleModelType = {
@@ -40,7 +41,6 @@ const menuFormatter = (menuTree: any) => {
   if (menuTree === null) {
     return [];
   }
-
   // 转参数
   const re = menuTree.map((item: { name: string; menuId: number; children: any }) => {
     const result = {
@@ -70,10 +70,28 @@ const toChildren = (menuDatas: any, ele: any) => {
     }
   });
 };
+const ParentKey = (list: number[], tree: TreeNode[]) => {
+  tree?.forEach((item: any) => {
+    if (item.children) {
+      list.push(item.key);
+      ParentKey(list, item.children);
+    }
+  });
+};
+// 所有key
+const allParentKey = (treeData: TreeNode[]) => {
+  let allKey: number[] = [];
+  treeData.forEach((item) => {
+    if (item.children) {
+      allKey.push(item.key);
+      ParentKey(allKey, item.children);
+    }
+  });
+  return allKey;
+};
 const Formatter = (menuList: Menu[]) => {
   const tree = menuTree(menuList);
   const treeData: TreeNode[] = menuFormatter(tree);
-  console.log(treeData);
   return treeData;
 };
 
@@ -82,6 +100,7 @@ const RoleModel: RoleModelType = {
 
   state: {
     treeData: [],
+    allKey: [],
   },
 
   effects: {
@@ -100,9 +119,12 @@ const RoleModel: RoleModelType = {
   },
   reducers: {
     changeMenuStatus(state, { payload }) {
+      console.log(payload);
+
       return {
         ...state,
-        treeData: payload || [],
+        treeData: payload,
+        allKey: allParentKey(payload),
       };
     },
   },

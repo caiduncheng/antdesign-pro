@@ -1,71 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dispatch } from 'umi';
 import { Modal, Spin, Tree } from 'antd';
 import ProForm, { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { addRoleParams } from '../data';
 import { connect } from '@/.umi/plugin-dva/exports';
 import { ConnectState } from '../models/connect';
 import { TreeNode } from '../models/role';
+import { Role } from '@/res';
 
 interface CreateFormProps {
   modalVisible: boolean;
+  title: string;
+  onSubmit: (values: Role) => void;
   onCancel: () => void;
   dispatch: Dispatch;
   treeData: TreeNode[];
+  allKey: number[];
+  values: Role;
 }
-const tree = [
-  {
-    title: '0-0',
-    key: '0-0',
-    children: [
-      {
-        title: '0-0-0',
-        key: '0-0-0',
-        children: [
-          { title: '0-0-0-0', key: '0-0-0-0' },
-          { title: '0-0-0-1', key: '0-0-0-1' },
-          { title: '0-0-0-2', key: '0-0-0-2' },
-        ],
-      },
-      {
-        title: '0-0-1',
-        key: '0-0-1',
-        children: [
-          { title: '0-0-1-0', key: '0-0-1-0' },
-          { title: '0-0-1-1', key: '0-0-1-1' },
-          { title: '0-0-1-2', key: '0-0-1-2' },
-        ],
-      },
-      {
-        title: '0-0-2',
-        key: '0-0-2',
-      },
-    ],
-  },
-  {
-    title: '0-1',
-    key: '0-1',
-    children: [
-      { title: '0-1-0-0', key: '0-1-0-0' },
-      { title: '0-1-0-1', key: '0-1-0-1' },
-      { title: '0-1-0-2', key: '0-1-0-2' },
-    ],
-  },
-  {
-    title: '0-2',
-    key: '0-2',
-  },
-];
 const CreateForm: React.FC<CreateFormProps> = (props) => {
-  console.log(props);
+  const { modalVisible, title, onCancel, onSubmit, dispatch, treeData, allKey, values } = props;
+  // console.log(allKey);
+  // console.log(values);
 
-  const { modalVisible, onCancel, dispatch, treeData } = props;
-  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([1]);
-  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>();
+  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>(allKey);
+  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>(values?.menuIdList);
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>();
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
 
   // const treeDataRef = useRef<TreeNode[]>([]);
+  // console.log(treeDataRef);
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -74,55 +38,43 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     }
   }, []);
 
-  // const onLoadData = async () => {
-  //   try {
-  //     const res = await queryMenuList();
-  //     if (res.msg === 'SUCCESS') {
-  //       const tree = menuTree(res.data.menuList);
-  //       const treeData = menuFormatter(tree);
-  //       console.log(treeData);
-
-  //       setTreeData(treeData);
-  //     } else {
-  //       message.error(res.msg);
-  //     }
-  //   } catch (error) {
-  //     message.error('菜单列表请求失败，请重试');
-  //   }
-  // };
-
   const onExpand = (expandedKeysValue: React.Key[]) => {
-    console.log('onExpand', expandedKeysValue);
+    // console.log('onExpand', expandedKeysValue);
     // if not set autoExpandParent to false, if children expanded, parent can not collapse.
     // or, you can remove all expanded children keys.
     setExpandedKeys(expandedKeysValue);
-    setAutoExpandParent(false);
+    setAutoExpandParent(true);
   };
 
   const onCheck = (checkedKeysValue: React.Key[]) => {
-    console.log('onCheck', checkedKeysValue);
+    // console.log('onCheck', checkedKeysValue);
     setCheckedKeys(checkedKeysValue);
   };
 
   const onSelect = (selectedKeysValue: React.Key[], info: any) => {
-    console.log('onSelect', info);
+    // console.log('onSelect', info);
     setSelectedKeys(selectedKeysValue);
   };
 
   const renderContent = () => {
     return (
-      <ProForm<addRoleParams>
-        onFinish={async (value) => {
-          console.log(value);
-
-          // onSubmit(value);
+      <ProForm<Role>
+        onFinish={async (value: Role) => {
+          value.menuIdList = checkedKeys || [];
+          // console.log(value);
+          if (values) {
+            value.roleId = values.roleId;
+          }
+          onSubmit(value);
         }}
-        // initialValues={{
-        //   status: values.status,
-        //   mobile: values.mobile,
-        //   email: values.email,
-        //   username: values.username,
-        // }}
+        onReset={() => {
+          setCheckedKeys([]);
+        }}
+        initialValues={{
+          roleName: values?.roleName,
+          roleId: values?.roleId,
+          remark: values?.remark,
+        }}
       >
         <ProForm.Group>
           <ProFormText
@@ -136,21 +88,30 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           <ProFormTextArea width="md" name="remark" label="备注" placeholder="请输入备注" />
         </ProForm.Group>
         {treeData.length ? (
-          <Tree
-            checkable
-            // titleRender={() => tree}
-            onExpand={onExpand}
-            expandedKeys={expandedKeys}
-            autoExpandParent={autoExpandParent}
-            // onCheck={onCheck}
-            checkedKeys={checkedKeys}
-            onSelect={onSelect}
-            selectedKeys={selectedKeys}
-            treeData={treeData}
-          />
+          <>
+            <div>
+              授权
+              {/* <span style={{ color: '#ff4d4f', marginLeft: '10px' }} hidden={!!checkedKeys?.length}>
+                请选择权限！
+              </span> */}
+            </div>
+            <Tree
+              checkable
+              // titleRender={() => tree}
+              style={{ margin: '10px 0' }}
+              onExpand={onExpand}
+              expandedKeys={expandedKeys}
+              autoExpandParent={autoExpandParent}
+              onCheck={onCheck}
+              checkedKeys={checkedKeys}
+              onSelect={onSelect}
+              selectedKeys={selectedKeys}
+              treeData={treeData}
+            />
+          </>
         ) : (
           <div>
-            <Spin />
+            <Spin style={{ margin: '10px 0' }} />
           </div>
           // 'loading tree'
         )}
@@ -160,7 +121,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   return (
     <Modal
       destroyOnClose
-      title="新建角色"
+      title={title}
       visible={modalVisible}
       onCancel={() => onCancel()}
       footer={null}
@@ -170,6 +131,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   );
 };
 
-export default connect(({ tree }: ConnectState) => ({
-  treeData: tree.treeData || [],
+export default connect(({ role }: ConnectState) => ({
+  treeData: role.treeData || [],
+  allKey: role.allKey || [],
 }))(CreateForm);

@@ -84,7 +84,7 @@ const Messages: React.FC<msgProps> = (props) => {
       <List
         dataSource={data}
         renderItem={(item) => (
-          <List.Item key={item.avatar}>
+          <List.Item>
             <List.Item.Meta
               avatar={
                 <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />

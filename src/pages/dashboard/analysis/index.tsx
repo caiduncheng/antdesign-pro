@@ -175,12 +175,7 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
               selectDate={this.selectDate}
             />
           </Suspense> */}
-          <Row
-            gutter={24}
-            style={{
-              margin: '24 0 0 0',
-            }}
-          >
+          <Row gutter={24}>
             {/* <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <TopSearch
@@ -191,7 +186,16 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
                 />
               </Suspense>
             </Col> */}
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+            <Col
+              xl={12}
+              lg={24}
+              md={24}
+              sm={24}
+              xs={24}
+              style={{
+                margin: '24px 0 0 0',
+              }}
+            >
               <Suspense fallback={null}>
                 <ProportionSales
                   dropdownGroup={dropdownGroup}
@@ -204,12 +208,12 @@ class Analysis extends Component<AnalysisProps, AnalysisState> {
                 />
               </Suspense>
             </Col>
-            <Col xl={6} lg={12} md={12} sm={12} xs={12}>
+            <Col xl={6} lg={12} md={24} sm={24} xs={24} style={{ margin: '24px 0 0 0' }}>
               <Suspense fallback={null}>
                 <SystemCalendar loading={loading} />
               </Suspense>
             </Col>
-            <Col xl={6} lg={12} md={12} sm={12} xs={12}>
+            <Col xl={6} lg={12} md={24} sm={24} xs={24} style={{ margin: '24px 0 0 0' }}>
               <Suspense fallback={null}>
                 <SystemMsg loading={loading} messageData={messageData} />
               </Suspense>

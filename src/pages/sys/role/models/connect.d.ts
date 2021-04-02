@@ -1,5 +1,5 @@
-import { RoleStateType } from './role';
+import { RoleStateType, TreeNode } from './role';
 
 export type ConnectState = {
-  tree: RoleStateType;
+  role: RoleStateType;
 };

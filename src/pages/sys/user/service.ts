@@ -55,3 +55,8 @@ export async function resetPwRule(params: { userId: number }) {
     headers: headers,
   });
 }
+export async function queryUserById(params: number) {
+  return request(`/api/sys/user/info/${params}`, {
+    headers,
+  });
+}

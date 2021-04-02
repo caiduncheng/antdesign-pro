@@ -1,6 +1,5 @@
-import { Menu } from '@/res';
 import request from 'umi-request';
-import { TableListParams, RoleListParams } from './data.d';
+import { RoleListParams, addRoleParams, updateRoleParams } from './data.d';
 let token = localStorage.getItem('token');
 let headers: any = {
   'Content-Type': 'application/json',
@@ -16,38 +15,42 @@ export async function queryRoles(params?: RoleListParams) {
     headers,
   });
 }
+export async function queryRoleById(roleId: number) {
+  return request(`/api/sys/role/info/${roleId}`, {
+    method: 'GET',
+    headers,
+  });
+}
 export async function queryMenuList() {
   return request('/api/sys/menu/list', {
     headers,
     method: 'GET',
   });
 }
-export async function removeRule(params: { key: number[] }) {
-  return request('/api/rule', {
+export async function addRole(params: addRoleParams) {
+  return request('/api/sys/role/save', {
     method: 'POST',
+    headers,
     data: {
       ...params,
-      method: 'delete',
     },
   });
 }
-
-export async function addRule(params: TableListParams) {
-  return request('/api/rule', {
+export async function updateRole(params: updateRoleParams) {
+  return request('/api/sys/role/update', {
     method: 'POST',
+    headers,
     data: {
       ...params,
-      method: 'post',
     },
   });
 }
-
-export async function updateRule(params: TableListParams) {
-  return request('/api/rule', {
+export async function removeRole(params: { deleteIds: number[] }) {
+  return request('/api/sys/role/delete', {
     method: 'POST',
     data: {
       ...params,
-      method: 'update',
     },
+    headers,
   });
 }

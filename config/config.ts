@@ -106,8 +106,8 @@ export default defineConfig({
             },
             {
               path: '/sys',
-              icon: 'icon-settings',
-              name: 'settings',
+              icon: 'icon-system',
+              name: 'system',
               authority: ['user'],
               routes: [
                 {
@@ -115,21 +115,22 @@ export default defineConfig({
                   redirect: '/sys/user',
                 },
                 {
-                  name: 'admin-list',
-                  icon: 'smile',
+                  name: 'user',
+                  icon: 'icon-admin',
                   path: '/sys/user',
                   component: './sys/user',
                 },
                 {
-                  name: 'role-list',
-                  icon: 'smile',
+                  name: 'role',
+                  icon: 'icon-role',
                   path: '/sys/role',
                   component: './sys/role',
                 },
                 {
-                  name: 'menu-list',
-                  icon: 'smile',
+                  name: 'menu',
+                  icon: 'icon-menu',
                   path: '/sys/menu',
+                  component: './sys/menu',
                 },
                 {
                   component: '404',

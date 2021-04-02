@@ -1,12 +1,20 @@
+import React from 'react';
+
 export interface RoleListParams {
   page?: number;
   limit?: number;
   roleName?: string;
 }
 export interface addRoleParams {
+  menuIdList: React.Key[];
+  roleName: string;
+  remark?: string;
+}
+export interface updateRoleParams {
   menuIdList: number[];
   roleName: string;
   remark?: string;
+  roleId: number;
 }
 export interface TableListItem {
   key: number;
