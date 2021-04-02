@@ -5,7 +5,8 @@ import { queryMenuNav } from '@/services/menu';
 import { Menu, ResponseResult } from '@/res';
 
 export interface MenuStateType {
-  menuData: MenuDataItem[];
+  menuData: Menu[];
+  normalizedMenu: MenuDataItem[];
 }
 
 export type MenuModelType = {
@@ -41,73 +42,12 @@ const normalizeMenu = (menuList: Menu[]): MenuDataItem[] => {
   return res;
 };
 
-const menuFormatter = (response: any) => {
-  if (response === null) {
-    return [];
-  }
-  response = response.filter((item: { type: number }) => item.type != 2);
-  // let menuDatas = response.map((item: { name: string; url: string; type: number }) => {
-  //   let menuItem = {
-  //     children: {},
-  //     name: item.name,
-  //     // path: item.url,
-  //     path: '/sys/user',
-  //   };
-  //   return menuItem;
-  // });
-  let menuDatas = [];
-  // for (let item of response) {
-  //   if (item.parentId === 0) {
-  //     menuDatas.push(item);
-  //   }
-  //   toChildren(menuDatas, item);
-  // }
-  menuDatas = response.map((item: any) => {
-    if (item.children) {
-      return toMenuData(item.children);
-    }
-    return {
-      children: item.list || [],
-      name: item.name,
-      path: item.url || '/',
-    };
-  });
-  return menuDatas;
-};
-const toChildren = (menuDatas: any, ele: any) => {
-  menuDatas.forEach((item: any) => {
-    if (item.menuId === ele.parentId) {
-      if (!item.children) {
-        item.children = [];
-      }
-      item.children.push(ele);
-    }
-    if (item.children) {
-      toChildren(item.children, ele);
-    }
-  });
-};
-const toMenuData = (menuDatas: any) => {
-  menuDatas = menuDatas.map((item: any) => {
-    // if (item.children) {
-    //   toMenuData(item.children);
-    // }
-    return item.children
-      ? toMenuData(item.children)
-      : {
-          children: item.children || [],
-          name: item.name,
-          path: item.url || '/',
-        };
-  });
-  return menuDatas;
-};
-
 const MenuModel: MenuModelType = {
   namespace: 'menu',
 
   state: {
     menuData: [],
+    normalizedMenu: []
   },
 
   effects: {
@@ -116,7 +56,7 @@ const MenuModel: MenuModelType = {
       if (response.code === '0000') {
         yield put({
           type: 'saveMenuData',
-          payload: normalizeMenu(response.data.menuList),
+          payload: response.data.menuList
         });
       }
     },
@@ -127,6 +67,7 @@ const MenuModel: MenuModelType = {
       return {
         ...state,
         menuData: payload || [],
+        normalizedMenu: normalizeMenu(payload)
       };
     },
   },

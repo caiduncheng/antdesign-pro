@@ -1,28 +1,22 @@
 import request from '@/utils/request';
-export type menuInfoParamsType = {
+import { MenuList, ResponseResult } from '@/res';
+export interface menuInfoParamsType {
   menuId: number;
-};
+}
 
-export type saveMenuParamsType = {
+export interface saveMenuParamsType {
   type: number;
   name: string;
   parentId: number;
-  url: string | undefined;
-  perms: string | undefined;
-  orderNum: number | undefined;
-  icon: string | undefined;
-};
+  url?: string;
+  perms?: string;
+  orderNum?: number;
+  icon?: string;
+}
 
-export type updatedMenuParamsType = {
+export interface updatedMenuParamsType extends saveMenuParamsType, menuInfoParamsType {
   menuId: number;
-  type: number;
-  name: string;
-  parentId: number;
-  url: string | undefined;
-  perms: string | undefined;
-  orderNum: number | undefined;
-  icon: string | undefined;
-};
+}
 
 /* 获取菜单列表 */
 export async function queryMenuList() {
@@ -38,7 +32,7 @@ export async function queryMenuInfo(params: menuInfoParamsType) {
   });
 }
 /* 导航菜单接口 */
-export async function queryMenuNav() {
+export async function queryMenuNav(): Promise<ResponseResult<MenuList>> {
   return request('/api/sys/menu/nav', {
     method: 'GET',
   });
@@ -66,9 +60,12 @@ export async function updatedMenu(params: updatedMenuParamsType) {
   });
 }
 /* 删除菜单 */
-export async function delMenu(params: menuInfoParamsType) {
-  return request('/api/sys/menu/delete/', {
+export async function delMenu(menuId: number): Promise<ResponseResult> {
+  return request(`/api/sys/menu/delete/${menuId}`, {
     method: 'POST',
-    data: params,
   });
+}
+
+export function queryMenuSelect() {
+  return request('/api/sys/menu/select');
 }
