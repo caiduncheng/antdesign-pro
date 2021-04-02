@@ -52,7 +52,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
       ...item,
       children: item.children ? menuDataRender(item.children) : undefined,
     };
-    console.log(localItem);
+    // console.log(localItem);
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
@@ -66,7 +66,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     },
     menuData,
   } = props;
-  // console.log(menuData);
+  console.log(menuData);
 
   const menuDataRef = useRef<MenuDataItem[]>([]);
   useEffect(() => {
@@ -137,8 +137,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             <span>{route.breadcrumbName}</span>
           );
         }}
-        menuDataRender={menuDataRender}
-        // menuDataRender={() => menuData}
+        // menuDataRender={menuDataRender}
+        menuDataRender={() => menuData}
         rightContentRender={() => <RightContent />}
         postMenuData={(menuData) => {
           menuDataRef.current = menuData || [];

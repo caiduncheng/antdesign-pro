@@ -63,7 +63,7 @@ export interface Role {
   /** @name 用户id */
   creUserId: number;
   /** @name 菜单id列表 */
-  menuIdList?: number[];
+  menuIdList: React.Key[];
   /** @name 预设值标识*/
   preInstallSign: 0 | 1;
   /** @name 备注*/

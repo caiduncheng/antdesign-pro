@@ -28,14 +28,16 @@ const normalizeMenu = (menuList: Menu[]): MenuDataItem[] => {
       c = normalizeMenu(menuList[i].list);
       res.push({
         children: c,
-        name: 'sys',
+        name: 'system',
         path: menuList[i].url ? menuList[i].url : '/',
+        icon: `icon-${menuList[i].icon}`,
       });
     } else {
       res.push({
         path: menuList[i].url ? menuList[i].url : '/',
         name: menuList[i].url?.split('/')[1],
         children: menuList[i].list,
+        icon: `icon-${menuList[i].icon}`,
       });
     }
   }
@@ -47,16 +49,16 @@ const MenuModel: MenuModelType = {
 
   state: {
     menuData: [],
-    normalizedMenu: []
+    normalizedMenu: [],
   },
 
   effects: {
     *getMenuData(_, { call, put }) {
       const response: ResponseResult<Menu> = yield call(queryMenuNav);
-      if (response.code === '0000') {
+      if (response?.code === '0000') {
         yield put({
           type: 'saveMenuData',
-          payload: response.data.menuList
+          payload: response.data.menuList,
         });
       }
     },
@@ -67,7 +69,7 @@ const MenuModel: MenuModelType = {
       return {
         ...state,
         menuData: payload || [],
-        normalizedMenu: normalizeMenu(payload)
+        normalizedMenu: normalizeMenu(payload),
       };
     },
   },

@@ -17,7 +17,7 @@ const proSettings: DefaultSettings = {
   colorWeak: false,
   title: 'Support',
   pwa: false,
-  iconfontUrl: '//at.alicdn.com/t/font_2430927_7yh8v0gru0i.js',
+  iconfontUrl: '//at.alicdn.com/t/font_2430927_w1ohhu8axrl.css',
 };
 
 export type { DefaultSettings };

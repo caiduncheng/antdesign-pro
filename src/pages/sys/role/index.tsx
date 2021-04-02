@@ -1,27 +1,31 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Drawer } from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, message, Drawer, Modal } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
-import { TableListItem } from './data.d';
+import { addRoleParams, updateRoleParams } from './data.d';
 // import { RoleList } from 'res.d';
-import { queryRoles, updateRule, addRule, removeRule } from './service';
+import { queryRoles, addRole, updateRole, queryRoleById, removeRole } from './service';
 import { Role } from '@/res';
+const { confirm } = Modal;
 
 /**
  * 添加节点
  * @param fields
  */
-const handleAdd = async (fields: TableListItem) => {
+const handleAdd = async (fields: addRoleParams) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
+    const res = await addRole({ ...fields });
+    if (res.code === '0000') {
+      hide();
+      message.success('添加成功');
+      return true;
+    }
+    message.error(res.msg);
+    return false;
   } catch (error) {
     hide();
     message.error('添加失败请重试！');
@@ -33,39 +37,62 @@ const handleAdd = async (fields: TableListItem) => {
  * 更新节点
  * @param fields
  */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
+const handleUpdate = async (fields: updateRoleParams) => {
+  const hide = message.loading('正在更新');
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-
-    message.success('配置成功');
-    return true;
+    const res = await updateRole({ ...fields });
+    if (res.code === '0000') {
+      hide();
+      message.success('更新成功');
+      return true;
+    }
+    message.error(res.msg);
+    return false;
   } catch (error) {
     hide();
-    message.error('配置失败请重试！');
+    message.error('更新失败请重试！');
     return false;
   }
 };
 
 /**
+ * 通过id查询角色信息
+ * @param fields
+ */
+const handleRoleById = async (roleId: number) => {
+  const hide = message.loading('正在查询该用户信息');
+  try {
+    const res = await queryRoleById(roleId);
+    if (res.code === '0000') {
+      hide();
+      return res.data;
+    }
+    message.error('查询失败');
+    return null;
+  } catch (error) {
+    hide();
+    message.error('查询失败请重试！');
+    return null;
+  }
+};
+/**
  *  删除节点
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: TableListItem[]) => {
+const handleRemove = async (selectedRows: Role[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
+    const res = await removeRole({
+      deleteIds: selectedRows.map((row) => row.roleId),
     });
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
+    if (res.code === '0000') {
+      hide();
+      message.success('删除成功，即将刷新');
+      return true;
+    }
+    message.error(res.msg);
+    return false;
   } catch (error) {
     hide();
     message.error('删除失败，请重试');
@@ -76,7 +103,7 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
 const TableList: React.FC<{}> = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [stepFormValues, setStepFormValues] = useState({});
+  const [stepFormValues, setStepFormValues] = useState<Role>();
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<Role>();
   const [selectedRowsState, setSelectedRows] = useState<Role[]>([]);
@@ -85,12 +112,12 @@ const TableList: React.FC<{}> = () => {
       title: 'ID',
       dataIndex: 'roleId',
       hideInForm: true,
-      tip: '用户ID是唯一的 key',
+      tip: '角色ID是唯一的 key',
       formItemProps: {
         rules: [
           {
             required: true,
-            message: '用户ID为必填项',
+            message: '角色ID为必填项',
           },
         ],
       },
@@ -133,11 +160,13 @@ const TableList: React.FC<{}> = () => {
       render: (_, record) => (
         <>
           <a
-            onClick={() => {
+            onClick={async () => {
               handleUpdateModalVisible(true);
-              console.log(record);
-
-              setStepFormValues(record);
+              // console.log(record);
+              const roleById = await handleRoleById(record.roleId);
+              if (roleById) {
+                setStepFormValues(roleById);
+              }
             }}
           >
             修改
@@ -146,7 +175,33 @@ const TableList: React.FC<{}> = () => {
       ),
     },
   ];
-
+  function showDeleteConfirm() {
+    let roleNames = selectedRowsState.reduce((pre: string[], cur: Role) => {
+      pre.push(cur.roleName);
+      return pre;
+    }, []);
+    confirm({
+      title: `确定对【${roleNames.join('，')}】进行【批量删除】操作吗?`,
+      icon: <ExclamationCircleOutlined />,
+      // content: 'Some descriptions',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      async onOk() {
+        // console.log('OK');
+        const success = await handleRemove(selectedRowsState);
+        if (success) {
+          setSelectedRows([]);
+          actionRef.current?.reloadAndRest?.();
+        }
+      },
+      onCancel() {
+        // console.log('Cancel');
+        setSelectedRows([]);
+        actionRef.current?.reloadAndRest?.();
+      },
+    });
+  }
   return (
     <PageContainer>
       <ProTable<Role>
@@ -166,7 +221,7 @@ const TableList: React.FC<{}> = () => {
           const msg = await queryRoles({
             limit: params.pageSize,
             page: params.current,
-            roleName: params.keyword,
+            roleName: params.roleName,
           });
 
           return {
@@ -193,39 +248,36 @@ const TableList: React.FC<{}> = () => {
         >
           <Button
             onClick={async () => {
-              // await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
+              showDeleteConfirm();
             }}
           >
             批量删除
           </Button>
-          <Button type="primary">批量审批</Button>
         </FooterToolbar>
       )}
-      <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
-        {/* <ProTable<Role, TableListItem>
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
+      <CreateForm
+        title={'新建角色'}
+        onSubmit={async (params: addRoleParams) => {
+          const success = await handleAdd(params);
+          if (success) {
+            handleModalVisible(false);
+            if (actionRef.current) {
+              actionRef.current.reload();
             }
-          }}
-          rowKey="key"
-          type="form"
-          columns={columns}
-        /> */}
-      </CreateForm>
+          }
+        }}
+        onCancel={() => handleModalVisible(false)}
+        modalVisible={createModalVisible}
+        values={undefined}
+      ></CreateForm>
       {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async (value) => {
-            const success = await handleUpdate(value);
+        <CreateForm
+          title={'修改角色'}
+          onSubmit={async (params: updateRoleParams) => {
+            const success = await handleUpdate(params);
             if (success) {
               handleUpdateModalVisible(false);
-              setStepFormValues({});
+              setStepFormValues(undefined);
               if (actionRef.current) {
                 actionRef.current.reload();
               }
@@ -233,11 +285,11 @@ const TableList: React.FC<{}> = () => {
           }}
           onCancel={() => {
             handleUpdateModalVisible(false);
-            setStepFormValues({});
+            setStepFormValues(undefined);
           }}
-          updateModalVisible={updateModalVisible}
+          modalVisible={updateModalVisible}
           values={stepFormValues}
-        />
+        ></CreateForm>
       ) : null}
 
       <Drawer
@@ -252,9 +304,12 @@ const TableList: React.FC<{}> = () => {
           <ProDescriptions<Role>
             column={2}
             title={row?.roleName}
-            request={async () => ({
-              data: row || {},
-            })}
+            request={async () => {
+              // const roleById = await handleRoleById(row.roleId);
+              return {
+                data: row || {},
+              };
+            }}
             params={{
               id: row?.roleId,
             }}

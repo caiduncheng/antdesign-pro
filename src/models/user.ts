@@ -67,10 +67,10 @@ const UserModel: UserModelType = {
       if (response.code === '0000') {
         yield put({
           type: 'saveCurrentUser',
-          payload: response.data,
+          payload: response?.data,
         });
       } else {
-        message.error(response.msg);
+        message.error(response?.msg);
       }
     },
   },

@@ -9,7 +9,7 @@ import RoleTable from './components/RoleTable';
 import UpdateForm from './components/UpdateForm';
 import { TableListItem, addListParams, updateListParams } from './data.d';
 import { RoleListParams } from '../role/data.d';
-import { queryRule, updateRule, addRule, removeRule, resetPwRule } from './service';
+import { queryRule, updateRule, addRule, removeRule, resetPwRule, queryUserById } from './service';
 import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
 
 /**
@@ -37,12 +37,31 @@ const handleAdd = async (fields: addListParams) => {
 };
 
 /**
+ * 查询用户通过id
+ * @param fields
+ */
+const queryUser = async (fields: number) => {
+  const hide = message.loading('正在查询');
+  try {
+    const res = await queryUserById(fields);
+    hide();
+    if (res.msg === 'SUCCESS') {
+      return res.data;
+    }
+    message.error(res.msg);
+    return null;
+  } catch {
+    hide();
+    message.error('查询失败请重试！');
+    return null;
+  }
+};
+/**
  * 更新节点
  * @param fields
  */
 const handleUpdate = async (fields: updateListParams) => {
   const hide = message.loading('正在更新');
-  console.log(fields);
 
   try {
     const res = await updateRule({ ...fields });
@@ -196,11 +215,13 @@ const TableList: React.FC<{}> = () => {
       render: (_, record) => (
         <>
           <a
-            onClick={() => {
+            onClick={async () => {
               handleUpdateModalVisible(true);
               console.log(record);
-
-              setStepFormValues(record);
+              const userInfos = await queryUser(record.userId);
+              if (userInfos) {
+                setStepFormValues(userInfos);
+              }
             }}
           >
             修改

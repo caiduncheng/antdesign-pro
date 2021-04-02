@@ -13,7 +13,7 @@ interface UpdateFormProps {
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateModalVisible, onCancel, onSubmit, values } = props;
-  const [roleListState, setRoleList] = useState<number[]>([]);
+  const [roleListState, setRoleList] = useState<number[]>(values.roleIdList);
   console.log(values.roleIdList);
 
   const renderContent = () => {
@@ -86,14 +86,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     );
   };
 
-  const renderFooter = () => {
-    return (
-      <>
-        <Button onClick={() => onCancel(false)}>取消</Button>
-        <Button type="primary">确认</Button>
-      </>
-    );
-  };
   return (
     <Modal
       destroyOnClose

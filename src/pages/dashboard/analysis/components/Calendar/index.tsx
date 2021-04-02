@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import autoHeight from '../Charts/autoHeight';
 import styles from './index.less';
 
-import { Calendar, Select, Radio, Col, Row, Typography } from 'antd';
+import { Calendar, Select, Radio, Col, Row } from 'antd';
 // import { FormattedMessage } from '@/.umi/plugin-locale/localeExports';
 
 // const onPanelChange = (value: any, mode: string) => {

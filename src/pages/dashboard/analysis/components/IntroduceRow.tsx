@@ -20,7 +20,7 @@ const topColResponsiveProps = {
   md: 12,
   lg: 12,
   xl: 8,
-  style: { marginBottom: 24 },
+  // style: { marginBottom: 24 },
 };
 // , visitData  visitData: VisitDataType[]
 const IntroduceRow = ({ loading }: { loading: boolean }) => (
