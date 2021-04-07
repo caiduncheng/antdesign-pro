@@ -18,7 +18,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
-import SecurityLayout from './SecurityLayout';
+
 const noMatch = (
   <Result
     status={403}
@@ -114,66 +114,64 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const { formatMessage } = useIntl();
   return (
     <>
-      <SecurityLayout>
-        <ProLayout
-          logo={logo}
-          formatMessage={formatMessage}
-          {...props}
-          {...settings}
-          onCollapse={handleMenuCollapse}
-          onMenuHeaderClick={() => history.push('/')}
-          menuItemRender={(menuItemProps, defaultDom) => {
-            if (
-              menuItemProps.isUrl ||
-              !menuItemProps.path ||
-              location.pathname === menuItemProps.path
-            ) {
-              return defaultDom;
-            }
-
-            return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-          }}
-          breadcrumbRender={(routers = []) => [
-            {
-              path: '/',
-              breadcrumbName: formatMessage({
-                id: 'menu.home',
-              }),
-            },
-            ...routers,
-          ]}
-          itemRender={(route, params, routes, paths) => {
-            const first = routes.indexOf(route) === 0;
-            return first ? (
-              <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-            ) : (
-              <span>{route.breadcrumbName}</span>
-            );
-          }}
-          menuDataRender={menuDataRender}
-          menu={{
-            locale: false,
-          }}
-          rightContentRender={() => <RightContent />}
-          postMenuData={(menuData) => {
-            menuDataRef.current = menuData || [];
-            return menuData || [];
-          }}
-        >
-          <Authorized authority={authorized!.authority} noMatch={noMatch}>
-            {children}
-          </Authorized>
-        </ProLayout>
-        <SettingDrawer
-          settings={settings}
-          onSettingChange={(config) =>
-            dispatch({
-              type: 'settings/changeSetting',
-              payload: config,
-            })
+      <ProLayout
+        logo={logo}
+        formatMessage={formatMessage}
+        {...props}
+        {...settings}
+        onCollapse={handleMenuCollapse}
+        onMenuHeaderClick={() => history.push('/')}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (
+            menuItemProps.isUrl ||
+            !menuItemProps.path ||
+            location.pathname === menuItemProps.path
+          ) {
+            return defaultDom;
           }
-        />
-      </SecurityLayout>
+
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={(routers = []) => [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({
+              id: 'menu.home',
+            }),
+          },
+          ...routers,
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          return first ? (
+            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          ) : (
+            <span>{route.breadcrumbName}</span>
+          );
+        }}
+        menuDataRender={menuDataRender}
+        menu={{
+          locale: false,
+        }}
+        rightContentRender={() => <RightContent />}
+        postMenuData={(menuData) => {
+          menuDataRef.current = menuData || [];
+          return menuData || [];
+        }}
+      >
+        <Authorized authority={authorized!.authority} noMatch={noMatch}>
+          {children}
+        </Authorized>
+      </ProLayout>
+      <SettingDrawer
+        settings={settings}
+        onSettingChange={(config) =>
+          dispatch({
+            type: 'settings/changeSetting',
+            payload: config,
+          })
+        }
+      />
     </>
   );
 };
