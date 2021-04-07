@@ -293,7 +293,7 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
               icon={<Icon type={icon} />}
               size="large"
               onClick={() => {
-                setIconInputValue(icon);
+                setIconInputValue(icon.split('-')[1]);
                 setPopOverVisible(false);
               }}
             />
@@ -377,6 +377,7 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
             if (success) {
               setModalVisible(false);
               ref.current?.reload();
+              window.location.reload();
             }
           }}
         >

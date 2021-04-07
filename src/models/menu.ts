@@ -31,14 +31,14 @@ const normalizeMenu = (menuList: Menu[]): MenuDataItem[] => {
       c = normalizeMenu(menuList[i].list);
       res.push({
         children: c,
-        name: 'system',
+        name: menuList[i].name,
         path: menuList[i].url ? menuList[i].url : '',
         icon: `icon-${menuList[i].icon}`,
       });
     } else {
       res.push({
         path: menuList[i].url ? menuList[i].url : '',
-        name: menuList[i].url?.split('/')[1],
+        name: menuList[i].name,
         children: menuList[i].list,
         icon: `icon-${menuList[i].icon}`,
       });

@@ -133,6 +133,11 @@ export default defineConfig({
                   component: './sys/menu',
                 },
                 {
+                  name: 'new',
+                  path: '/sys/new',
+                  component: './sys/menu',
+                },
+                {
                   component: '404',
                 },
               ],
