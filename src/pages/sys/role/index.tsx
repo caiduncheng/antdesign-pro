@@ -5,9 +5,17 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
-import { addRoleParams, updateRoleParams } from './data.d';
+// import { addRoleParams, updateRoleParams } from './data.d';
 // import { RoleList } from 'res.d';
-import { queryRoles, addRole, updateRole, queryRoleById, removeRole } from './service';
+import {
+  addRoleParams,
+  updateRoleParams,
+  queryRoles,
+  addRole,
+  updateRole,
+  queryRoleById,
+  removeRole,
+} from '@/services/role';
 import { Role } from '@/res';
 const { confirm } = Modal;
 

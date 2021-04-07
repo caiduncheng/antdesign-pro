@@ -1,5 +1,5 @@
 import type { Reducer, Effect } from 'umi';
-import { queryMenuList } from '../service';
+import { queryMenuList } from '@/services/role';
 import { ResponseResult, MenuList, Menu } from '@/res';
 import { message } from 'antd';
 export interface TreeNode {

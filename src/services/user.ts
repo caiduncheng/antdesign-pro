@@ -1,12 +1,36 @@
 import request from '@/utils/request';
-let token = localStorage.getItem('token');
-console.log(token);
+export interface TableListItem {
+  userId: number;
+  username: string;
+  email: string;
+  mobile: string;
+  status: number;
+  preInstallSign: number;
+  creTime: string;
+  roleIdList: number[];
+}
+export interface TableDataParams {
+  username?: string;
+  limit?: number;
+  page?: number;
+}
+export interface addListParams {
+  email: string;
+  mobile: string;
+  password: string;
+  roleIdList: number[];
+  status?: number;
+  username: string;
+}
+export interface updateListParams {
+  email?: string;
+  mobile?: string;
+  roleIdList: number[];
+  status: number;
+  userId: number;
+  username: string;
+}
 
-let headers: any = {
-  'Content-Type': 'application/json',
-  Accept: 'application/json',
-  token: token,
-};
 export async function query(): Promise<any> {
   return request('/api/users');
 }
@@ -22,6 +46,53 @@ export async function queryNotices(): Promise<any> {
 export async function user() {
   return request('/api/sys/user/info', {
     method: 'GET',
-    headers,
   });
+}
+
+export async function queryRule(params?: TableDataParams) {
+  return request('/api/sys/user/list', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function removeRule(params: { userIds: number[] }) {
+  return request('/api/sys/user/delete', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function addRule(params: addListParams) {
+  return request('/api/sys/user/save', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function updateRule(params: updateListParams) {
+  return request('/api/sys/user/update', {
+    method: 'POST',
+    data: {
+      ...params,
+      method: 'update',
+    },
+  });
+}
+export async function resetPwRule(params: { userId: number }) {
+  return request('/api/sys/user/resetPw', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+export async function queryUserById(params: number) {
+  return request(`/api/sys/user/info/${params}`, {});
 }

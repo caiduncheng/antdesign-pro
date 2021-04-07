@@ -7,9 +7,18 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import RoleTable from './components/RoleTable';
 import UpdateForm from './components/UpdateForm';
-import { TableListItem, addListParams, updateListParams } from './data.d';
-import { RoleListParams } from '../role/data.d';
-import { queryRule, updateRule, addRule, removeRule, resetPwRule, queryUserById } from './service';
+import {
+  TableListItem,
+  addListParams,
+  updateListParams,
+  queryRule,
+  updateRule,
+  addRule,
+  removeRule,
+  resetPwRule,
+  queryUserById,
+} from '@/services/user';
+// import { queryRule, updateRule, addRule, removeRule, resetPwRule, queryUserById } from './service';
 import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
 
 /**

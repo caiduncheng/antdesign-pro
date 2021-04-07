@@ -21,13 +21,7 @@ import { TableListItem } from './data';
 import { ConnectState } from '@/models/connect';
 import { connect } from 'umi';
 import iconList from '@/assets/icons';
-import {
-  saveMenu,
-  saveMenuParamsType,
-  delMenu,
-  queryMenuList,
-  queryMenuSelect,
-} from '@/services/menu';
+import { saveMenu, saveMenuParamsType, delMenu, queryMenuList } from '@/services/menu';
 import { treeDataTranslate } from '@/utils/utils';
 import type { Dispatch } from 'umi';
 interface TreeSelectType {

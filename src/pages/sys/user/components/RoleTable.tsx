@@ -1,7 +1,6 @@
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import React, { useRef, useState } from 'react';
-import { RoleListItem } from '../data.d';
-import { queryRoles } from '../../role/service';
+import { RoleListItem, queryRoles } from '@/services/role';
 
 interface RoleTableProps {
   getRoles: (roles: number[]) => void;

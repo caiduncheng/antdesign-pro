@@ -1,13 +1,6 @@
 import request from '@/utils/request';
 import { JSEncrypt } from 'jsencrypt';
 import { getRsaPublicKey } from '@/utils/utils';
-
-let token = localStorage.getItem('token');
-let headers: any = {
-  'Content-Type': 'application/json',
-  Accept: 'application/json',
-  token: token,
-};
 const rsa = new JSEncrypt({});
 const publicKey = getRsaPublicKey();
 rsa.setPublicKey(publicKey);
@@ -31,7 +24,6 @@ export function login(params: LoginParamsType) {
 export function loginout() {
   return request(`/api/logout`, {
     method: 'POST',
-    headers,
   });
 }
 
