@@ -9,7 +9,7 @@ import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
 export type GlobalHeaderRightProps = {
-  currentUser?: CurrentUser;
+  currentUser: CurrentUser;
   menu?: boolean;
 } & Partial<ConnectProps>;
 
@@ -69,7 +69,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.username ? (
+    return (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
           <div className={styles.usernameContainer}>
@@ -80,17 +80,18 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
           <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
         </span>
       </HeaderDropdown>
-    ) : (
-      <span className={`${styles.action} ${styles.account}`}>
-        <Spin
-          size="small"
-          style={{
-            marginLeft: 8,
-            marginRight: 8,
-          }}
-        />
-      </span>
     );
+    // : (
+    //   <span className={`${styles.action} ${styles.account}`}>
+    //     <Spin
+    //       size="small"
+    //       style={{
+    //         marginLeft: 8,
+    //         marginRight: 8,
+    //       }}
+    //     />
+    //   </span>
+    // );
   }
 }
 

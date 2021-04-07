@@ -108,7 +108,7 @@ export default defineConfig({
               path: '/sys',
               icon: 'icon-system',
               name: 'system',
-              authority: ['user'],
+              authority: ['admin', 'user'],
               routes: [
                 {
                   path: '/',
@@ -136,12 +136,6 @@ export default defineConfig({
                   component: '404',
                 },
               ],
-            },
-            {
-              path: '/menu',
-              name: 'menu',
-              component: './sys/menu',
-              icon: 'icon-menu',
             },
             {
               path: '/issue',

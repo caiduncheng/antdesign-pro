@@ -1,6 +1,6 @@
 import type { Effect, Reducer } from 'umi';
 
-import { queryCurrent, query as queryUsers, user } from '@/services/user';
+import { query as queryUsers, user } from '@/services/user';
 import { message } from 'antd';
 
 // export type CurrentUser = {
@@ -20,7 +20,7 @@ import { message } from 'antd';
 export type CurrentUser = {
   userId?: number;
   username?: string;
-  avatar?: string | undefined;
+  avatar?: string;
   email?: string;
   mobile?: string;
   status?: number;
@@ -50,7 +50,9 @@ const UserModel: UserModelType = {
   namespace: 'user',
 
   state: {
-    currentUser: {},
+    currentUser: {
+      avatar: 'https://caidc.oss-cn-beijing.aliyuncs.com/avatar.c58e465.png',
+    },
   },
 
   effects: {
@@ -62,15 +64,12 @@ const UserModel: UserModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      // const response = yield call(queryCurrent);
       const response = yield call(user);
       if (response.code === '0000') {
         yield put({
           type: 'saveCurrentUser',
-          payload: response?.data,
+          payload: response.data,
         });
-      } else {
-        message.error(response?.msg);
       }
     },
   },
@@ -79,7 +78,7 @@ const UserModel: UserModelType = {
     saveCurrentUser(state, action) {
       return {
         ...state,
-        currentUser: action.payload || {},
+        currentUser: { ...state?.currentUser, ...action.payload },
       };
     },
     changeNotifyCount(

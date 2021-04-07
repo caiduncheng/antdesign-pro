@@ -89,7 +89,6 @@ const Login: React.FC<LoginProps> = (props) => {
           <LoginMessage
             content={intl.formatMessage({
               id: 'pages.login.accountLogin.errorMessage',
-              defaultMessage: '账户或密码错误（admin/ant.design)',
             })}
           />
         )}
@@ -101,7 +100,6 @@ const Login: React.FC<LoginProps> = (props) => {
           }}
           placeholder={intl.formatMessage({
             id: 'pages.login.username.placeholder',
-            defaultMessage: '请输入账号',
           })}
           rules={[
             {

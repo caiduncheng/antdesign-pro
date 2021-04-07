@@ -3,9 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
-import { history } from 'umi';
-import { ErrorShowType } from 'umi';
+import { message, notification } from 'antd';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -62,16 +60,13 @@ const request = extend({
   },
 });
 
-// request.interceptors.response.use(async (response: Response) => {
-//   const data = await response.clone().json();
-//   if (data.code !== '0000') {
-//     notification.warn({
-//       message: `${response.url}请求错误`,
-//       description: data.msg,
-//     });
-//   }
-//   return response;
-// });
+request.interceptors.response.use(async (response: Response) => {
+  const data = await response.clone().json();
+  if (data.code && data.code !== '0000') {
+    message.error(data.msg);
+  }
+  return response;
+});
 
 // 拦截器
 // request.interceptors.request.use((url, options) => {

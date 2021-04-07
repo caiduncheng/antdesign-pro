@@ -48,6 +48,8 @@ export interface Menu {
   url?: string;
   /** @name 子菜单列表*/
   list: Menu[];
+  /** @name 子菜单列表 */
+  children: Menu[];
   /** @name 菜单列表 */
   menuList: Menu[];
 }

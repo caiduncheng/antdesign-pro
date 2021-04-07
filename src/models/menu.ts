@@ -1,12 +1,13 @@
 import type { Reducer, Effect } from 'umi';
 import type { MenuDataItem } from '@ant-design/pro-layout';
 
-import { queryMenuNav } from '@/services/menu';
+import { queryMenuNav, queryMenuSelect } from '@/services/menu';
 import { Menu, ResponseResult } from '@/res';
 
 export interface MenuStateType {
-  menuData: Menu[];
-  normalizedMenu: MenuDataItem[];
+  menuData?: Menu[];
+  normalizedMenu?: MenuDataItem[];
+  menuSelect?: Menu[];
 }
 
 export type MenuModelType = {
@@ -14,9 +15,11 @@ export type MenuModelType = {
   state: MenuStateType;
   effects: {
     getMenuData: Effect;
+    getMenuSelect: Effect;
   };
   reducers: {
     saveMenuData: Reducer<MenuStateType>;
+    saveMenuSelect: Reducer<MenuStateType>;
   };
 };
 
@@ -50,17 +53,25 @@ const MenuModel: MenuModelType = {
   state: {
     menuData: [],
     normalizedMenu: [],
+    menuSelect: [],
   },
 
   effects: {
     *getMenuData(_, { call, put }) {
       const response: ResponseResult<Menu> = yield call(queryMenuNav);
-      if (response?.code === '0000') {
+      if (response.code === '0000') {
         yield put({
           type: 'saveMenuData',
           payload: response.data.menuList,
         });
       }
+    },
+    *getMenuSelect(_, { call, put }) {
+      const response: ResponseResult<Menu> = yield call(queryMenuSelect);
+      yield put({
+        type: 'saveMenuSelect',
+        payload: response.data.menuList,
+      });
     },
   },
 
@@ -70,6 +81,12 @@ const MenuModel: MenuModelType = {
         ...state,
         menuData: payload || [],
         normalizedMenu: normalizeMenu(payload),
+      };
+    },
+    saveMenuSelect(state, { payload }) {
+      return {
+        ...state,
+        menuSelect: payload,
       };
     },
   },

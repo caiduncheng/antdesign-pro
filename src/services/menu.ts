@@ -14,6 +14,8 @@ export interface saveMenuParamsType {
   icon?: string;
 }
 
+type MenuResponse = Promise<ResponseResult<MenuList>>;
+
 export interface updatedMenuParamsType extends saveMenuParamsType, menuInfoParamsType {
   menuId: number;
 }
@@ -38,7 +40,7 @@ export async function queryMenuNav(): Promise<ResponseResult<MenuList>> {
   });
 }
 /* 菜单下拉框选择 */
-export async function selectMenu() {
+export async function queryMenuSelect(): MenuResponse {
   return request('/api/sys/menu/select', {
     method: 'GET',
   });
@@ -64,8 +66,4 @@ export async function delMenu(menuId: number): Promise<ResponseResult> {
   return request(`/api/sys/menu/delete/${menuId}`, {
     method: 'POST',
   });
-}
-
-export function queryMenuSelect() {
-  return request('/api/sys/menu/select');
 }

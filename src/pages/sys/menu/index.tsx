@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
@@ -20,14 +20,25 @@ import CreateForm from './components/CreateForm';
 import { TableListItem } from './data';
 import { ConnectState } from '@/models/connect';
 import { connect } from 'umi';
-import { MenuStateType } from '@/models/menu';
 import iconList from '@/assets/icons';
-import { saveMenu, saveMenuParamsType, queryMenuNav, delMenu } from '@/services/menu';
-
-interface TreeData {
+import {
+  saveMenu,
+  saveMenuParamsType,
+  delMenu,
+  queryMenuList,
+  queryMenuSelect,
+} from '@/services/menu';
+import { treeDataTranslate } from '@/utils/utils';
+import type { Dispatch } from 'umi';
+interface TreeSelectType {
   title?: string;
   value?: number;
-  children?: TreeData[];
+  children?: TreeSelectType[];
+}
+
+interface MenuTableProps {
+  menuSelect: Menu[];
+  dispatch: Dispatch;
 }
 
 const Icon = createFromIconfontCN({
@@ -39,7 +50,7 @@ const normalizeMenu = (menuList: Menu[]) => {
   let c: TableListItem[] | undefined;
 
   for (let i = 0; i < menuList.length; i++) {
-    const { name, url, icon, orderNum, parentName, menuId } = menuList[i];
+    const { name, url, icon, orderNum, parentName, menuId, type } = menuList[i];
     const obj: TableListItem = {
       name,
       url,
@@ -48,12 +59,14 @@ const normalizeMenu = (menuList: Menu[]) => {
       parentName,
       menuId,
       label:
-        menuList[i].list.length > 0
-          ? { color: 'green', name: '菜单' }
-          : { color: 'blue', name: '目录' },
+        type === 0
+          ? { name: '目录', color: 'blue' }
+          : type === 1
+          ? { name: '菜单', color: 'green' }
+          : { name: '按钮', color: 'gray' },
     };
-    if (menuList[i].list.length > 0) {
-      c = normalizeMenu(menuList[i].list);
+    if (menuList[i].children && menuList[i].children.length > 0) {
+      c = normalizeMenu(menuList[i].children);
       res.push({ ...obj, children: c });
     } else {
       res.push({ ...obj });
@@ -62,12 +75,12 @@ const normalizeMenu = (menuList: Menu[]) => {
   return res;
 };
 
-const menuToTreeData = (menuData: Menu[]): TreeData[] => {
-  const res: TreeData[] = [];
-  let c: TreeData[];
+const menuToTreeData = (menuData: Menu[]): TreeSelectType[] => {
+  const res: TreeSelectType[] = [];
+  let c: TreeSelectType[];
   for (let i = 0; i < menuData.length; i++) {
-    if (menuData[i].list.length > 0) {
-      c = menuToTreeData(menuData[i].list);
+    if (menuData[i].children && menuData[i].children.length > 0) {
+      c = menuToTreeData(menuData[i].children);
       res.push({
         title: menuData[i].name,
         value: menuData[i].menuId,
@@ -84,7 +97,24 @@ const menuToTreeData = (menuData: Menu[]): TreeData[] => {
   return res;
 };
 
-const MenuTable: React.FC<MenuStateType> = (props) => {
+/**
+ * 添加菜单
+ */
+const handleAdd = async (fields: saveMenuParamsType) => {
+  const hide = message.loading('正在添加');
+  try {
+    await saveMenu({ ...fields });
+    hide();
+    message.success('添加成功');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('添加失败请重试！');
+    return false;
+  }
+};
+
+const MenuTable: React.FC<MenuTableProps> = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [popOverVisible, setPopOverVisible] = useState(false);
   const [iconInputValue, setIconInputValue] = useState('');
@@ -92,29 +122,40 @@ const MenuTable: React.FC<MenuStateType> = (props) => {
   const [treeDataValue, setTreeDataValue] = useState(0);
   const ref = useRef<ActionType>();
 
+  const { menuSelect, dispatch } = props;
+  let foramattedMenuSelect: any = null;
+
+  useEffect(() => {
+    dispatch({
+      type: 'menu/getMenuSelect',
+    });
+  }, []);
+
+  foramattedMenuSelect = menuToTreeData(treeDataTranslate(menuSelect, 'menuId'));
+
   const queryMenu = async () => {
-    // const res = await request<ResponseResult<Menu>>('/api/menulist');
-    const res = await queryMenuNav();
-    const normalizedMenu = normalizeMenu(res.data.menuList);
+    const res = await queryMenuList();
+    const treeMenu = treeDataTranslate(res.data.menuList, 'menuId');
+    const normalizedMenu = normalizeMenu(treeMenu);
     return {
       sucess: true,
-      data: normalizeMenu(res.data.menuList),
+      data: normalizedMenu,
       total: normalizedMenu.length,
     };
   };
 
-  const onTreeSelectChange = (value) => {
+  const onTreeSelectChange = (value: number) => {
     setTreeDataValue(value);
   };
 
-  const ParentMenuSelctor = () => (
+  const ParentMenuSelector = () => (
     <Form.Item label="上级菜单">
       <TreeSelect
         style={{ width: '100%' }}
         value={treeDataValue}
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         placeholder="请选择"
-        treeData={[{ title: '一级菜单', children: menuToTreeData(props.menuData), value: 0 }]}
+        treeData={foramattedMenuSelect}
         treeDefaultExpandAll
         onChange={onTreeSelectChange}
       />
@@ -234,14 +275,14 @@ const MenuTable: React.FC<MenuStateType> = (props) => {
     },
   ];
 
-  const DirectoryForm: React.FC = () => (
+  const DirectoryForm = () => (
     <>
       <ProFormText
         name="name"
         label="目录名称"
         rules={[{ required: true, message: '目录名称不能为空' }]}
       />
-      <ParentMenuSelctor />
+      <ParentMenuSelector />
       <ProFormText name="orderNum" label="排序号" />
       <Popover
         content={() =>
@@ -272,36 +313,32 @@ const MenuTable: React.FC<MenuStateType> = (props) => {
     </>
   );
 
-  const MenuForm: React.FC = () => (
+  const MenuForm = () => (
     <>
       <ProFormText
         name="name"
         label="菜单名称"
         rules={[{ required: true, message: '目录名称不能为空' }]}
       />
-      <ParentMenuSelctor />
+      <ParentMenuSelector />
       <ProFormText
         name="url"
         label="菜单路由"
         rules={[{ required: true, message: '目录名称不能为空' }]}
       />
-      <ProFormText
-        name="perms"
-        label="授权标识"
-        rules={[{ required: true, message: '目录名称不能为空' }]}
-      />
-      <ProFormText
-        name="orderNum"
-        label="排序序号"
-        rules={[{ required: true, message: '目录名称不能为空' }]}
-      />
+      <ProFormText name="perms" label="授权标识" />
+      <ProFormText name="orderNum" label="排序序号" />
     </>
   );
 
-  const ButtonForm: React.FC = () => (
+  const ButtonForm = () => (
     <>
-      <ProFormText name="name" label="按钮名称" />
-      <ProFormText name="parentId" label="上级菜单" />
+      <ProFormText
+        name="name"
+        label="按钮名称"
+        rules={[{ required: true, message: '按钮名称不能为空' }]}
+      />
+      <ParentMenuSelector />
       <ProFormText name="perms" label="授权标识" />
     </>
   );
@@ -320,7 +357,7 @@ const MenuTable: React.FC<MenuStateType> = (props) => {
         columns={columns}
         search={false}
         headerTitle="新增菜单"
-        rowKey="name"
+        rowKey="menuId"
         request={queryMenu}
         toolBarRender={() => [
           <Button type="primary" key="primary" onClick={() => setModalVisible(true)}>
@@ -331,12 +368,16 @@ const MenuTable: React.FC<MenuStateType> = (props) => {
       <CreateForm modalVisible={modalVisible} onCancel={() => setModalVisible(false)}>
         <ProForm
           onFinish={async (formData: saveMenuParamsType) => {
-            saveMenu({
+            const success = await handleAdd({
               ...formData,
               parentId: treeDataValue,
               icon: iconInputValue,
               type,
             });
+            if (success) {
+              setModalVisible(false);
+              ref.current?.reload();
+            }
           }}
         >
           <ProFormRadio.Group
@@ -349,9 +390,9 @@ const MenuTable: React.FC<MenuStateType> = (props) => {
               onChange: (e) => setType(e.target.value),
             }}
             options={[
-              { label: '目录', value: '0' },
-              { label: '菜单', value: '1' },
-              { label: '按钮', value: '2' },
+              { label: '目录', value: 0 },
+              { label: '菜单', value: 1 },
+              { label: '按钮', value: 2 },
             ]}
           />
           <FormComponents />
@@ -363,4 +404,5 @@ const MenuTable: React.FC<MenuStateType> = (props) => {
 
 export default connect(({ menu }: ConnectState) => ({
   menuData: menu.menuData,
+  menuSelect: menu.menuSelect,
 }))(MenuTable);
