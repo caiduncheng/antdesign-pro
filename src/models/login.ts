@@ -1,14 +1,15 @@
 import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
-import { login, loginout, fakeAccountLogin } from '@/services/login';
+import { login, loginout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery, getUUID } from '@/utils/utils';
 import { ResponseResult, LoginData } from '@/res';
 import { message } from 'antd';
 
 export type StateType = {
-  status?: 'ok' | 'error';
+  status?: 'account-error' | 'captcha-error' | 'ok';
+  tipMsg?: string;
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
   UUID?: string;
@@ -32,6 +33,7 @@ const Model: LoginModelType = {
 
   state: {
     status: undefined,
+    tipMsg: '',
     UUID: getUUID(),
   },
 
@@ -65,18 +67,30 @@ const Model: LoginModelType = {
         }
         history.replace(redirect || '/');
       } else {
-        yield put({
-          type: 'changeLoginStatus',
-          payload: {
-            status: 'error',
-          },
-        });
+        if (response.code === '6033') {
+          yield put({
+            type: 'changeLoginStatus',
+            payload: {
+              status: 'captcha-error',
+              tipMsg: response.msg,
+            },
+          });
+        } else {
+          yield put({
+            type: 'changeLoginStatus',
+            payload: {
+              status: 'account-error',
+              tipMsg: response.msg,
+            },
+          });
+        }
       }
     },
     *logout(_, { call }) {
       const response: ResponseResult = yield call(loginout);
       if (response.code === '0000') {
         const { redirect } = getPageQuery();
+        localStorage.removeItem('token');
         // Note: There may be security issues, please note
         if (window.location.pathname !== '/user/login' && !redirect) {
           history.replace({
@@ -85,7 +99,6 @@ const Model: LoginModelType = {
               redirect: window.location.href,
             }),
           });
-          localStorage.removeItem('token');
         }
       } else {
         message.error(response.msg);
@@ -99,7 +112,8 @@ const Model: LoginModelType = {
       return {
         ...state,
         status: payload.status,
-        type: payload.type,
+        tipMsg: payload.tipMsg,
+        // type: payload.type,
         UUID: getUUID(),
       };
     },

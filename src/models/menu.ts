@@ -32,12 +32,12 @@ const normalizeMenu = (menuList: Menu[]): MenuDataItem[] => {
       res.push({
         children: c,
         name: 'system',
-        path: menuList[i].url ? menuList[i].url : '/',
+        path: menuList[i].url ? menuList[i].url : '',
         icon: `icon-${menuList[i].icon}`,
       });
     } else {
       res.push({
-        path: menuList[i].url ? menuList[i].url : '/',
+        path: menuList[i].url ? menuList[i].url : '',
         name: menuList[i].url?.split('/')[1],
         children: menuList[i].list,
         icon: `icon-${menuList[i].icon}`,

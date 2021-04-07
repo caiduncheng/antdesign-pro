@@ -1,6 +1,6 @@
 import type { Effect, Reducer } from 'umi';
 
-import { query as queryUsers, user } from '@/services/user';
+import { user } from '@/services/user';
 import { message } from 'antd';
 
 // export type CurrentUser = {
@@ -37,7 +37,7 @@ export type UserModelType = {
   namespace: 'user';
   state: UserModelState;
   effects: {
-    fetch: Effect;
+    // fetch: Effect;
     fetchCurrent: Effect;
   };
   reducers: {
@@ -56,13 +56,13 @@ const UserModel: UserModelType = {
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
+    // *fetch(_, { call, put }) {
+    //   const response = yield call(queryUsers);
+    //   yield put({
+    //     type: 'save',
+    //     payload: response,
+    //   });
+    // },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(user);
       if (response.code === '0000') {
@@ -71,6 +71,9 @@ const UserModel: UserModelType = {
           payload: response.data,
         });
       }
+      // else {
+      //   message.error(response?.msg);
+      // }
     },
   },
 

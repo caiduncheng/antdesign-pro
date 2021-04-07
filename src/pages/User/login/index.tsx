@@ -10,8 +10,6 @@ import type { ConnectState } from '@/models/connect';
 import { getUUID } from '@/utils/utils';
 
 import styles from './index.less';
-// import { resolveOnChange } from 'antd/lib/input/Input';
-// import { wrapConstructor } from 'lodash-decorators/utils';
 
 export type LoginProps = {
   dispatch: Dispatch;
@@ -34,7 +32,7 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
-  const { status, UUID } = userLogin;
+  const { status, tipMsg, UUID } = userLogin;
   const intl = useIntl();
 
   const handleSubmit = (values: LoginParamsType) => {
@@ -53,7 +51,7 @@ const Login: React.FC<LoginProps> = (props) => {
     });
   };
 
-  if (status === 'error') {
+  if (status != 'ok') {
     handleCaptchaClick;
   }
 
@@ -85,11 +83,13 @@ const Login: React.FC<LoginProps> = (props) => {
         }}
         className={styles.btn}
       >
-        {status === 'error' && !submitting && (
+        {status === 'account-error' && !submitting && (
           <LoginMessage
-            content={intl.formatMessage({
-              id: 'pages.login.accountLogin.errorMessage',
-            })}
+            // content={intl.formatMessage({
+            //   id: 'pages.login.accountLogin.errorMessage',
+            //   defaultMessage: tipMsg,
+            // })}
+            content={tipMsg || ''}
           />
         )}
         <ProFormText
@@ -133,7 +133,7 @@ const Login: React.FC<LoginProps> = (props) => {
           ]}
         />
 
-        {status === 'error' && !submitting && <LoginMessage content="验证码错误" />}
+        {status === 'captcha-error' && !submitting && <LoginMessage content="验证码错误" />}
         <div className={styles.captcha}>
           <ProFormText
             name="captcha"
