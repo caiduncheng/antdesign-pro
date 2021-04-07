@@ -1,5 +1,7 @@
 import request from '@/utils/request';
 let token = localStorage.getItem('token');
+console.log(token);
+
 let headers: any = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
@@ -9,9 +11,9 @@ export async function query(): Promise<any> {
   return request('/api/users');
 }
 
-export async function queryCurrent(): Promise<any> {
-  return request('/api/currentUser');
-}
+// export async function queryCurrent(): Promise<any> {
+//   return request('/api/currentUser');
+// }
 
 export async function queryNotices(): Promise<any> {
   return request('/api/notices');

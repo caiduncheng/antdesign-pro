@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dispatch } from 'umi';
 import { Modal, Spin, Tree } from 'antd';
 import ProForm, { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
@@ -19,8 +19,12 @@ interface CreateFormProps {
 }
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { modalVisible, title, onCancel, onSubmit, dispatch, treeData, allKey, values } = props;
-  // console.log(allKey);
-  // console.log(values);
+  const [initialValues, setInitialValues] = useState<{}>({
+    roleName: values?.roleName,
+    roleId: values?.roleId,
+    remark: values?.remark,
+  });
+  console.log(initialValues);
 
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>(allKey);
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>(values?.menuIdList);
@@ -32,6 +36,11 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   useEffect(() => {
     if (dispatch) {
+      // setInitialValues({
+      //   roleName: values?.roleName,
+      //   roleId: values?.roleId,
+      //   remark: values?.remark,
+      // });
       dispatch({
         type: 'role/getMenu',
       });
@@ -68,13 +77,17 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           onSubmit(value);
         }}
         onReset={() => {
+          setInitialValues({});
           setCheckedKeys([]);
         }}
-        initialValues={{
-          roleName: values?.roleName,
-          roleId: values?.roleId,
-          remark: values?.remark,
-        }}
+        initialValues={
+          initialValues
+          // {
+          // roleName: values?.roleName,
+          // roleId: values?.roleId,
+          // remark: values?.remark,
+          // }
+        }
       >
         <ProForm.Group>
           <ProFormText

@@ -9,6 +9,7 @@ interface RoleTableProps {
 }
 const RoleTable: React.FC<RoleTableProps> = (props) => {
   console.log(props);
+  const { choosedRoles } = props;
 
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<RoleListItem>[] = [
@@ -39,7 +40,7 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
     },
   ];
 
-  const [selectedRowsState, setSelectedRows] = useState<number[]>();
+  const [selectedRowsState, setSelectedRows] = useState<number[]>([]);
 
   return (
     <div>
@@ -66,7 +67,8 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
         }}
         columns={columns}
         rowSelection={{
-          // selectedRowsState,
+          type: 'checkbox',
+          selectedRowKeys: [...choosedRoles, ...selectedRowsState],
           onChange: (_, selectedRows) => {
             let choosed =
               selectedRows.map((item: any) => {
@@ -78,13 +80,10 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
             return setSelectedRows(choosed);
             // console.log(selectedRowsState);
           },
-          // getCheckboxProps: (record) => {
-          //   console.log(record);
-
-          //   return {
-          //     defaultChecked: selectedRowsState?.includes(record.roleId),
-          //   };
-          // },
+          getCheckboxProps: (record) => ({
+            disabled: false,
+            // defaultChecked: choosedRoles.indexOf(record.roleId || -1) !== -1,
+          }),
         }}
       />
       {/* {console.log(selectedRowsState)} */}

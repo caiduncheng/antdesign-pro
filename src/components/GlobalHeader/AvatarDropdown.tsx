@@ -9,7 +9,7 @@ import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
 export type GlobalHeaderRightProps = {
-  currentUser?: CurrentUser;
+  currentUser: CurrentUser;
   menu?: boolean;
 } & Partial<ConnectProps>;
 
