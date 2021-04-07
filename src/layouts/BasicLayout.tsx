@@ -47,15 +47,19 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
  * use Authorized check all menu item
  */
 
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-  menuList.map((item) => {
-    const localItem = {
-      ...item,
-      children: item.children ? menuDataRender(item.children) : undefined,
-    };
-    // console.log(localItem);
-    return Authorized.check(item.authority, localItem, null) as MenuDataItem;
-  });
+const menuDataRender = (): MenuDataItem[] => {
+  const menu = localStorage.getItem('menu') || '[]';
+  const menuList = JSON.parse(menu) as MenuDataItem[];
+  return menuList;
+};
+// menuList.map((item) => {
+//   const localItem = {
+//     ...item,
+//     children: item.children ? menuDataRender(item.children) : undefined,
+//   };
+//   // console.log(localItem);
+//   return Authorized.check(item.authority, localItem, null) as MenuDataItem;
+// });
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const {
@@ -139,8 +143,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
               <span>{route.breadcrumbName}</span>
             );
           }}
-          // menuDataRender={menuDataRender}
-          menuDataRender={() => menuData}
+          menuDataRender={menuDataRender}
+          // menuDataRender={() => menuData}
           rightContentRender={() => <RightContent />}
           postMenuData={(menuData) => {
             menuDataRef.current = menuData || [];

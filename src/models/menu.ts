@@ -64,6 +64,7 @@ const MenuModel: MenuModelType = {
           type: 'saveMenuData',
           payload: response.data.menuList,
         });
+        localStorage.setItem('menu', JSON.stringify(normalizeMenu(response.data.menuList)));
       }
     },
     *getMenuSelect(_, { call, put }) {

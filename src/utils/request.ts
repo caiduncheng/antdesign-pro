@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { message, notification } from 'antd';
+import { history } from 'umi';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -22,8 +23,6 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
-
-const token: string = localStorage.getItem('token') || '';
 
 /**
  * 异常处理程序
@@ -52,31 +51,30 @@ const errorHandler = (error: { response: Response }): Response => {
  */
 const request = extend({
   errorHandler, // 默认错误处理
-  credentials: 'omit',
   timeout: 1000,
-  headers: {
-    token,
-    'Content-Type': 'application/json',
-  },
 });
 
 request.interceptors.response.use(async (response: Response) => {
   const data = await response.clone().json();
   if (data.code && data.code !== '0000') {
     message.error(data.msg);
+    if (data.code === '6028') {
+      localStorage.removeItem('token');
+      history.replace('/user/login');
+    }
   }
   return response;
 });
 
-// 拦截器
-// request.interceptors.request.use((url, options) => {
-//   console.log(options)
-//   return {
-//     url: process.env.baseUrl + url,
-//     options: {
-//       ...options
-//     },
-//   }
-// })
+request.interceptors.request.use((url, options: any) => {
+  return {
+    options: {
+      ...options,
+      headers: {
+        token: localStorage.getItem('token'),
+      },
+    },
+  };
+});
 
 export default request;
