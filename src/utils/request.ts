@@ -60,6 +60,7 @@ request.interceptors.response.use(async (response: Response) => {
     message.error(data.msg);
     if (data.code === '6028') {
       localStorage.removeItem('token');
+      localStorage.removeItem('menu');
       history.replace('/user/login');
     }
   }

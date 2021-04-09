@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
-import { updateListParams, TableListItem } from '../data.d';
+import { Modal } from 'antd';
+import { updateListParams, TableListItem } from '@/services/user';
 import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
 import RoleTable from './RoleTable';
 
@@ -14,6 +14,12 @@ interface UpdateFormProps {
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateModalVisible, onCancel, onSubmit, values } = props;
   const [roleListState, setRoleList] = useState<number[]>(values.roleIdList);
+  const [initialValuesState, setInitialValues] = useState<{}>({
+    status: values.status,
+    mobile: values.mobile,
+    email: values.email,
+    username: values.username,
+  });
   console.log(values.roleIdList);
 
   const renderContent = () => {
@@ -26,12 +32,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
           onSubmit(value);
         }}
-        initialValues={{
-          status: values.status,
-          mobile: values.mobile,
-          email: values.email,
-          username: values.username,
+        onReset={() => {
+          setRoleList([]);
+          setInitialValues({});
         }}
+        initialValues={initialValuesState}
       >
         <ProForm.Group>
           <ProFormText
@@ -81,7 +86,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             },
           ]}
         />
-        <RoleTable getRoles={(roles) => setRoleList(roles)} choosedRoles={values.roleIdList} />
+        <RoleTable
+          getRoles={(roles) => setRoleList(roles)}
+          choosedRoles={roleListState && initialValuesState ? values.roleIdList : []}
+        />
       </ProForm>
     );
   };

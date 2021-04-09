@@ -64,4 +64,13 @@ export default {
   'pages.searchTable.tenThousand': '0000',
   'pages.searchTable.batchDeletion': 'bacth deletion',
   'pages.searchTable.batchApproval': 'batch approval',
+  'pages.header.avatarDropdown.comfirmPassword.required': 'Please confirm your password!',
+  'pages.header.avatarDropdown.newPassword.required': 'Please input your password!',
+  'pages.header.avatarDropdown.oldPassword.required': 'Please input your old password!',
+  'pages.header.avatarDropdown.oldPassword.label': 'Old Password',
+  'pages.header.avatarDropdown.comfirmPassword.label': 'Confirm Password',
+  'pages.header.avatarDropdown.newPassword.label': 'New Password',
+  'pages.header.avatarDropdown.userName.label': 'User Name',
+  'pages.header.avatarDropdown.comfirmPassword.match':
+    'The two passwords that you entered do not match!',
 };

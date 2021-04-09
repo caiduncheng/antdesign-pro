@@ -62,4 +62,12 @@ export default {
   'pages.searchTable.tenThousand': '万',
   'pages.searchTable.batchDeletion': '批量删除',
   'pages.searchTable.batchApproval': '批量审批',
+  'pages.header.avatarDropdown.comfirmPassword.required': '请输入确认密码！',
+  'pages.header.avatarDropdown.newPassword.required': '请输入新密码！',
+  'pages.header.avatarDropdown.oldPassword.required': '请输入旧密码！',
+  'pages.header.avatarDropdown.oldPassword.label': '原密码',
+  'pages.header.avatarDropdown.newPassword.label': '新密码',
+  'pages.header.avatarDropdown.comfirmPassword.label': '确认密码',
+  'pages.header.avatarDropdown.userName.label': '账号',
+  'pages.header.avatarDropdown.comfirmPassword.match': '两次输入密码不一致！',
 };

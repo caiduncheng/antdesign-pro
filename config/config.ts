@@ -1,5 +1,7 @@
 // https://umijs.org/config/
 import { defineConfig, Redirect } from 'umi';
+import request from 'umi-request';
+
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
@@ -247,6 +249,7 @@ export default defineConfig({
             {
               path: '/profile',
               name: 'profile',
+              authority: ['123'],
               icon: 'profile',
               routes: [
                 {
@@ -255,6 +258,7 @@ export default defineConfig({
                 },
                 {
                   name: 'basic',
+                  authority: ['123'],
                   icon: 'smile',
                   path: '/profile/basic',
                   component: './profile/basic',
@@ -294,6 +298,13 @@ export default defineConfig({
               name: 'exception',
               icon: 'warning',
               path: '/exception',
+              // authority: () => {
+              //   request('/api/menu/roles').then((res: any) => {
+              //     console.log(res);
+
+              //     return res;
+              //   });
+              // },
               routes: [
                 {
                   path: '/',
