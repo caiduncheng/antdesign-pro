@@ -5,13 +5,14 @@ import { Menu } from '@/res';
 import { Tag, Space, Button, Divider, Popconfirm, message } from 'antd';
 import { createFromIconfontCN, PlusOutlined } from '@ant-design/icons';
 import CreateForm from './components/CreateForm';
+import UpdateForm from './components/UpdateForm';
 import { TableListItem } from './data';
 import { ConnectState } from '@/models/connect';
 import { connect } from 'umi';
 import { delMenu, queryMenuList, queryMenuInfo } from '@/services/menu';
 import { treeDataTranslate } from '@/utils/utils';
 import type { Dispatch } from 'umi';
-import UpdateForm from './components/UpdateForm';
+// import UpdateForm from './components/UpdateForm';
 
 interface MenuTableProps {
   menuSelect: Menu[];
@@ -183,10 +184,11 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
         <>
           <a
             onClick={async () => {
-              setUpdateModalVisible(true);
               const menuInfo = await queryMenuByMenuId(record.menuId);
               if (menuInfo) {
+                setUpdateModalVisible(true);
                 setUpdateFormValues(menuInfo);
+                console.log(updateFormValues);
               }
             }}
           >
@@ -236,13 +238,18 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
           window.location.reload();
         }}
       />
-      <UpdateForm />
-      {/* <UpdateForm
-        values={updateFormValues!}
-        updateModalVisible={updateModalVisible}
-        onCancel={() => {}}
-        onSubmit={() => {}}
-      /> */}
+      {updateFormValues && (
+        <UpdateForm
+          modalVisible={updateModalVisible}
+          values={updateFormValues}
+          updateModalVisible={updateModalVisible}
+          onCancel={() => setUpdateModalVisible(false)}
+          onFInish={() => {
+            setModalVisible(false);
+            ref.current?.reload();
+          }}
+        />
+      )}
     </PageContainer>
   );
 };
