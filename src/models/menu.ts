@@ -67,7 +67,7 @@ const MenuModel: MenuModelType = {
   },
 
   effects: {
-    *getMenuData(_, { call, put }) {
+    *getMenuData({ callback }, { call, put }) {
       const response: ResponseResult<Menu> = yield call(queryMenuNav);
       if (response.code === '0000') {
         yield put({
@@ -75,6 +75,9 @@ const MenuModel: MenuModelType = {
           payload: response.data.menuList,
         });
         localStorage.setItem('menu', JSON.stringify(normalizeMenu(response.data.menuList)));
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
       }
     },
     *getMenuSelect(_, { call, put }) {

@@ -91,6 +91,7 @@ const Model: LoginModelType = {
       if (response.code === '0000') {
         const { redirect } = getPageQuery();
         localStorage.removeItem('token');
+        localStorage.removeItem('menu');
         // Note: There may be security issues, please note
         if (window.location.pathname !== '/user/login' && !redirect) {
           history.replace({

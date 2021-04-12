@@ -163,4 +163,9 @@ export default {
   },
 
   'GET  /api/login/captcha': getFakeCaptcha,
+  'GET /api/menu/roles': (req: Request, res: Response) => {
+    res.status(200).send({
+      auth: ['admin1'],
+    });
+  },
 };

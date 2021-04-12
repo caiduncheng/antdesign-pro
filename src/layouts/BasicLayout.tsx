@@ -9,7 +9,7 @@ import type {
   Settings,
 } from '@ant-design/pro-layout';
 import ProLayout, { SettingDrawer } from '@ant-design/pro-layout';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Dispatch } from 'umi';
 import { Link, useIntl, connect, history } from 'umi';
 import { Result, Button } from 'antd';
@@ -18,6 +18,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
+import styles from './UserLayout.less';
 
 const noMatch = (
   <Result
@@ -82,9 +83,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     },
     menuData,
   } = props;
-  console.log(menuData);
 
   const menuDataRef = useRef<MenuDataItem[]>([]);
+  const [loadingState, setLoading] = useState(true);
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -92,6 +93,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       });
       dispatch({
         type: 'menu/getMenuData',
+        callback: () => {
+          setLoading(false);
+        },
       });
     }
   }, []);
@@ -157,12 +161,15 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         // menuDataRender={}
         menu={{
           locale: false,
+          loading: loadingState,
         }}
+        // loading={loadingState}
         rightContentRender={() => <RightContent />}
         postMenuData={(menuData) => {
           menuDataRef.current = menuData || [];
           return menuData || [];
         }}
+        className={styles.menuStyle}
       >
         <Authorized authority={authorized!.authority} noMatch={noMatch}>
           {children}

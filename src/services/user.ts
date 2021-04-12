@@ -1,4 +1,13 @@
 import request from '@/utils/request';
+import { getRsaPublicKey } from '@/utils/utils';
+import JSEncrypt from 'jsencrypt';
+const rsa = new JSEncrypt({});
+const publickey = getRsaPublicKey();
+rsa.setPublicKey(publickey);
+export interface updatePasswordParams {
+  newPassword: string;
+  password: string;
+}
 export interface TableListItem {
   userId: number;
   username: string;
@@ -95,4 +104,14 @@ export async function resetPwRule(params: { userId: number }) {
 }
 export async function queryUserById(params: number) {
   return request(`/api/sys/user/info/${params}`, {});
+}
+export async function updateUserPassword(params: updatePasswordParams) {
+  return request('/api/sys/user/password', {
+    method: 'POST',
+    data: {
+      ...params,
+      newPassword: rsa.encrypt(params.newPassword.trim()),
+      password: rsa.encrypt(params.password.trim()),
+    },
+  });
 }
