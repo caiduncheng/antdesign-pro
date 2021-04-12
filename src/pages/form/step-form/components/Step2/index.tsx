@@ -54,7 +54,7 @@ const Step2: React.FC<Step2Props> = (props) => {
     }
   };
 
-  const { payAccount, receiverAccount, receiverName, amount } = data;
+  const { payAccount, receiverAccount, receiverName, password } = data;
   return (
     <Form
       {...formItemLayout}
@@ -63,29 +63,24 @@ const Step2: React.FC<Step2Props> = (props) => {
       className={styles.stepForm}
       initialValues={{ password: '123456' }}
     >
-      <Alert
-        closable
-        showIcon
-        message="确认转账后，资金将直接打入对方账户，无法退回。"
-        style={{ marginBottom: 24 }}
-      />
+      <Alert closable showIcon message="请确认信息" style={{ marginBottom: 24 }} />
       <Descriptions column={1}>
-        <Descriptions.Item label="付款账户"> {payAccount}</Descriptions.Item>
-        <Descriptions.Item label="收款账户"> {receiverAccount}</Descriptions.Item>
-        <Descriptions.Item label="收款人姓名"> {receiverName}</Descriptions.Item>
-        <Descriptions.Item label="转账金额">
+        <Descriptions.Item label="用户"> {payAccount}</Descriptions.Item>
+        <Descriptions.Item label="姓名"> {receiverName}</Descriptions.Item>
+        <Descriptions.Item label="密码"> {password}</Descriptions.Item>
+        {/* <Descriptions.Item label="转账金额">
           <Statistic value={amount} suffix="元" />
-        </Descriptions.Item>
+        </Descriptions.Item> */}
       </Descriptions>
       <Divider style={{ margin: '24px 0' }} />
-      <Form.Item
+      {/* <Form.Item
         label="支付密码"
         name="password"
         required={false}
         rules={[{ required: true, message: '需要支付密码才能进行支付' }]}
       >
         <Input type="password" autoComplete="off" style={{ width: '80%' }} />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item
         style={{ marginBottom: 8 }}
         wrapperCol={{

@@ -1,9 +1,5 @@
 import request from '@/utils/request';
-import { MenuList, ResponseResult } from '@/res';
-export interface menuInfoParamsType {
-  menuId: number;
-}
-
+import { MenuList, ResponseResult, Menu } from '@/res';
 export interface saveMenuParamsType {
   type: number;
   name: string;
@@ -14,9 +10,10 @@ export interface saveMenuParamsType {
   icon?: string;
 }
 
-type MenuResponse = Promise<ResponseResult<MenuList>>;
+type MenuListResponse = Promise<ResponseResult<MenuList>>;
+type MenuResponse = Promise<ResponseResult<Menu>>;
 
-export interface updatedMenuParamsType extends saveMenuParamsType, menuInfoParamsType {
+export interface updateMenuParamsType extends saveMenuParamsType {
   menuId: number;
 }
 
@@ -27,14 +24,13 @@ export async function queryMenuList() {
   });
 }
 /* 获取菜单信息 */
-export async function queryMenuInfo(params: menuInfoParamsType) {
-  return request('/api/sys/menu/info/', {
+export async function queryMenuInfo(menuId: number): MenuResponse {
+  return request(`/api/sys/menu/info/${menuId}`, {
     method: 'GET',
-    data: params,
   });
 }
 /* 导航菜单接口 */
-export async function queryMenuNav(): Promise<ResponseResult<MenuList>> {
+export async function queryMenuNav(): MenuListResponse {
   return request('/api/sys/menu/nav', {
     method: 'GET',
   });
@@ -55,7 +51,7 @@ export async function saveMenu(params: saveMenuParamsType) {
 }
 
 /* 更新菜单 */
-export async function updatedMenu(params: updatedMenuParamsType) {
+export async function updatedMenu(params: updateMenuParamsType) {
   return request('/api/sys/menu/update', {
     method: 'POST',
     data: params,

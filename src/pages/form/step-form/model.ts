@@ -8,7 +8,7 @@ export interface StateType {
     payAccount: string;
     receiverAccount: string;
     receiverName: string;
-    amount: string;
+    password: string;
   };
 }
 
@@ -30,10 +30,10 @@ const Model: ModelType = {
   state: {
     current: 'info',
     step: {
-      payAccount: 'ant-design@alipay.com',
-      receiverAccount: 'test@example.com',
-      receiverName: 'Alex',
-      amount: '500',
+      payAccount: 'admin',
+      receiverAccount: 'admin',
+      receiverName: 'admin',
+      password: '',
     },
   },
 

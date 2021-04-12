@@ -1,13 +1,17 @@
 import type { Reducer, Effect } from 'umi';
 import type { MenuDataItem } from '@ant-design/pro-layout';
-
 import { queryMenuNav, queryMenuSelect } from '@/services/menu';
 import { Menu, ResponseResult } from '@/res';
+import { treeDataTranslate } from '@/utils/utils';
 
 export interface MenuStateType {
   menuData?: Menu[];
   normalizedMenu?: MenuDataItem[];
   menuSelect?: Menu[];
+  menuForm?: {
+    iconValue: string;
+    treeDataValue: number;
+  };
 }
 
 export type MenuModelType = {
@@ -20,6 +24,7 @@ export type MenuModelType = {
   reducers: {
     saveMenuData: Reducer<MenuStateType>;
     saveMenuSelect: Reducer<MenuStateType>;
+    saveMenuForm: Reducer<MenuStateType>;
   };
 };
 
@@ -54,6 +59,10 @@ const MenuModel: MenuModelType = {
     menuData: [],
     normalizedMenu: [],
     menuSelect: [],
+    menuForm: {
+      treeDataValue: 0,
+      iconValue: '',
+    },
   },
 
   effects: {
@@ -84,10 +93,21 @@ const MenuModel: MenuModelType = {
         normalizedMenu: normalizeMenu(payload),
       };
     },
+
     saveMenuSelect(state, { payload }) {
       return {
         ...state,
-        menuSelect: payload,
+        menuSelect: treeDataTranslate(payload),
+      };
+    },
+
+    saveMenuForm(state, { payload }) {
+      return {
+        ...state,
+        menuForm: {
+          ...(state as MenuStateType).menuForm,
+          ...payload,
+        },
       };
     },
   },

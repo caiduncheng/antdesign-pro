@@ -1,34 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
 import { Menu } from '@/res';
-import {
-  Tag,
-  Space,
-  Button,
-  Divider,
-  TreeSelect,
-  Form,
-  Popover,
-  Input,
-  Popconfirm,
-  message,
-} from 'antd';
+import { Tag, Space, Button, Divider, Popconfirm, message } from 'antd';
 import { createFromIconfontCN, PlusOutlined } from '@ant-design/icons';
 import CreateForm from './components/CreateForm';
 import { TableListItem } from './data';
 import { ConnectState } from '@/models/connect';
 import { connect } from 'umi';
-import iconList from '@/assets/icons';
-import { saveMenu, saveMenuParamsType, delMenu, queryMenuList } from '@/services/menu';
+import { delMenu, queryMenuList, queryMenuInfo } from '@/services/menu';
 import { treeDataTranslate } from '@/utils/utils';
 import type { Dispatch } from 'umi';
-interface TreeSelectType {
-  title?: string;
-  value?: number;
-  children?: TreeSelectType[];
-}
+import UpdateForm from './components/UpdateForm';
 
 interface MenuTableProps {
   menuSelect: Menu[];
@@ -69,63 +52,37 @@ const normalizeMenu = (menuList: Menu[]) => {
   return res;
 };
 
-const menuToTreeData = (menuData: Menu[]): TreeSelectType[] => {
-  const res: TreeSelectType[] = [];
-  let c: TreeSelectType[];
-  for (let i = 0; i < menuData.length; i++) {
-    if (menuData[i].children && menuData[i].children.length > 0) {
-      c = menuToTreeData(menuData[i].children);
-      res.push({
-        title: menuData[i].name,
-        value: menuData[i].menuId,
-        children: c,
-      });
-    } else {
-      res.push({
-        title: menuData[i].name,
-        value: menuData[i].menuId,
-      });
-    }
-  }
-
-  return res;
-};
-
-/**
- * 添加菜单
- */
-const handleAdd = async (fields: saveMenuParamsType) => {
-  const hide = message.loading('正在添加');
+const queryMenuByMenuId = async (menuId: number) => {
+  const hide = message.loading('正在查询');
   try {
-    await saveMenu({ ...fields });
+    const res = await queryMenuInfo(menuId);
     hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
+    if (res.code === '0000') {
+      return res.data;
+    }
+    message.error(res.msg);
+    return false;
+  } catch {
     hide();
-    message.error('添加失败请重试！');
+    message.error('查询失败！');
     return false;
   }
 };
 
 const MenuTable: React.FC<MenuTableProps> = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [popOverVisible, setPopOverVisible] = useState(false);
-  const [iconInputValue, setIconInputValue] = useState('');
-  const [type, setType] = useState(0);
-  const [treeDataValue, setTreeDataValue] = useState(0);
+  const [updateModalVisible, setUpdateModalVisible] = useState(false);
+  const [updateFormValues, setUpdateFormValues] = useState<Menu>();
+
   const ref = useRef<ActionType>();
 
-  const { menuSelect, dispatch } = props;
-  let foramattedMenuSelect: any = null;
+  const { dispatch } = props;
 
   useEffect(() => {
     dispatch({
       type: 'menu/getMenuSelect',
     });
   }, []);
-
-  foramattedMenuSelect = menuToTreeData(treeDataTranslate(menuSelect, 'menuId'));
 
   const queryMenu = async () => {
     const res = await queryMenuList();
@@ -137,24 +94,6 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
       total: normalizedMenu.length,
     };
   };
-
-  const onTreeSelectChange = (value: number) => {
-    setTreeDataValue(value);
-  };
-
-  const ParentMenuSelector = () => (
-    <Form.Item label="上级菜单">
-      <TreeSelect
-        style={{ width: '100%' }}
-        value={treeDataValue}
-        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-        placeholder="请选择"
-        treeData={foramattedMenuSelect}
-        treeDefaultExpandAll
-        onChange={onTreeSelectChange}
-      />
-    </Form.Item>
-  );
 
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -243,8 +182,12 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
       render: (_, record) => (
         <>
           <a
-            onClick={() => {
-              setModalVisible(true);
+            onClick={async () => {
+              setUpdateModalVisible(true);
+              const menuInfo = await queryMenuByMenuId(record.menuId);
+              if (menuInfo) {
+                setUpdateFormValues(menuInfo);
+              }
             }}
           >
             修改
@@ -269,81 +212,6 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
     },
   ];
 
-  const DirectoryForm = () => (
-    <>
-      <ProFormText
-        name="name"
-        label="目录名称"
-        rules={[{ required: true, message: '目录名称不能为空' }]}
-      />
-      <ParentMenuSelector />
-      <ProFormText name="orderNum" label="排序号" />
-      <Popover
-        content={() =>
-          iconList.map((icon) => (
-            <Button
-              key={icon}
-              style={{ marginLeft: '5px' }}
-              icon={<Icon type={icon} />}
-              size="large"
-              onClick={() => {
-                setIconInputValue(icon.split('-')[1]);
-                setPopOverVisible(false);
-              }}
-            />
-          ))
-        }
-        title="Title"
-        trigger="click"
-        visible={popOverVisible}
-        onVisibleChange={(visible) => setPopOverVisible(visible)}
-        placement="bottomRight"
-        arrowPointAtCenter={true}
-      >
-        <Form.Item label="图标">
-          <Input value={iconInputValue} />
-        </Form.Item>
-      </Popover>
-    </>
-  );
-
-  const MenuForm = () => (
-    <>
-      <ProFormText
-        name="name"
-        label="菜单名称"
-        rules={[{ required: true, message: '目录名称不能为空' }]}
-      />
-      <ParentMenuSelector />
-      <ProFormText
-        name="url"
-        label="菜单路由"
-        rules={[{ required: true, message: '目录名称不能为空' }]}
-      />
-      <ProFormText name="perms" label="授权标识" />
-      <ProFormText name="orderNum" label="排序序号" />
-    </>
-  );
-
-  const ButtonForm = () => (
-    <>
-      <ProFormText
-        name="name"
-        label="按钮名称"
-        rules={[{ required: true, message: '按钮名称不能为空' }]}
-      />
-      <ParentMenuSelector />
-      <ProFormText name="perms" label="授权标识" />
-    </>
-  );
-
-  const Components = {
-    '0': DirectoryForm,
-    '1': MenuForm,
-    '2': ButtonForm,
-  };
-  const FormComponents = Components[type];
-
   return (
     <PageContainer>
       <ProTable<TableListItem>
@@ -359,40 +227,22 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
           </Button>,
         ]}
       ></ProTable>
-      <CreateForm modalVisible={modalVisible} onCancel={() => setModalVisible(false)}>
-        <ProForm
-          onFinish={async (formData: saveMenuParamsType) => {
-            const success = await handleAdd({
-              ...formData,
-              parentId: treeDataValue,
-              icon: iconInputValue,
-              type,
-            });
-            if (success) {
-              setModalVisible(false);
-              ref.current?.reload();
-              window.location.reload();
-            }
-          }}
-        >
-          <ProFormRadio.Group
-            style={{
-              margin: 16,
-            }}
-            radioType="button"
-            fieldProps={{
-              value: type,
-              onChange: (e) => setType(e.target.value),
-            }}
-            options={[
-              { label: '目录', value: 0 },
-              { label: '菜单', value: 1 },
-              { label: '按钮', value: 2 },
-            ]}
-          />
-          <FormComponents />
-        </ProForm>
-      </CreateForm>
+      <CreateForm
+        modalVisible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        onFinish={() => {
+          setModalVisible(false);
+          ref.current?.reload();
+          window.location.reload();
+        }}
+      />
+      <UpdateForm />
+      {/* <UpdateForm
+        values={updateFormValues!}
+        updateModalVisible={updateModalVisible}
+        onCancel={() => {}}
+        onSubmit={() => {}}
+      /> */}
     </PageContainer>
   );
 };

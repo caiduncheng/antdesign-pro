@@ -9,4 +9,5 @@ export interface TableListItem {
   orderNum: number;
   label: { name: string; color: string };
   menuId: number;
+  type?: number;
 }

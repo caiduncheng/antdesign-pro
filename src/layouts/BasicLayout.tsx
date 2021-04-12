@@ -50,11 +50,15 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 const menuDataRender = (menuLists: MenuDataItem[]): MenuDataItem[] => {
   const menu = localStorage.getItem('menu') || '[]';
   const menuList = JSON.parse(menu) as MenuDataItem[];
-  debugger;
   menuList.unshift({
     path: '/dashboard',
     name: '首页',
     icon: 'icon-home',
+  });
+  menuList.push({
+    name: '分步表单',
+    icon: 'icon-maintenance',
+    path: '/form/step-form',
   });
   return menuList;
 };
@@ -150,6 +154,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           );
         }}
         menuDataRender={menuDataRender}
+        // menuDataRender={}
         menu={{
           locale: false,
         }}

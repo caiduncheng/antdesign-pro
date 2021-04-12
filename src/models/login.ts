@@ -51,7 +51,7 @@ const Model: LoginModelType = {
         const { token } = response.data;
         localStorage.setItem('token', token);
 
-        message.success('🎉 🎉 🎉  登录成功！');
+        message.success('登录成功！');
         let { redirect } = params as { redirect: string };
         if (redirect) {
           const redirectUrlParams = new URL(redirect);

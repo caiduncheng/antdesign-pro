@@ -16,7 +16,7 @@ const formItemLayout = {
 };
 interface Step1Props {
   data?: StateType['step'];
-  dispatch?: Dispatch<any>;
+  dispatch?: Dispatch;
 }
 
 const Step1: React.FC<Step1Props> = (props) => {
@@ -51,15 +51,17 @@ const Step1: React.FC<Step1Props> = (props) => {
         initialValues={data}
       >
         <Form.Item
-          label="付款账户"
+          label="选择用户"
           name="payAccount"
           rules={[{ required: true, message: '请选择付款账户' }]}
         >
           <Select placeholder="test@example.com">
-            <Option value="ant-design@alipay.com">ant-design@alipay.com</Option>
+            <Option value="admin">admin</Option>
+            <Option value="admin1">admin1</Option>
+            <Option value="admin2">admin2</Option>
           </Select>
         </Form.Item>
-        <Form.Item label="收款账户">
+        {/* <Form.Item label="收款账户">
           <Input.Group compact>
             <Select defaultValue="alipay" style={{ width: 100 }}>
               <Option value="alipay">支付宝</Option>
@@ -76,26 +78,16 @@ const Step1: React.FC<Step1Props> = (props) => {
               <Input style={{ width: 'calc(100% - 100px)' }} placeholder="test@example.com" />
             </Form.Item>
           </Input.Group>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
-          label="收款人姓名"
+          label="姓名"
           name="receiverName"
           rules={[{ required: true, message: '请输入收款人姓名' }]}
         >
-          <Input placeholder="请输入收款人姓名" />
+          <Input placeholder="请输入姓名" />
         </Form.Item>
-        <Form.Item
-          label="转账金额"
-          name="amount"
-          rules={[
-            { required: true, message: '请输入转账金额' },
-            {
-              pattern: /^(\d+)((?:\.\d+)?)$/,
-              message: '请输入合法金额数字',
-            },
-          ]}
-        >
-          <Input prefix="￥" placeholder="请输入金额" />
+        <Form.Item label="密码" name="password">
+          <Input placeholder="请输入密码" />
         </Form.Item>
         <Form.Item
           wrapperCol={{
@@ -112,7 +104,7 @@ const Step1: React.FC<Step1Props> = (props) => {
         </Form.Item>
       </Form>
       <Divider style={{ margin: '40px 0 24px' }} />
-      <div className={styles.desc}>
+      {/* <div className={styles.desc}>
         <h3>说明</h3>
         <h4>转账到支付宝账户</h4>
         <p>
@@ -122,7 +114,7 @@ const Step1: React.FC<Step1Props> = (props) => {
         <p>
           如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
         </p>
-      </div>
+      </div> */}
     </>
   );
 };
