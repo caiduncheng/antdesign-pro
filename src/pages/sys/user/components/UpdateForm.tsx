@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Key, useState } from 'react';
 import { Modal } from 'antd';
 import { updateListParams, TableListItem } from '@/services/user';
 import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
@@ -13,7 +13,7 @@ interface UpdateFormProps {
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateModalVisible, onCancel, onSubmit, values } = props;
-  const [roleListState, setRoleList] = useState<number[]>(values.roleIdList);
+  const [roleListState, setRoleList] = useState<Key[]>(values.roleIdList);
   const [initialValuesState, setInitialValues] = useState<{}>({
     status: values.status,
     mobile: values.mobile,
@@ -87,8 +87,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           ]}
         />
         <RoleTable
-          getRoles={(roles) => setRoleList(roles)}
-          choosedRoles={roleListState && initialValuesState ? values.roleIdList : []}
+          getRoles={(roles: Key[]) => setRoleList(roles)}
+          choosedRoles={values.roleIdList}
         />
       </ProForm>
     );

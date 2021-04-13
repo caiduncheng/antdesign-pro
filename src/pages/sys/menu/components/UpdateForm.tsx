@@ -82,7 +82,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           radioType="button"
           fieldProps={{
             value: type,
-            onChange: (e) => setType(e.target.value),
+            onChange: (e) => {
+              console.log(e.target.value);
+
+              setType(e.target.value);
+            },
           }}
           options={[
             { label: '目录', value: 0 },

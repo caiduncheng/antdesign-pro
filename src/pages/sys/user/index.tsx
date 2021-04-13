@@ -1,12 +1,13 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, message, Drawer, Popconfirm } from 'antd';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, Key } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import RoleTable from './components/RoleTable';
 import UpdateForm from './components/UpdateForm';
+import styles from '@/global.less';
 import {
   TableListItem,
   addListParams,
@@ -20,6 +21,7 @@ import {
 } from '@/services/user';
 // import { queryRule, updateRule, addRule, removeRule, resetPwRule, queryUserById } from './service';
 import ProForm, { ProFormRadio, ProFormText } from '@ant-design/pro-form';
+import { isAuth } from '@/utils/utils';
 
 /**
  * 添加节点
@@ -140,7 +142,7 @@ const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
-  const [roleListState, setRoleList] = useState<number[]>([]);
+  const [roleListState, setRoleList] = useState<Key[]>([]);
   const columns: ProColumns<TableListItem>[] = [
     {
       title: 'ID',
@@ -232,12 +234,13 @@ const TableList: React.FC<{}> = () => {
                 setStepFormValues(userInfos);
               }
             }}
+            hidden={!isAuth('sys:user:update')}
           >
             修改
           </a>
           {/* <Divider type="vertical" />
           <a href="">订阅警报</a> */}
-          <Divider type="vertical" />
+          <Divider type="vertical" className={!isAuth('sys:user:update') && styles.hidden} />
           <Popconfirm
             title={`确定对【${record.username}】进行【删除】操作?`}
             onConfirm={async () => {
@@ -252,10 +255,12 @@ const TableList: React.FC<{}> = () => {
             okText="确认"
             cancelText="取消"
           >
-            <a href="#">删除</a>
+            <a href="#" hidden={!isAuth('sys:user:delete')}>
+              删除
+            </a>
           </Popconfirm>
 
-          <Divider type="vertical" />
+          <Divider type="vertical" className={!isAuth('sys:user:delete') && styles.hidden} />
 
           <Popconfirm
             title={`确定对【${record.username}】进行【重置密码】操作?`}
@@ -288,7 +293,11 @@ const TableList: React.FC<{}> = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" onClick={() => handleModalVisible(true)}>
+          <Button
+            type="primary"
+            onClick={() => handleModalVisible(true)}
+            hidden={!isAuth('sys:user:save')}
+          >
             <PlusOutlined /> 新建
           </Button>,
         ]}
@@ -334,6 +343,7 @@ const TableList: React.FC<{}> = () => {
                 actionRef.current?.reloadAndRest?.();
               }
             }}
+            hidden={!isAuth('sys:user:delete')}
           >
             批量删除
           </Button>

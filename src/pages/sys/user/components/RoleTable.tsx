@@ -1,14 +1,13 @@
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import React, { useRef, useState } from 'react';
+import React, { Key, useRef, useState } from 'react';
 import { RoleListItem, queryRoles } from '@/services/role';
 
 interface RoleTableProps {
-  getRoles: (roles: number[]) => void;
-  choosedRoles: number[];
+  getRoles: (roles: Key[]) => void;
+  choosedRoles: Key[];
 }
 const RoleTable: React.FC<RoleTableProps> = (props) => {
-  console.log(props);
-  const { choosedRoles } = props;
+  const { choosedRoles, getRoles } = props;
 
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<RoleListItem>[] = [
@@ -39,7 +38,8 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
     },
   ];
 
-  const [selectedRowsState, setSelectedRows] = useState<number[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<Key[]>([]);
+  const [defaultSelectedState, setDefaultSelected] = useState<Key[]>(choosedRoles);
 
   return (
     <div>
@@ -67,26 +67,20 @@ const RoleTable: React.FC<RoleTableProps> = (props) => {
         columns={columns}
         rowSelection={{
           type: 'checkbox',
-          selectedRowKeys: [...choosedRoles, ...selectedRowsState],
-          onChange: (_, selectedRows) => {
-            let choosed =
-              selectedRows.map((item: any) => {
-                return item.roleId;
-              }) || [];
-            console.log(choosed);
-
-            props.getRoles(choosed);
-            return setSelectedRows(choosed);
-            // console.log(selectedRowsState);
+          selectedRowKeys: [...selectedRowsState, ...defaultSelectedState],
+          onChange: (selectedRowKeys, selectedRows) => {
+            setDefaultSelected([]);
+            // console.log(`selectedRowKeys1: ${selectedRowKeys}`, 'selectedRows1: ', selectedRows);
+            getRoles(selectedRowKeys);
+            return setSelectedRows(selectedRowKeys);
           },
           getCheckboxProps: (record) => ({
             disabled: false,
-            // defaultChecked: choosedRoles.indexOf(record.roleId || -1) !== -1,
+            // Do not set `checked` or `defaultChecked` in `getCheckboxProps`. Please use `selectedRowKeys` instead
+            // defaultChecked: defaultSelectedState.includes(record.roleId),
           }),
         }}
       />
-      {/* {console.log(selectedRowsState)} */}
-      {/* {selectedRowsState?.length > 0 && } */}
     </div>
   );
 };

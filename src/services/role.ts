@@ -5,7 +5,7 @@ export interface RoleListItem {
   menuIdList?: number[];
   preInstallSign: number;
   remark?: string;
-  roleId?: number;
+  roleId: number;
   roleName?: string;
   updTime?: string;
   updUserId?: number;

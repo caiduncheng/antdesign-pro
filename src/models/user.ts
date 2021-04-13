@@ -63,13 +63,16 @@ const UserModel: UserModelType = {
     //     payload: response,
     //   });
     // },
-    *fetchCurrent(_, { call, put }) {
+    *fetchCurrent({ callback }, { call, put }) {
       const response = yield call(user);
-      if (response.code === '0000') {
+      if (response?.code === '0000') {
         yield put({
           type: 'saveCurrentUser',
           payload: response?.data,
         });
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
       }
       // else {
       //   message.error(response?.msg);
