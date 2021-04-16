@@ -124,9 +124,8 @@ for (let i = 0; i < 20; i += 1) {
 }
 // 常规折线图
 const norlineChartData = [];
-const xValue = ['一','二','三','四','五'];
+const xValue = ['一', '二', '三', '四', '五'];
 for (let i = 0; i < 5; i += 1) {
-  
   norlineChartData.push({
     x: xValue[i],
     y1: Math.floor(Math.random() * 100) + 10,
@@ -138,52 +137,52 @@ const messageData = [
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
 ];
 
@@ -435,7 +434,7 @@ radarOriginData.forEach((item) => {
 export default {
   'GET  /api/project/notice': getNotice,
   'GET  /api/activities': getActivities,
-  'GET  /api/fake_chart_data': {
+  'GET  /mock/fake_chart_data': {
     visitData,
     visitData2,
     salesData,

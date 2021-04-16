@@ -9,7 +9,7 @@ export async function queryActivities() {
 }
 
 export async function fakeChartData() {
-  return request('/api/fake_chart_data');
+  return request('/mock/fake_chart_data');
 }
 
 export async function queryCurrent() {

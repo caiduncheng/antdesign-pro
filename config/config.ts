@@ -11,8 +11,8 @@ export default defineConfig({
   hash: true,
   antd: {},
   define: {
-    // "process.env.baseUrl": "http://121.36.23.30:12461/portalbase"
-    'process.env.baseUrl': 'http://192.168.35.8:7050/portal',
+    'process.env.baseUrl': 'http://121.36.23.30:12461/portalbase',
+    // 'process.env.baseUrl': 'http://192.168.35.8:7050/portal',
   },
   dva: {
     hmr: true,
@@ -353,6 +353,11 @@ export default defineConfig({
             //     },
             //   ],
             // },
+            {
+              name: 'picture',
+              path: '/picture',
+              component: './imageupload',
+            },
             {
               name: 'editor',
               icon: 'highlight',
