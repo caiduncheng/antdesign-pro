@@ -125,7 +125,7 @@ for (let i = 0; i < 20; i += 1) {
 }
 // 常规折线图
 const norlineChartData = [];
-const xValue = ['一','二','三','四','五'];
+const xValue = ['一', '二', '三', '四', '五'];
 for (let i = 0; i < 5; i += 1) {
   norlineChartData.push({
     x: xValue[i],
@@ -137,55 +137,54 @@ const messageData = [
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
   {
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     name: '新大陆',
-    content:'每一次支付都能发现...'
+    content: '每一次支付都能发现...',
   },
 ];
-
 
 const radarOriginData = [
   {
@@ -250,5 +249,5 @@ const getFakeChartData: AnalysisData = {
 };
 
 export default {
-  'GET  /api/fake_chart_data': getFakeChartData,
+  'GET  /mock/fake_chart_data': getFakeChartData,
 };

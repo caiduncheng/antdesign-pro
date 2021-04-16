@@ -42,8 +42,8 @@ const MenuSelector: React.FC<MenuSelectorProps> = ({ menuSelect, dispatch }) => 
   const onTreeSelectChange = (value: number) => {
     setTreeDataValue(value);
     dispatch({
-      type: 'menu/saveTreeDataValue',
-      payload: value,
+      type: 'menu/saveMenuForm',
+      payload: { value },
     });
   };
 

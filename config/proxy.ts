@@ -9,9 +9,14 @@ export default {
   dev: {
     '/api/': {
       // target: 'http://121.36.23.30:12461/portalbase',
-      target:'http://192.168.35.8:7050/portal',
+      target: 'http://192.168.35.8:7050/portal',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },      
+      pathRewrite: { '^/api': '' },
+    },
+    '/mock': {
+      target: 'http://localhost:8001',
+      changeOrigin: true,
+      pathRewrite: { '': '' },
     },
   },
   test: {

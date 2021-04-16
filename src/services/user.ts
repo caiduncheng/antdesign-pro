@@ -49,7 +49,7 @@ export async function query(): Promise<any> {
 // }
 
 export async function queryNotices(): Promise<any> {
-  return request('/api/notices');
+  return request('/mock/notices');
 }
 
 export async function user() {

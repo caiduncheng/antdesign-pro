@@ -51,16 +51,24 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 const menuDataRender = (menuLists: MenuDataItem[]): MenuDataItem[] => {
   const menu = localStorage.getItem('menu') || '[]';
   const menuList = JSON.parse(menu) as MenuDataItem[];
+  console.log(menuLists);
   menuList.unshift({
     path: '/dashboard',
     name: '首页',
     icon: 'icon-home',
   });
-  menuList.push({
-    name: '分步表单',
-    icon: 'icon-maintenance',
-    path: '/form/step-form',
-  });
+  menuList.push(
+    {
+      name: '分步表单',
+      icon: 'icon-maintenance-report',
+      path: '/form/step-form',
+    },
+    {
+      name: '图片上传',
+      icon: 'icon-new',
+      path: '/picture',
+    },
+  );
   return menuList;
 };
 

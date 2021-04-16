@@ -63,6 +63,7 @@ const MenuModel: MenuModelType = {
     menuForm: {
       treeDataValue: 0,
       iconValue: '',
+      type: 0,
     },
   },
 
