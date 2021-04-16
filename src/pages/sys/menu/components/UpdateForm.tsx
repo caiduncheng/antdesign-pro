@@ -50,13 +50,16 @@ const handleUpdate = async (fields: updateMenuParamsType) => {
       perms: fields['button-perms'].replace(/(^\s*)|(\s*$)/g, ''),
     };
   }
-  console.log(newFields);
+  // console.log(newFields);
   const hide = message.loading('正在更新');
   try {
-    await updatedMenu({ ...newFields });
+    const res = await updatedMenu({ ...newFields });
     hide();
-    message.success('更新成功');
-    return true;
+    if (res.code === '0000') {
+      message.success('更新成功');
+      return true;
+    }
+    return false;
   } catch (error) {
     hide();
     message.error('更新失败请重试！');
@@ -75,7 +78,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       type: 'menu/saveMenuForm',
       payload: {
         iconValue: values.icon || ''.split('-')[1],
-        treeDAtaValue: values.parentId,
+        treeDataValue: values.parentId,
       },
     });
     setType(typeParam);
@@ -136,8 +139,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             type: typeValue,
             menuId: values.menuId,
           });
-          console.log(success);
-
           if (success) {
             onFinish();
           }

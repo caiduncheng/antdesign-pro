@@ -23,7 +23,7 @@ const handleAdd = async (fields: saveMenuParamsType) => {
   if (fields.type === 0) {
     newFields = {
       type: fields.type,
-      name: fields['directory-name'],
+      name: fields['directory-name'].replace(/(^\s*)|(\s*$)/g, ''),
       parentId: fields.parentId,
       orderNum: fields['directory-orderNum'],
       icon: fields.icon,
@@ -31,26 +31,32 @@ const handleAdd = async (fields: saveMenuParamsType) => {
   } else if (fields.type === 1) {
     newFields = {
       type: fields.type,
-      name: fields['menu-name'],
+      name: fields['menu-name'].replace(/(^\s*)|(\s*$)/g, ''),
       parentId: fields.parentId,
-      url: fields['menu-url'],
-      perms: fields['menu-perms'],
+      url: fields['menu-url'].replace(/(^\s*)|(\s*$)/g, ''),
+      perms: fields['menu-perms'].replace(/(^\s*)|(\s*$)/g, ''),
       orderNum: fields['menu-orderNum'],
     };
   } else if (fields.type === 2) {
     newFields = {
       type: fields.type,
-      name: fields['button-name'],
+      name: fields['button-name'].replace(/(^\s*)|(\s*$)/g, ''),
       parentId: fields.parentId,
-      perms: fields['button-perms'],
+      perms: fields['button-perms'].replace(/(^\s*)|(\s*$)/g, ''),
     };
   }
+  console.log(fields.type === 2);
+
+  console.log(newFields);
   const hide = message.loading('正在添加');
   try {
-    await saveMenu({ ...fields });
+    const res = await saveMenu({ ...newFields });
     hide();
-    message.success('添加成功');
-    return true;
+    if (res.code === '0000') {
+      message.success('添加成功');
+      return true;
+    }
+    return false;
   } catch (error) {
     hide();
     message.error('添加失败请重试！');
@@ -83,6 +89,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     >
       <ProForm
         onFinish={async (formData: saveMenuParamsType) => {
+          console.log(formData);
           const success = await handleAdd({
             ...formData,
             parentId: data.treeDataValue,

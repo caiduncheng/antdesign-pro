@@ -97,6 +97,18 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
     };
   };
 
+  // 更新菜单
+  const refreshMenu = () => {
+    if (dispatch) {
+      dispatch({
+        type: 'menu/isChangeMenu',
+        payload: {
+          isChange: true,
+        },
+      });
+    }
+  };
+
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '菜单名称',
@@ -189,7 +201,6 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
               if (menuInfo) {
                 setUpdateFormValues(menuInfo);
                 setUpdateModalVisible(true);
-                console.log(menuInfo);
               }
             }}
             hidden={!isAuth('sys:menu:update')}
@@ -204,6 +215,7 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
               if (res.code === '0000') {
                 message.success('删除成功');
                 ref.current?.reload();
+                refreshMenu();
               }
             }}
             okText="确认"
@@ -243,8 +255,11 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
         onCancel={() => setModalVisible(false)}
         onFinish={() => {
           setModalVisible(false);
+          dispatch({
+            type: 'menu/getMenuSelect',
+          });
           ref.current?.reload();
-          window.location.reload();
+          refreshMenu();
         }}
       />
       {updateFormValues && (
@@ -256,7 +271,7 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
           onFinish={() => {
             setUpdateModalVisible(false);
             ref.current?.reload();
-            window.location.reload();
+            refreshMenu();
           }}
         />
       )}

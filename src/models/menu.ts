@@ -13,6 +13,7 @@ export interface MenuStateType {
     treeDataValue: number;
     type: number;
   };
+  isChange?: boolean;
 }
 
 export type MenuModelType = {
@@ -26,6 +27,7 @@ export type MenuModelType = {
     saveMenuData: Reducer<MenuStateType>;
     saveMenuSelect: Reducer<MenuStateType>;
     saveMenuForm: Reducer<MenuStateType>;
+    isChangeMenu: Reducer<MenuStateType>;
   };
 };
 
@@ -65,6 +67,7 @@ const MenuModel: MenuModelType = {
       iconValue: '',
       type: 0,
     },
+    isChange: false,
   },
 
   effects: {
@@ -98,6 +101,7 @@ const MenuModel: MenuModelType = {
         ...state,
         menuData: payload || [],
         normalizedMenu: normalizeMenu(payload),
+        isChange: false,
       };
     },
 
@@ -109,14 +113,18 @@ const MenuModel: MenuModelType = {
     },
 
     saveMenuForm(state, { payload }) {
-      console.log(payload);
-
       return {
         ...state,
         menuForm: {
           ...(state as MenuStateType).menuForm,
           ...payload,
         },
+      };
+    },
+    isChangeMenu(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
       };
     },
   },

@@ -41,6 +41,7 @@ export type BasicLayoutProps = {
   settings: Settings;
   dispatch: Dispatch;
   menuData: MenuDataItem[];
+  isChange: boolean;
 } & ProLayoutProps;
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: Record<string, MenuDataItem>;
@@ -82,16 +83,27 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     location = {
       pathname: '/',
     },
-    menuData,
+    isChange,
   } = props;
 
   const menuDataRef = useRef<MenuDataItem[]>([]);
   const [loadingState, setLoading] = useState(true);
+  // useEffect(() => {
+  //   if (dispatch) {
+  //     // dispatch({
+  //     //   type: 'user/fetchCurrent',
+  //     // });
+  //     dispatch({
+  //       type: 'menu/getMenuData',
+  //       callback: () => {
+  //         setLoading(false);
+  //       },
+  //     });
+  //   }
+  // }, []);
   useEffect(() => {
+    setLoading(true);
     if (dispatch) {
-      // dispatch({
-      //   type: 'user/fetchCurrent',
-      // });
       dispatch({
         type: 'menu/getMenuData',
         callback: () => {
@@ -99,7 +111,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         },
       });
     }
-  }, []);
+  }, [isChange]);
   /**
    * init variables
    */
@@ -194,4 +206,5 @@ export default connect(({ global, settings, menu }: ConnectState) => ({
   settings,
   // menuData: menu.menuData,
   menuData: menu.normalizedMenu,
+  isChange: menu.isChange,
 }))(BasicLayout);
