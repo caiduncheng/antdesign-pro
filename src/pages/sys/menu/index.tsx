@@ -12,6 +12,7 @@ import { connect } from 'umi';
 import { delMenu, queryMenuList, queryMenuInfo } from '@/services/menu';
 import { isAuth, treeDataTranslate } from '@/utils/utils';
 import type { Dispatch } from 'umi';
+import styles from '@/global.less';
 // import UpdateForm from './components/UpdateForm';
 
 interface MenuTableProps {
@@ -186,8 +187,8 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
             onClick={async () => {
               const menuInfo = await queryMenuByMenuId(record.menuId);
               if (menuInfo) {
-                setUpdateModalVisible(true);
                 setUpdateFormValues(menuInfo);
+                setUpdateModalVisible(true);
                 console.log(menuInfo);
               }
             }}
@@ -195,7 +196,7 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
           >
             修改
           </a>
-          <Divider type="vertical" />
+          <Divider type="vertical" className={!isAuth('sys:user:update') && styles.hidden} />
           <Popconfirm
             title={`确定对【${record.name}】进行【删除】操作?`}
             onConfirm={async () => {
@@ -252,9 +253,10 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
           values={updateFormValues}
           updateModalVisible={updateModalVisible}
           onCancel={() => setUpdateModalVisible(false)}
-          onFInish={() => {
+          onFinish={() => {
             setUpdateModalVisible(false);
             ref.current?.reload();
+            window.location.reload();
           }}
         />
       )}

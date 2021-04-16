@@ -63,6 +63,7 @@ const MenuModel: MenuModelType = {
     menuForm: {
       treeDataValue: 0,
       iconValue: '',
+      type: 0,
     },
   },
 
@@ -108,6 +109,8 @@ const MenuModel: MenuModelType = {
     },
 
     saveMenuForm(state, { payload }) {
+      console.log(payload);
+
       return {
         ...state,
         menuForm: {

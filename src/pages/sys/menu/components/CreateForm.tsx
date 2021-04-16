@@ -19,6 +19,32 @@ interface CreateFormProps {
 }
 
 const handleAdd = async (fields: saveMenuParamsType) => {
+  let newFields: saveMenuParamsType = { name: '', type: 0, parentId: 0 };
+  if (fields.type === 0) {
+    newFields = {
+      type: fields.type,
+      name: fields['directory-name'],
+      parentId: fields.parentId,
+      orderNum: fields['directory-orderNum'],
+      icon: fields.icon,
+    };
+  } else if (fields.type === 1) {
+    newFields = {
+      type: fields.type,
+      name: fields['menu-name'],
+      parentId: fields.parentId,
+      url: fields['menu-url'],
+      perms: fields['menu-perms'],
+      orderNum: fields['menu-orderNum'],
+    };
+  } else if (fields.type === 2) {
+    newFields = {
+      type: fields.type,
+      name: fields['button-name'],
+      parentId: fields.parentId,
+      perms: fields['button-perms'],
+    };
+  }
   const hide = message.loading('正在添加');
   try {
     await saveMenu({ ...fields });

@@ -24,12 +24,18 @@ const DirectoryForm: React.FC<DirectoryFormProps> = (props) => {
   return (
     <>
       <ProFormText
-        name="name"
+        name="directory-name"
         label="目录名称"
         rules={[{ required: true, message: '目录名称不能为空' }]}
+        // getValueFromEvent={(event) => event.target.value.replace(/(^\s*)|(\s*$)/g, '')}
       />
       <MenuSelector />
-      <ProFormText name="orderNum" label="排序号" />
+      <ProFormText
+        name="directory-orderNum"
+        label="排序号"
+        rules={[{ pattern: /^(0|[1-9][0-9]*)$/, message: '请输入正确的数字' }]}
+        // getValueFromEvent={(event) => event.target.value.replace(/(^\s*)|(\s*$)/g, '')}
+      />
       <Popover
         overlayStyle={{ width: 500 }}
         content={() =>
@@ -59,7 +65,7 @@ const DirectoryForm: React.FC<DirectoryFormProps> = (props) => {
         arrowPointAtCenter={true}
       >
         <Form.Item label="图标">
-          <Input value={iconValue} />
+          <Input name="icon" value={iconValue} />
         </Form.Item>
       </Popover>
     </>
