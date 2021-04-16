@@ -17,6 +17,7 @@ import {
   removeRole,
 } from '@/services/role';
 import { Role } from '@/res';
+import { isAuth } from '@/utils/utils';
 const { confirm } = Modal;
 
 /**
@@ -176,6 +177,7 @@ const TableList: React.FC<{}> = () => {
                 setStepFormValues(roleById);
               }
             }}
+            hidden={!isAuth('sys:role:update')}
           >
             修改
           </a>
@@ -220,7 +222,11 @@ const TableList: React.FC<{}> = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" onClick={() => handleModalVisible(true)}>
+          <Button
+            type="primary"
+            onClick={() => handleModalVisible(true)}
+            hidden={!isAuth('sys:role:save')}
+          >
             <PlusOutlined /> 新建
           </Button>,
         ]}
@@ -258,6 +264,7 @@ const TableList: React.FC<{}> = () => {
             onClick={async () => {
               showDeleteConfirm();
             }}
+            hidden={!isAuth('sys:role:delete')}
           >
             批量删除
           </Button>

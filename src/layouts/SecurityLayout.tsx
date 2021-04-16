@@ -21,13 +21,15 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   };
 
   componentDidMount() {
-    this.setState({
-      isReady: true,
-    });
     const { dispatch } = this.props;
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
+        callback: () => {
+          this.setState({
+            isReady: true,
+          });
+        },
       });
     }
   }
@@ -45,7 +47,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     if ((!isLogin && loading) || !isReady) {
       return <PageLoading />;
     }
-    console.log(localStorage.getItem('token'));
+    // console.log(localStorage.getItem('token'));
 
     if (!isLogin && window.location.pathname !== '/user/login') {
       return <Redirect to={`/user/login?${queryString}`} />;

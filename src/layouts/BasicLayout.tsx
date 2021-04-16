@@ -19,6 +19,7 @@ import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
+import SecurityLayout from './SecurityLayout';
 
 const noMatch = (
   <Result
@@ -96,9 +97,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const [loadingState, setLoading] = useState(true);
   useEffect(() => {
     if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
+      // dispatch({
+      //   type: 'user/fetchCurrent',
+      // });
       dispatch({
         type: 'menu/getMenuData',
         callback: () => {
@@ -129,7 +130,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   );
   const { formatMessage } = useIntl();
   return (
-    <>
+    <SecurityLayout>
       <ProLayout
         logo={logo}
         formatMessage={formatMessage}
@@ -192,7 +193,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           })
         }
       />
-    </>
+    </SecurityLayout>
   );
 };
 

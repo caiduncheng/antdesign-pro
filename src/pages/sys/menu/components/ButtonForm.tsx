@@ -5,12 +5,17 @@ import MenuSelector from './MenuSelector';
 const ButtonForm = () => (
   <>
     <ProFormText
-      name="name"
+      name="button-name"
       label="按钮名称"
       rules={[{ required: true, message: '按钮名称不能为空' }]}
+      // getValueFromEvent={(event) => event.target.value.replace(/(^\s*)|(\s*$)/g, '')}
     />
     <MenuSelector />
-    <ProFormText name="perms" label="授权标识" />
+    <ProFormText
+      name="button-perms"
+      label="授权标识"
+      // getValueFromEvent={(event) => event.target.value.replace(/(^\s*)|(\s*$)/g, '')}
+    />
   </>
 );
 

@@ -3,6 +3,7 @@ import { Form, TreeSelect } from 'antd';
 import { connect, Dispatch } from 'umi';
 import { Menu } from '@/res';
 import { ConnectState } from '@/models/connect';
+import { MenuStateType } from '@/models/menu';
 
 interface TreeSelectType {
   title?: string;
@@ -12,6 +13,7 @@ interface TreeSelectType {
 
 interface MenuSelectorProps {
   menuSelect: Menu[];
+  data?: MenuStateType['menuForm'];
   dispatch: Dispatch;
 }
 
@@ -37,13 +39,12 @@ const menuToTreeData = (menuData: Menu[]): TreeSelectType[] => {
   return res;
 };
 
-const MenuSelector: React.FC<MenuSelectorProps> = ({ menuSelect, dispatch }) => {
-  const [treeDataValue, setTreeDataValue] = useState(0);
+const MenuSelector: React.FC<MenuSelectorProps> = ({ menuSelect, data, dispatch }) => {
+  const [treeDataValue, setTreeDataValue] = useState(data?.treeDataValue);
   const onTreeSelectChange = (value: number) => {
-    setTreeDataValue(value);
     dispatch({
       type: 'menu/saveMenuForm',
-      payload: { value },
+      payload: { treeDataValue: value },
     });
   };
 
@@ -56,7 +57,10 @@ const MenuSelector: React.FC<MenuSelectorProps> = ({ menuSelect, dispatch }) => 
         placeholder="请选择"
         treeData={menuToTreeData(menuSelect)}
         treeDefaultExpandAll
-        onChange={onTreeSelectChange}
+        onChange={(value) => {
+          setTreeDataValue(value);
+          onTreeSelectChange(value);
+        }}
       />
     </Form.Item>
   );
@@ -64,4 +68,5 @@ const MenuSelector: React.FC<MenuSelectorProps> = ({ menuSelect, dispatch }) => 
 
 export default connect(({ menu }: ConnectState) => ({
   menuSelect: menu.menuSelect,
+  data: menu.menuForm,
 }))(MenuSelector);

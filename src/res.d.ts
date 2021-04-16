@@ -52,6 +52,10 @@ export interface Menu {
   children: Menu[];
   /** @name 菜单列表 */
   menuList: Menu[];
+  permissions: number[];
+}
+export interface Permissions {
+  permissions: number[];
 }
 
 export interface MenuList {

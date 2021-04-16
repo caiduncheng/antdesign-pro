@@ -10,8 +10,9 @@ import { TableListItem } from './data';
 import { ConnectState } from '@/models/connect';
 import { connect } from 'umi';
 import { delMenu, queryMenuList, queryMenuInfo } from '@/services/menu';
-import { treeDataTranslate } from '@/utils/utils';
+import { isAuth, treeDataTranslate } from '@/utils/utils';
 import type { Dispatch } from 'umi';
+import styles from '@/global.less';
 // import UpdateForm from './components/UpdateForm';
 
 interface MenuTableProps {
@@ -186,15 +187,16 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
             onClick={async () => {
               const menuInfo = await queryMenuByMenuId(record.menuId);
               if (menuInfo) {
-                setUpdateModalVisible(true);
                 setUpdateFormValues(menuInfo);
-                console.log(updateFormValues);
+                setUpdateModalVisible(true);
+                console.log(menuInfo);
               }
             }}
+            hidden={!isAuth('sys:menu:update')}
           >
             修改
           </a>
-          <Divider type="vertical" />
+          <Divider type="vertical" className={!isAuth('sys:user:update') && styles.hidden} />
           <Popconfirm
             title={`确定对【${record.name}】进行【删除】操作?`}
             onConfirm={async () => {
@@ -207,7 +209,9 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
             okText="确认"
             cancelText="取消"
           >
-            <a href="#">删除</a>
+            <a href="#" hidden={!isAuth('sys:menu:delete')}>
+              删除
+            </a>
           </Popconfirm>
         </>
       ),
@@ -224,7 +228,12 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
         rowKey="menuId"
         request={queryMenu}
         toolBarRender={() => [
-          <Button type="primary" key="primary" onClick={() => setModalVisible(true)}>
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => setModalVisible(true)}
+            hidden={!isAuth('sys:menu:save')}
+          >
             <PlusOutlined /> 新增菜单
           </Button>,
         ]}
@@ -244,9 +253,10 @@ const MenuTable: React.FC<MenuTableProps> = (props) => {
           values={updateFormValues}
           updateModalVisible={updateModalVisible}
           onCancel={() => setUpdateModalVisible(false)}
-          onFInish={() => {
-            setModalVisible(false);
+          onFinish={() => {
+            setUpdateModalVisible(false);
             ref.current?.reload();
+            window.location.reload();
           }}
         />
       )}

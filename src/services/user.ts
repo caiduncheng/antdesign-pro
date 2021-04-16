@@ -1,6 +1,7 @@
 import request from '@/utils/request';
 import { getRsaPublicKey } from '@/utils/utils';
 import JSEncrypt from 'jsencrypt';
+import { Key } from 'react';
 const rsa = new JSEncrypt({});
 const publickey = getRsaPublicKey();
 rsa.setPublicKey(publickey);
@@ -16,7 +17,7 @@ export interface TableListItem {
   status: number;
   preInstallSign: number;
   creTime: string;
-  roleIdList: number[];
+  roleIdList: Key[];
 }
 export interface TableDataParams {
   username?: string;
@@ -27,14 +28,14 @@ export interface addListParams {
   email: string;
   mobile: string;
   password: string;
-  roleIdList: number[];
+  roleIdList: Key[];
   status?: number;
   username: string;
 }
 export interface updateListParams {
   email?: string;
   mobile?: string;
-  roleIdList: number[];
+  roleIdList: Key[];
   status: number;
   userId: number;
   username: string;

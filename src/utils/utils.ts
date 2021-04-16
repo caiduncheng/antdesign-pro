@@ -65,3 +65,10 @@ export function treeDataTranslate(
   }
   return res;
 }
+/**
+ * 是否有权限
+ * @param {*} key
+ */
+export function isAuth(key: string) {
+  return JSON.parse(sessionStorage.getItem('permissions') || '[]').indexOf(key) !== -1 || false;
+}

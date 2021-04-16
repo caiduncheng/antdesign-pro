@@ -1,10 +1,10 @@
 export interface TableListItem {
   name: string;
   icon?: string;
-  parent?: string;
+  parentId?: number;
   children?: TableListItem[];
   url?: string;
-  authorizeSign?: string;
+  perms?: string;
   parentName?: string;
   orderNum: number;
   label: { name: string; color: string };

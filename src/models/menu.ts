@@ -70,11 +70,13 @@ const MenuModel: MenuModelType = {
   effects: {
     *getMenuData({ callback }, { call, put }) {
       const response: ResponseResult<Menu> = yield call(queryMenuNav);
-      if (response.code === '0000') {
+
+      if (response?.code === '0000') {
         yield put({
           type: 'saveMenuData',
           payload: response.data.menuList,
         });
+        sessionStorage.setItem('permissions', JSON.stringify(response.data.permissions || '[]'));
         localStorage.setItem('menu', JSON.stringify(normalizeMenu(response.data.menuList)));
         if (callback && typeof callback === 'function') {
           callback();
@@ -107,6 +109,8 @@ const MenuModel: MenuModelType = {
     },
 
     saveMenuForm(state, { payload }) {
+      console.log(payload);
+
       return {
         ...state,
         menuForm: {
