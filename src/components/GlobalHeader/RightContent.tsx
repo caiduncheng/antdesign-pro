@@ -21,6 +21,7 @@ const ENVTagColor = {
 
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
   const { theme, layout } = props;
+  let classNameWrap = `${styles.right}  ${styles.basic}`;
   let className = styles.right;
 
   if (theme === 'dark' && layout === 'top') {
@@ -28,10 +29,10 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
   }
 
   return (
-    <div className={className}>
+    <div className={classNameWrap}>
       <HeaderSearch
         className={`${styles.action} ${styles.search}`}
-        placeholder="站内搜索"
+        placeholder="检索"
         defaultValue="umi ui"
         options={[
           {
@@ -54,7 +55,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
         //   //console.log('input', value);
         // }}
       />
-      <Tooltip title="使用文档">
+      {/* <Tooltip title="使用文档">
         <a
           style={{
             color: 'inherit',
@@ -66,15 +67,17 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
         >
           <QuestionCircleOutlined />
         </a>
-      </Tooltip>
-      <NoticeIconView />
-      <Avatar menu />
-      {REACT_APP_ENV && (
-        <span>
-          <Tag color={ENVTagColor[REACT_APP_ENV]}>{REACT_APP_ENV}</Tag>
-        </span>
-      )}
-      <SelectLang className={styles.action} />
+      </Tooltip> */}
+      <div className={className}>
+        <NoticeIconView />
+        <Avatar menu />
+        {REACT_APP_ENV && (
+          <span>
+            <Tag color={ENVTagColor[REACT_APP_ENV]}>{REACT_APP_ENV}</Tag>
+          </span>
+        )}
+        <SelectLang className={styles.action} />
+      </div>
     </div>
   );
 };

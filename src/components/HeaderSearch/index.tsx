@@ -38,45 +38,46 @@ const HeaderSearch: React.FC<HeaderSearchProps> = (props) => {
     onChange: props.onChange,
   });
 
-  const [searchMode, setSearchMode] = useMergedState(defaultOpen ?? false, {
-    value: props.open,
-    onChange: onVisibleChange,
-  });
+  // const [searchMode, setSearchMode] = useMergedState(defaultOpen ?? false, {
+  //   value: props.open,
+  //   onChange: onVisibleChange,
+  // });
 
-  const inputClass = classNames(styles.input, {
-    [styles.show]: searchMode,
-  });
+  // const inputClass = classNames(styles.input, {
+  //   [styles.show]: searchMode,
+  // });
 
   return (
     <div
-      className={classNames(className, styles.headerSearch)}
-      onClick={() => {
-        setSearchMode(true);
-        if (searchMode && inputRef.current) {
-          inputRef.current.focus();
-        }
-      }}
-      onTransitionEnd={({ propertyName }) => {
-        if (propertyName === 'width' && !searchMode) {
-          if (onVisibleChange) {
-            onVisibleChange(searchMode);
-          }
-        }
-      }}
+      // className={classNames(className, styles.headerSearch)}
+      className={styles.headerSearch}
+      // onClick={() => {
+      //   setSearchMode(true);
+      //   if (searchMode && inputRef.current) {
+      //     inputRef.current.focus();
+      //   }
+      // }}
+      // onTransitionEnd={({ propertyName }) => {
+      //   if (propertyName === 'width' && !searchMode) {
+      //     if (onVisibleChange) {
+      //       onVisibleChange(searchMode);
+      //     }
+      //   }
+      // }}
     >
-      <SearchOutlined
+      {/* <SearchOutlined
         key="Icon"
         style={{
           cursor: 'pointer',
         }}
-      />
+      /> */}
       <AutoComplete
         key="AutoComplete"
-        className={inputClass}
+        className={styles.input}
         value={value}
         style={{
-          height: 28,
-          marginTop: -6,
+          height: 41,
+          // marginTop: -6,
         }}
         options={restProps.options}
         onChange={setValue}
@@ -93,9 +94,9 @@ const HeaderSearch: React.FC<HeaderSearchProps> = (props) => {
               }
             }
           }}
-          onBlur={() => {
-            setSearchMode(false);
-          }}
+          // onBlur={() => {
+          //   setSearchMode(false);
+          // }}
         />
       </AutoComplete>
     </div>
