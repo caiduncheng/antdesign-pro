@@ -14,12 +14,6 @@ interface UpdateFormProps {
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateModalVisible, onCancel, onSubmit, values } = props;
   const [roleListState, setRoleList] = useState<Key[]>(values.roleIdList);
-  const [initialValuesState, setInitialValues] = useState<{}>({
-    status: values.status,
-    mobile: values.mobile,
-    email: values.email,
-    username: values.username,
-  });
   console.log(values.roleIdList);
 
   const renderContent = () => {
@@ -28,15 +22,18 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         onFinish={async (value) => {
           value.userId = values.userId;
           value.roleIdList = roleListState;
-          console.log(value);
-
           onSubmit(value);
         }}
         onReset={() => {
-          setRoleList([]);
-          setInitialValues({});
+          setRoleList(values.roleIdList);
+          // setInitialValues({});
         }}
-        initialValues={initialValuesState}
+        initialValues={{
+          status: values.status,
+          mobile: values.mobile,
+          email: values.email,
+          username: values.username,
+        }}
       >
         <ProForm.Group>
           <ProFormText

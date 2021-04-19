@@ -19,13 +19,6 @@ interface CreateFormProps {
 }
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { modalVisible, title, onCancel, onSubmit, dispatch, treeData, allKey, values } = props;
-  const [initialValues, setInitialValues] = useState<{}>({
-    roleName: values?.roleName,
-    roleId: values?.roleId,
-    remark: values?.remark,
-  });
-  console.log(initialValues);
-
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>(allKey);
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>(values?.menuIdList);
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>();
@@ -36,11 +29,6 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   useEffect(() => {
     if (dispatch) {
-      // setInitialValues({
-      //   roleName: values?.roleName,
-      //   roleId: values?.roleId,
-      //   remark: values?.remark,
-      // });
       dispatch({
         type: 'role/getMenu',
       });
@@ -77,17 +65,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           onSubmit(value);
         }}
         onReset={() => {
-          setInitialValues({});
-          setCheckedKeys([]);
+          setCheckedKeys(values?.menuIdList);
         }}
-        initialValues={
-          initialValues
-          // {
-          // roleName: values?.roleName,
-          // roleId: values?.roleId,
-          // remark: values?.remark,
-          // }
-        }
+        initialValues={{
+          roleName: values?.roleName,
+          roleId: values?.roleId,
+          remark: values?.remark,
+        }}
       >
         <ProForm.Group>
           <ProFormText

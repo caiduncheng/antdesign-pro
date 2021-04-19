@@ -1,6 +1,5 @@
-import { Tooltip, Tag } from 'antd';
+import { Tag } from 'antd';
 import type { Settings as ProSettings } from '@ant-design/pro-layout';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import React from 'react';
 import type { ConnectProps } from 'umi';
 import { connect, SelectLang } from 'umi';
@@ -29,9 +28,10 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
   }
 
   return (
-    <div className={classNameWrap}>
+    <div className={styles.basic}>
       <HeaderSearch
-        className={`${styles.action} ${styles.search}`}
+        // className={`${styles.action} ${styles.search}`}
+        className={styles.left}
         placeholder="检索"
         defaultValue="umi ui"
         options={[

@@ -70,6 +70,11 @@ const menuDataRender = (menuLists: MenuDataItem[]): MenuDataItem[] => {
       icon: 'icon-new',
       path: '/picture',
     },
+    {
+      name: '富文本编辑',
+      icon: 'icon-signature',
+      path: '/squill',
+    },
   );
   return menuList;
 };

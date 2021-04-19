@@ -359,6 +359,11 @@ export default defineConfig({
               component: './imageupload',
             },
             {
+              name: 'squill',
+              path: '/squill',
+              component: './squill',
+            },
+            {
               name: 'editor',
               icon: 'highlight',
               path: '/editor',
