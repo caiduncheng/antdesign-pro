@@ -6,7 +6,7 @@ interface RoleTableProps {
   getRoles: (roles: Key[]) => void;
   choosedRoles: Key[];
 }
-const RoleTable: React.FC<RoleTableProps> = (props) => {
+const RoleTable: React.FC<RoleTableProps> = (props: RoleTableProps) => {
   const { choosedRoles, getRoles } = props;
 
   const actionRef = useRef<ActionType>();
